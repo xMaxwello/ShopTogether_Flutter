@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
-import 'package:shopping_app/objects/groups/MyGroup.dart';
+import 'package:shopping_app/components/product/MyProductItem.dart';
+import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 
 class MyHomeList extends StatefulWidget {
 
-  final List<MyGroup> myGroups;
   final Widget isListEmptyWidget;
 
-  const MyHomeList({super.key, required this.myGroups, required this.isListEmptyWidget});
+  const MyHomeList({super.key, required this.isListEmptyWidget});
 
   @override
   State<MyHomeList> createState() => _MyHomeListState();
@@ -49,27 +49,41 @@ class _MyHomeListState extends State<MyHomeList> {
   @override
   Widget build(BuildContext context) {
 
-    if (widget.myGroups.isEmpty) {
+    return Consumer<MyItemsProvider>(
+        builder: (BuildContext context,
+            MyItemsProvider value, //TODO: Firebase daten an Provider übergeben?
+            Widget? child){
 
-      return Center(
-        child: widget.isListEmptyWidget,
-      );
-    } else {
+          if (value.elements.isEmpty) {
 
-      return ListView.builder(
-        itemCount: widget.myGroups.length,
-        //TODO: Moritz: Hier muss noch der Builder flexibel gemacht werden
-        controller: _controller,
-        itemBuilder: (context, index) {
-          return MyBasicStructItem(
+            return Center(
+              child: widget.isListEmptyWidget,
+            );
+          } else {
 
-            ///the basic struct of the group, product, ... elements
-            content: MyGroupItem(
-              myGroupItem: widget.myGroups[index],
-            ),
-          );
-        },
-      );
-    }
+            return ListView.builder(
+              itemCount: value.elements.length,
+              //TODO: Moritz: Hier muss noch der Builder flexibel gemacht werden
+              controller: _controller,
+              itemBuilder: (context, index) {
+                return MyBasicStructItem(
+
+                  ///the basic struct of the group, product, ... elements
+                    content:
+                    value.isGroup == true ?
+                    MyGroupItem(
+                      myGroupItem: value.elements[index],
+                    )
+                        :
+                    MyProductItem(
+                      myProduct: value.elements[index],
+                    )
+
+                );
+              },
+            );
+          }
+        }
+    );
   }
 }

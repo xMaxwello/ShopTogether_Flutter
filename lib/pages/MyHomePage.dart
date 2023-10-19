@@ -17,18 +17,8 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: height), ///set the padding = status bar height
-        child: MyHomeList(
-          isListEmptyWidget: const Text("Die Liste is leer"),
-          myGroups: [
-
-            MyGroup(
-                groupID: "",
-                groupName: "Wohngemeinschaft",
-                users: [],
-                shoppingList: []
-            )
-
-          ],
+        child: const MyHomeList(
+          isListEmptyWidget: Text("Die Liste is leer"),
         ),
       ),
       bottomNavigationBar: BottomAppBar(

@@ -17,6 +17,8 @@ Future<void> main() async {
         providers: [
           ChangeNotifierProvider(create: (context) => MyFloatingButtonProvider()),
           ChangeNotifierProvider(create: (context) => MyNavigationBarProvider()),
+          ChangeNotifierProvider(create: (Context) => MyItemsProvider()),
+          // Fügen Sie weitere Anbieter hinzu, falls erforderlich.
         ],
         child: const MyApp(),
       )
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoppinglist',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
