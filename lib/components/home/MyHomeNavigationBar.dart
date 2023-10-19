@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
@@ -11,6 +12,14 @@ class MyHomeNavigationBar extends StatefulWidget {
 }
 
 class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    //FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
 

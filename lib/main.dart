@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
-import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
+import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
 Future<void> main() async {
@@ -19,7 +19,6 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => MyFloatingButtonProvider()),
           ChangeNotifierProvider(create: (context) => MyNavigationBarProvider()),
           ChangeNotifierProvider(create: (Context) => MyItemsProvider()),
-          // Fügen Sie weitere Anbieter hinzu, falls erforderlich.
         ],
         child: const MyApp(),
       )
