@@ -1,16 +1,37 @@
-# shopping_app
+# FoodScannerApp
 
-A Shopping list App for group organizing.
+##Functions:
 
-## Getting Started
+Sensorik:
+- Barcode Scanner => Kamera
 
-This project is a starting point for a Flutter application.
+- Authentification:
+  => Fingerprint, FaceId (Turn off/on in Settings) => https://pub.dev/packages/local_auth
 
-A few resources to get you started if this is your first Flutter project:
+Aktorik:
+- Vibration
+- Notificationsound
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Notificationfunction:
+https://pub.dev/packages/flutter_local_notifications
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Network communication:
+Api => https://de.openfoodfacts.org/ || https://pub.dev/packages/openfoodfacts
+
+##Pages:
+1) Authentification-Page
+2) Shopping list-Page
+3) Scanner-Page
+4) Product Info-Page
+5) Add product manually-Page
+6) Settings-Page
+
+#Wichtig für die Programmierung:
+- Verwenden von Konstanten in flutter ist sehr wichtig für die Performance
+- Verwenden von Einheitlichen Komponenten (In Flutter sind diese Vorgegeben meistens, am besten diese auch verwenden)
+- Auslagerung so viel wie möglich
+- Die Verzeichnisse dementsprechend wählen und benennen
+- Bei Booleans immer isTall, isSmall, is...
+
+Datenbank: Firebase nur als Datenbank
+Gruppenmanagment -> Usermanagment -> Fingerprint/FaceID Token
