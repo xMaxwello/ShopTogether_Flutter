@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
+import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
@@ -18,7 +19,8 @@ Future<void> main() async {
         providers: [
           ChangeNotifierProvider(create: (context) => MyFloatingButtonProvider()),
           ChangeNotifierProvider(create: (context) => MyNavigationBarProvider()),
-          ChangeNotifierProvider(create: (Context) => MyItemsProvider()),
+          ChangeNotifierProvider(create: (context) => MyItemsProvider()),
+          ChangeNotifierProvider(create: (context) => MyLoginProvider()),
         ],
         child: const MyApp(),
       )

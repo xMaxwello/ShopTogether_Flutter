@@ -51,7 +51,7 @@ class _MyHomeListState extends State<MyHomeList> {
 
     return Consumer<MyItemsProvider>(
         builder: (BuildContext context,
-            MyItemsProvider value, //TODO: Firebase daten an Provider übergeben?
+            MyItemsProvider value,
             Widget? child){
 
           if (value.elements.isEmpty) {
@@ -63,12 +63,10 @@ class _MyHomeListState extends State<MyHomeList> {
 
             return ListView.builder(
               itemCount: value.elements.length,
-              //TODO: Moritz: Hier muss noch der Builder flexibel gemacht werden
               controller: _controller,
               itemBuilder: (context, index) {
-                return MyBasicStructItem(
+                return MyBasicStructItem(///the basic struct of the group, product, ... elements
 
-                  ///the basic struct of the group, product, ... elements
                     content:
                     value.isGroup == true ?
                     MyGroupItem(
