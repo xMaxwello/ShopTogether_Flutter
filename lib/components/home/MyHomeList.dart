@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
@@ -41,9 +42,10 @@ class _MyHomeListState extends State<MyHomeList> {
 
   @override
   void initState() {
+    super.initState();
+
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
-    super.initState();
   }
 
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/pages/MyRegisterPage.dart';
 
 class MyLoginWidget extends StatelessWidget {
 
@@ -12,8 +11,9 @@ class MyLoginWidget extends StatelessWidget {
   final List<String> buttonLabels;
   final List<Color> buttonForegroundColors;
   final List<Color> buttonBackgroundColors;
+  final List<bool> isInputPassword;
 
-  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors});
+  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +40,7 @@ class MyLoginWidget extends StatelessWidget {
                     TextFormField(
                       controller: controllers[i],
                       decoration: InputDecoration(labelText: inputLabels[i]),
+                      obscureText: isInputPassword[i],
                     ),
                   const SizedBox(height: 30),
 

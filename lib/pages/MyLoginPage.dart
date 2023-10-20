@@ -25,12 +25,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
-            buttonFunctions: [_register, _toLogin],
-            controllers: [_prenameController, _nameController, _emailController, _passwordController],
-            inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*"],
-            buttonLabels: const ["Registrieren", "Zum Login"],
-            buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
-            buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!]
+          buttonFunctions: [_register, _toLogin],
+          controllers: [_prenameController, _nameController, _emailController, _passwordController],
+          inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*"],
+          buttonLabels: const ["Registrieren", "Zum Login"],
+          buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
+          buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
+          isInputPassword: const [false, false, false, true],
         )
     );
   }
@@ -39,12 +40,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
-            buttonFunctions: [_login, _toRegister],
-            controllers: [_emailController, _passwordController],
-            inputLabels: const ["E-Mail*", "Passwort*"],
-            buttonLabels: const ["Anmelden", "Zur Registrierung"],
-            buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
-            buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!]
+          buttonFunctions: [_login, _toRegister],
+          controllers: [_emailController, _passwordController],
+          inputLabels: const ["E-Mail*", "Passwort*"],
+          buttonLabels: const ["Anmelden", "Zur Registrierung"],
+          buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
+          buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
+          isInputPassword: const [false, true],
         )
     );
   }
@@ -105,7 +107,27 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   Future<void> _register() async {
 
-    ///TODO: register fertig machen
+    //TODO: Verbessern
+
+    bool error = false;
+
+    if (_passwordController.text == "" || _prenameController.text == "" ||
+        _nameController.text == "" || _emailController.text == "") {
+      error = true;
+    }
+
+    if (!error) {
+
+      try {
+        await _auth.createUserWithEmailAndPassword(
+            email: _emailController.text,
+            password: _passwordController.text
+        );
+
+      } catch(e) {
+
+      }
+    }
   }
 
   @override
