@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
+import 'package:shopping_app/pages/MyHomePage.dart';
+import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 
 class MyHomeNavigationBar extends StatefulWidget {
 
@@ -54,8 +56,13 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             }
 
                             Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected(value.isNavigationSelected);
-
-                            ///TODO: LUKAS: Hier müssen noch die einzelnen Verlinkung zu den Seiten hin + Du müsstest dann noch eine neue Seite erstellen
+///TODO:Lukas
+                            if (i == 0) {
+                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = false;
+                            } else if (i == 1) {
+                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = true;
+                            }
+///TODO:Lukas
                           });
                         },
                         child: Padding(
