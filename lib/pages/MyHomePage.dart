@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
+import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/objects/groups/MyGroup.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isSettingsPage = Provider.of<MySettingsProvider>(context).isSettingsPage;
 
     ///get status bar height
     double height = MediaQuery.of(context).padding.top;
@@ -17,7 +21,9 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: height), ///set the padding = status bar height
-        child: MyHomeList(
+        child: isSettingsPage ///TODO:lukas
+        ? const Center(child: Text('Einstellungen'))
+        : MyHomeList(
           isListEmptyWidget: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -58,7 +64,9 @@ class MyHomePage extends StatelessWidget {
         color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.2),
         child: const MyHomeNavigationBar(),
       ),
-      floatingActionButton: const MyFloatingButton(
+      floatingActionButton: isSettingsPage ///TODO:Lukas
+      ? null
+      : const MyFloatingButton(
         buttonTitle: 'Gruppe',
         iconData: Icons.group_add,
         isChangeByScroll: true,
