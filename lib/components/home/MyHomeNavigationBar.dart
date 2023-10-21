@@ -16,15 +16,13 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
   @override
   void initState() {
     super.initState();
-
-    //FirebaseAuth.instance.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
 
-    List<IconData> icons = [Icons.home,Icons.settings];
-    List<String> titles = ["Home","Settings"];
+    List<IconData> icons = [Icons.group,Icons.settings];
+    List<String> titles = ["Gruppen","Einstellungen"];
 
     return Consumer<MyNavigationBarProvider>(
         builder: (BuildContext context,
