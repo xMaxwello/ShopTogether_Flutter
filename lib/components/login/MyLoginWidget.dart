@@ -5,6 +5,7 @@ import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 
 class MyLoginWidget extends StatelessWidget {
 
+  final String title;
   final List<Function()> buttonFunctions;
   final List<TextEditingController> controllers;
   final List<String> inputLabels;
@@ -13,7 +14,7 @@ class MyLoginWidget extends StatelessWidget {
   final List<Color> buttonBackgroundColors;
   final List<bool> isInputPassword;
 
-  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword});
+  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +37,13 @@ class MyLoginWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
 
+                  Text(
+                      title,
+                    style: GoogleFonts.tiltNeon(
+                      fontSize: 24
+                    ),
+                  ),
+
                   for (int i = 0; i<controllers.length;i++)
                     TextFormField(
                       controller: controllers[i],
@@ -43,8 +51,6 @@ class MyLoginWidget extends StatelessWidget {
                       obscureText: isInputPassword[i],
                     ),
                   const SizedBox(height: 30),
-
-                  Text(value.message),
 
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,

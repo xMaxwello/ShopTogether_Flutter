@@ -25,6 +25,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
+          title: "Registrierung",
           buttonFunctions: [_register, _toLogin],
           controllers: [_prenameController, _nameController, _emailController, _passwordController],
           inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*"],
@@ -40,6 +41,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
+          title: "Anmeldung",
           buttonFunctions: [_login, _toRegister],
           controllers: [_emailController, _passwordController],
           inputLabels: const ["E-Mail*", "Passwort*"],
@@ -76,15 +78,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     bool error = false;
 
-    if (_emailController.text == "") {
-      Provider.of<MyLoginProvider>(context, listen: false)
-          .updateMessage("Geben Sie die E-Mail ein!");
-      error = true;
-    }
-
-    if (_passwordController.text == "") {
-      Provider.of<MyLoginProvider>(context, listen: false)
-          .updateMessage("Geben Sie das Passwort ein!");
+    if (_emailController.text == "" || _passwordController.text == "") {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Es müssen alle Felder mit "*" ausgefüllt werden!')));
       error = true;
     }
 
@@ -97,10 +92,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
         );
 
         Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MyHomePage()));
+            MaterialPageRoute(builder: (context) => MyHomePage()));
+      } on FirebaseAuthException catch(e) {
+
       } catch (e) {
-        Provider.of<MyLoginProvider>(context, listen: false)
-            .updateMessage("Ein Fehler ist aufgetreten!");
+
       }
     }
   }
@@ -113,16 +109,28 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     if (_passwordController.text == "" || _prenameController.text == "" ||
         _nameController.text == "" || _emailController.text == "") {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Es müssen alle Felder mit "*" ausgefüllt werden!')));
       error = true;
     }
 
     if (!error) {
 
       try {
-        await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential = await _auth
+            .createUserWithEmailAndPassword(
             email: _emailController.text,
             password: _passwordController.text
         );
+
+        //await userCredential.user.sendEmailVerification();
+      } on FirebaseAuthException catch(e) {
+
+        if (e.code == 'weak-password') {
+
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ihr Passwort ist zu schwach!')));
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Die eingegebene E-Mail ist bereits vergeben!')));
+        }
 
       } catch(e) {
 
@@ -135,62 +143,76 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     return Scaffold(
 
-        body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
+        body: Stack(
+          children: [
 
-                    Text(
-                      "Einkaufsapp",
-                      style: GoogleFonts.tiltNeon(
-                          fontSize: 40
+        Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/background.png'), // Ihr Hintergrundbil
+          fit: BoxFit.cover,),),
+        ),
+
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+
+                      Text(
+                        "Einkaufsapp",
+                        style: GoogleFonts.tiltNeon(
+                            fontSize: 40,
+                            backgroundColor: Colors.white
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 60,),
+                      const SizedBox(height: 60,),
 
-                    Consumer<MyLoginProvider>(
-                        builder: (BuildContext context,
-                        MyLoginProvider value,
-                        Widget? child) {
+                      Consumer<MyLoginProvider>(
+                          builder: (BuildContext context,
+                              MyLoginProvider value,
+                              Widget? child) {
 
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            setState(() {
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              setState(() {
 
-                              if (value.widget == null) {
+                                if (value.widget == null) {
 
-                                updateToLoginPage();
-                              }
+                                  updateToLoginPage();
+                                }
+                              });
                             });
-                          });
 
-                          return AnimatedSwitcher(
-                            switchInCurve: Curves.fastOutSlowIn,
-                            duration: const Duration(milliseconds: 500),
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(-1, 0), // Startposition von links außerhalb des Bildschirms
-                                end: const Offset(0, 0),   // Aktuelle Position des Elements
-                              ).animate(CurvedAnimation(
-                                parent: const AlwaysStoppedAnimation(1.0),
-                                curve: Curves.fastOutSlowIn,
-                              )),
-                              child: value.widget,
-                            ),
-                          );
-                        }),
+                            return AnimatedSwitcher(
+                              switchInCurve: Curves.fastOutSlowIn,
+                              duration: const Duration(milliseconds: 500),
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(-1, 0), // Startposition von links außerhalb des Bildschirms
+                                  end: const Offset(0, 0),   // Aktuelle Position des Elements
+                                ).animate(CurvedAnimation(
+                                  parent: const AlwaysStoppedAnimation(1.0),
+                                  curve: Curves.fastOutSlowIn,
+                                )),
+                                child: value.widget,
+                              ),
+                            );
+                          }),
 
-                    const SizedBox(height: 60,)
+                      const SizedBox(height: 60,)
 
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-        )
+
+          ],
+        ),
     );
   }
 }

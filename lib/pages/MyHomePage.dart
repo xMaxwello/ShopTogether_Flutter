@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
-import 'package:shopping_app/objects/groups/MyGroup.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
