@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
+import 'package:shopping_app/components/settings/MySettingsWidget.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 
@@ -22,7 +23,7 @@ class MyHomePage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.only(top: height), ///set the padding = status bar height
         child: isSettingsPage ///TODO:lukas
-        ? const Center(child: Text('Einstellungen'))
+        ? const MySettingsWidget()
         : MyHomeList(
           isListEmptyWidget: Column(
             mainAxisAlignment: MainAxisAlignment.center,
