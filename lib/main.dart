@@ -54,23 +54,19 @@ class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
+    ///TODO: Mit firebase das machen
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-
-          return const CircularProgressIndicator(); //if its loading
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasError) { //TODO: Weg machen später
+          return Text('Fehler: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          return const MyHomePage();
         } else {
-
-          if (snapshot.hasData) {
-
-            return const MyHomePage(); //the user is logged in
-          } else {
-
-            return const MyLoginPage(); //the user is logged out
-          }
+          return const MyLoginPage();
         }
       },
     );

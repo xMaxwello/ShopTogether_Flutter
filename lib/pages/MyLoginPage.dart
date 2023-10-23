@@ -21,7 +21,17 @@ class _MyLoginPageState extends State<MyLoginPage> {
   final TextEditingController _prenameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
+  void refreshInputs() {
+
+    _prenameController.text = "";
+    _nameController.text = "";
+    _passwordController.text = "";
+    _emailController.text = "";
+  }
+
   void updateToRegisterPage() {
+
+    refreshInputs();
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
@@ -38,6 +48,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
   }
 
   void updateToLoginPage() {
+
+    refreshInputs();
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
@@ -95,8 +107,25 @@ class _MyLoginPageState extends State<MyLoginPage> {
             MaterialPageRoute(builder: (context) => MyHomePage()));
       } on FirebaseAuthException catch(e) {
 
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Benutzer nicht gefunden.')));
+        } else if (e.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Falsches Passwort.')));
+        } else if (e.code == 'user-disabled') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Benutzerkonto deaktiviert.')));
+        } else if (e.code == 'too-many-requests') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Zu viele Anfragen. Versuchen Sie es später erneut.')));
+        } else if (e.code == 'network-request-failed') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.')));
+        } else if (e.code == 'invalid-email') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
+        }
+
       } catch (e) {
 
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
       }
     }
   }
@@ -104,6 +133,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
   Future<void> _register() async {
 
     //TODO: Verbessern
+
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+
+    });
 
     bool error = false;
 
@@ -126,14 +159,18 @@ class _MyLoginPageState extends State<MyLoginPage> {
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'weak-password') {
-
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ihr Passwort ist zu schwach!')));
         } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Die eingegebene E-Mail ist bereits vergeben!')));
+        } else if (e.code == 'invalid-email') {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.')));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
         }
 
       } catch(e) {
 
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
       }
     }
   }
