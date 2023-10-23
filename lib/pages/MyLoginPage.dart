@@ -132,12 +132,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   Future<void> _register() async {
 
-    //TODO: Verbessern
-
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-
-    });
-
     bool error = false;
 
     if (_passwordController.text == "" || _prenameController.text == "" ||
@@ -155,7 +149,16 @@ class _MyLoginPageState extends State<MyLoginPage> {
             password: _passwordController.text
         );
 
-        //await userCredential.user.sendEmailVerification();
+        //TODO: Email-Verifizierung
+        FirebaseAuth.instance.authStateChanges().listen((User? user) {
+
+          if (!user!.emailVerified) {
+            print("Email nicht verifiziert!");
+          } else {
+            print("Email verifiziert!");
+          }
+        });
+
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'weak-password') {
