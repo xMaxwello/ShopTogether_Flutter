@@ -29,7 +29,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
           buttonFunctions: [_register, _toLogin],
           controllers: [_prenameController, _nameController, _emailController, _passwordController],
           inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*"],
-          buttonLabels: const ["Registrieren", "Zum Login"],
+          buttonLabels: const ["Registrieren", "Zur Anmeldung"],
           buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
           buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
           isInputPassword: const [false, false, false, true],
