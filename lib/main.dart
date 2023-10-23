@@ -47,14 +47,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
-class AuthenticationWrapper extends StatelessWidget {
+class AuthenticationWrapper extends StatefulWidget {
   const AuthenticationWrapper({super.key});
 
   @override
+  State<AuthenticationWrapper> createState() => _AuthenticationWrapperState();
+}
+
+class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
+  @override
   Widget build(BuildContext context) {
-
-
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {

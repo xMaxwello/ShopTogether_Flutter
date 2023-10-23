@@ -45,7 +45,11 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
           margin: const EdgeInsets.symmetric(horizontal: 100.0),
         child: ElevatedButton(
           onPressed: () async {
+
             await FirebaseAuth.instance.signOut();
+            setState(() {
+
+            });
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.indigoAccent),
