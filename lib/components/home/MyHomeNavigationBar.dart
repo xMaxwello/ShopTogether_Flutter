@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
-import 'package:shopping_app/pages/MyHomePage.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 
 class MyHomeNavigationBar extends StatefulWidget {
@@ -56,9 +54,9 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             }
 
                             Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected(value.isNavigationSelected);
-///TODO:Lukas
+///TODO:Lukas => Überarbeitung-1
                             if (i == 0) {
-                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = false;
+                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = false; //TODO: Verstehe nicht ganz warum du nach i==0 oder 1 abfragst, desweiteren werden so die Values im Provider nicht geupdatet oder zumindestens macht man das so nicht
                             } else if (i == 1) {
                               Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = true;
                             }
