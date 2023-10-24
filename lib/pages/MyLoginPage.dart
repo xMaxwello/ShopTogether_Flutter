@@ -142,19 +142,15 @@ class _MyLoginPageState extends State<MyLoginPage> {
     if (!error) {
 
       try {
-        UserCredential userCredential = await _auth
-            .createUserWithEmailAndPassword(
+        await _auth.createUserWithEmailAndPassword(
             email: _emailController.text,
             password: _passwordController.text
         );
 
-        //TODO: Email-Verifizierung
         FirebaseAuth.instance.authStateChanges().listen((User? user) {
 
           if (!user!.emailVerified) {
-            print("Email nicht verifiziert!");
-          } else {
-            print("Email verifiziert!");
+            user.sendEmailVerification();
           }
         });
 
