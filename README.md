@@ -35,3 +35,17 @@ Api => https://de.openfoodfacts.org/ || https://pub.dev/packages/openfoodfacts
 
 Datenbank: Firebase nur als Datenbank
 Gruppenmanagment -> Usermanagment -> Fingerprint/FaceID Token
+
+
+SettingsPage:
+Theme Farbauswahl (8 Farben),
+Abmelden fixen,
+Konto löschen Button mit Nutzerbestätigung.
+Buttons in einer Card setzen,
+Titel setzen,
+Möglichkeit zwischen Home und settings zu swipen (nach merge)
+Fingerprint/FaceID nach Betriebssystem definieren,
+Accountspezifische Einstellungen (Password/Email ändern)
+Ton/Vibration ein/aus
+
+
