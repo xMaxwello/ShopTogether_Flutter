@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/pages/MyHomePage.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -95,9 +94,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-
-        Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MyHomePage()));
       } catch (e) {
         Provider.of<MyLoginProvider>(context, listen: false)
             .updateMessage("Ein Fehler ist aufgetreten!");
