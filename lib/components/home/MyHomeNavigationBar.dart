@@ -56,9 +56,9 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected(value.isNavigationSelected);
 ///TODO:Lukas => Überarbeitung-1
                             if (i == 0) {
-                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = false; //TODO: Verstehe nicht ganz warum du nach i==0 oder 1 abfragst, desweiteren werden so die Values im Provider nicht geupdatet oder zumindestens macht man das so nicht
+                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false); //TODO: Verstehe nicht ganz warum du nach i==0 oder 1 abfragst, desweiteren werden so die Values im Provider nicht geupdatet oder zumindestens macht man das so nicht
                             } else if (i == 1) {
-                              Provider.of<MySettingsProvider>(context, listen: false).isSettingsPage = true;
+                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(true);
                             }
 ///TODO:Lukas
                           });
