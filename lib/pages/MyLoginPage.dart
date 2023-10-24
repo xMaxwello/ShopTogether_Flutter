@@ -7,6 +7,7 @@ import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/pages/MyHomePage.dart';
 
 class MyLoginPage extends StatefulWidget {
+
   const MyLoginPage({super.key});
 
   @override
@@ -179,6 +180,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    refreshInputs();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -186,12 +194,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
         body: Stack(
           children: [
 
-        Container(
-        decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/background.png'), // Ihr Hintergrundbil
-          fit: BoxFit.cover,),),
-        ),
+            Container(
+            decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/background.png'),
+              fit: BoxFit.cover,),),
+            ),
 
             Center(
               child: Padding(
@@ -227,19 +235,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
                               });
                             });
 
-                            return AnimatedSwitcher(
-                              switchInCurve: Curves.fastOutSlowIn,
-                              duration: const Duration(milliseconds: 500),
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(-1, 0), // Startposition von links außerhalb des Bildschirms
-                                  end: const Offset(0, 0),   // Aktuelle Position des Elements
-                                ).animate(CurvedAnimation(
-                                  parent: const AlwaysStoppedAnimation(1.0),
-                                  curve: Curves.fastOutSlowIn,
-                                )),
-                                child: value.widget,
-                              ),
+                            return SizedBox(
+                              child: value.widget,
                             );
                           }),
 

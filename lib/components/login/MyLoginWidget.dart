@@ -30,7 +30,7 @@ class MyLoginWidget extends StatelessWidget {
             elevation: 20,
             clipBehavior: Clip.antiAlias,
             child: Padding(
-              padding: const EdgeInsets.only(right: 25, left: 25, top: 25, bottom: 25),
+              padding: const EdgeInsets.all(25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

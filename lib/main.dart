@@ -6,7 +6,9 @@ import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButton
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
+import 'components/login/MyLoginWidget.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
@@ -54,19 +56,26 @@ class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    ///TODO: Mit firebase das machen
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
 
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
-        } else if (snapshot.hasError) { //TODO: Weg machen später
-          return Text('Fehler: ${snapshot.error}');
-        } else if (snapshot.hasData) {
-          return const MyHomePage();
         } else {
-          return const MyLoginPage();
+
+          if (snapshot.hasData) {
+            bool isVerified = snapshot.data!.emailVerified;
+
+            if (isVerified) {
+              return const MyHomePage();
+            } else {
+
+              return const MyEmailVerificationPage();
+            }
+          } else {
+            return const MyLoginPage();
+          }
         }
       },
     );
