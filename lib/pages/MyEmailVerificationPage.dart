@@ -33,7 +33,7 @@ class MyEmailVerificationPage extends StatelessWidget {
               elevation: 20,
               clipBehavior: Clip.antiAlias,
               child: Padding(
-                padding: const EdgeInsets.only(top: 25, bottom: 25, right: 15, left: 15),
+                padding: const EdgeInsets.all(25),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,9 +49,9 @@ class MyEmailVerificationPage extends StatelessWidget {
 
                     const SizedBox(height: 30,),
                     Text(
-                      "Bevor Sie die App benutzen können, müssen Sie Ihre E-Mail Adresse verifizieren!",
+                      "Bevor Sie die App benutzen können, müssen\n Sie Ihre E-Mail Adresse verifizieren!",
                       style: GoogleFonts.tiltNeon(
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                       softWrap: true,
                       textAlign: TextAlign.center,

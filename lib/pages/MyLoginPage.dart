@@ -104,8 +104,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
           password: _passwordController.text,
         );
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MyHomePage()));
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'user-not-found') {
