@@ -11,7 +11,7 @@ class MySettingsWidget extends StatefulWidget {
 
 class _MySettingsWidgetState extends State<MySettingsWidget> {
 
-  //TODO: Booleans im Provider speichern (Alle Settings in einem Provider)
+  //TODO: Überarbeitung-1: Booleans im Provider speichern (Alle Settings in einem Provider)
   bool _isBiometricLock = false;
   bool _isNotificationsEnabled = true;
   bool _isVibrationEnabled = true;
