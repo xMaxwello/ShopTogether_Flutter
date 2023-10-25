@@ -6,7 +6,6 @@ import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButton
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
-import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
@@ -58,6 +57,8 @@ class MyAuthenticationWrapper extends StatefulWidget {
 class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
+
+
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {

@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
+import 'package:shopping_app/pages/MyHomePage.dart';
 
 class MyLoginPage extends StatefulWidget {
-
   const MyLoginPage({super.key});
 
   @override
