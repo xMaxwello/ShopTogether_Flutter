@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 
 class MyLoginWidget extends StatefulWidget {
+
   final String title;
   final List<Function()> buttonFunctions;
   final List<TextEditingController> controllers;
@@ -23,6 +24,8 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+    //TODO: Buttons aktualisieren sich nicht, wenn man die Farbe aktualisiert => Man muss die App komplett neu installieren, damit es übernommen wird
 
     return Consumer<MyLoginProvider>(
         builder: (BuildContext context,
@@ -69,7 +72,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
 
                           },
                           icon: Icon(
-                            widget.isInputPassword[i] ? Icons.password : Icons.clear,
+                            widget.isInputPassword[i] ? Icons.remove_red_eye : Icons.clear,
                             size: 20,
                           ),
                         ),

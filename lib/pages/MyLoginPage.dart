@@ -45,7 +45,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
           title: "Registrierung",
           buttonFunctions: [_register, _toLogin],
           controllers: controllers,
-          inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*", "Passwort wiederholen"],
+          inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*", "Passwort wiederholen*"],
           buttonLabels: const ["Registrieren", "Zur Anmeldung"],
           buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
           buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],

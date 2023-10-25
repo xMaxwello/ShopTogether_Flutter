@@ -8,6 +8,8 @@ class MyEmailVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    ///TODO: Refresh screen, IsEmailVerified Listener
+
     return Scaffold(
       body: Stack(
         children: [
