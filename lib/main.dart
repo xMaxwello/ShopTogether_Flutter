@@ -8,7 +8,6 @@ import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarPr
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
-import 'components/login/MyLoginWidget.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
@@ -44,18 +43,21 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const AuthenticationWrapper(),
+      home: const MyAuthenticationWrapper(),
     );
   }
 }
 
-
-class AuthenticationWrapper extends StatelessWidget {
-  const AuthenticationWrapper({super.key});
+class MyAuthenticationWrapper extends StatefulWidget {
+  const MyAuthenticationWrapper({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyAuthenticationWrapper> createState() => _MyAuthenticationWrapperState();
+}
 
+class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
@@ -68,6 +70,7 @@ class AuthenticationWrapper extends StatelessWidget {
             bool isVerified = snapshot.data!.emailVerified;
 
             if (isVerified) {
+
               return const MyHomePage();
             } else {
 

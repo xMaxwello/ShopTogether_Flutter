@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/pages/MyHomePage.dart';
 
 class MyLoginPage extends StatefulWidget {
 
@@ -66,11 +65,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
     );
   }
 
-  void _toRegister() {
+  void _toRegister() async {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-
         updateToRegisterPage();
       });
     });
@@ -122,7 +120,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
         }
 
-      } catch (e) {
+        print("Firebase Error Code: ${e.code}");
+
+    } catch (e) {
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
       }
@@ -142,17 +142,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
     if (!error) {
 
       try {
-        await _auth.createUserWithEmailAndPassword(
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
             email: _emailController.text,
             password: _passwordController.text
         );
 
-        FirebaseAuth.instance.authStateChanges().listen((User? user) {
-
-          if (!user!.emailVerified) {
-            user.sendEmailVerification();
-          }
-        });
+        userCredential.user!.sendEmailVerification();
 
       } on FirebaseAuthException catch(e) {
 

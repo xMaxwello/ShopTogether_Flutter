@@ -8,14 +8,6 @@ class MyEmailVerificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void sendVerificationEmail() async {
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-    }
-
-    void cancelVerification() async {
-      await FirebaseAuth.instance.signOut();
-    }
-
     return Scaffold(
       body: Stack(
         children: [
@@ -60,7 +52,17 @@ class MyEmailVerificationPage extends StatelessWidget {
                     const SizedBox(height: 20,),
 
                     ElevatedButton(
-                        onPressed: sendVerificationEmail,
+                        onPressed: () async {
+
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          if (user != null) {
+
+                            await user.sendEmailVerification();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sie sind nicht angemeldet!')));
+                          }
+                        },
                         child: Text(
                             "E-Mail erneut senden",
                           style: GoogleFonts.tiltNeon(
@@ -70,7 +72,9 @@ class MyEmailVerificationPage extends StatelessWidget {
                     ),
 
                     ElevatedButton(
-                      onPressed: cancelVerification,
+                      onPressed: () async {
+                        await FirebaseAuth.instance.signOut();
+                      },
                       child: Text(
                         "Abbruch",
                         style: GoogleFonts.tiltNeon(
