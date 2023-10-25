@@ -34,7 +34,7 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
 
-              for (int i = 0;i < icons.length; i++)
+              for (int iconView = 0;iconView < icons.length; iconView++)
                 Row(
                   children: [
 
@@ -45,39 +45,41 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             bool allFalse = value.isNavigationSelected.every((element) => element == false);
 
                             if (allFalse) {
-                              value.isNavigationSelected[i] = true;
+                              value.isNavigationSelected[iconView] = true;
                             } else {
                               for (int y = 0; y < value.isNavigationSelected.length; y++) {
                                 value.isNavigationSelected[y] = false;
                               }
-                              value.isNavigationSelected[i] = !value.isNavigationSelected[i];
+                              value.isNavigationSelected[iconView] = !value.isNavigationSelected[iconView];
                             }
 
                             Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected(value.isNavigationSelected);
-///TODO:Lukas => Überarbeitung-1
-                            if (i == 0) {
-                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false); //TODO: Verstehe nicht ganz warum du nach i==0 oder 1 abfragst, desweiteren werden so die Values im Provider nicht geupdatet oder zumindestens macht man das so nicht
-                            } else if (i == 1) {
+
+                            //Switch statement to switch between different Views by pressing
+                            // on the corresponding Icon on the BottomBar
+                            switch(iconView) {
+                              case 0: //Shows Homepage
+                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false);
+                              case 1: //Shows SettingsPage
                               Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(true);
                             }
-///TODO:Lukas
                           });
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4),
-                          child: value.isNavigationSelected[i] == true ?
+                          child: value.isNavigationSelected[iconView] == true ?
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
 
                               Icon(
-                                icons[i],
+                                icons[iconView],
                                 size: 28,
                                 color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8),
                               ),
                               Text(
-                                  titles[i]
+                                  titles[iconView]
                               )
 
                             ],
@@ -89,11 +91,11 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             children: [
 
                               Icon(
-                                icons[i],
+                                icons[iconView],
                                 size: 25,
                               ),
                               Text(
-                                  titles[i]
+                                  titles[iconView]
                               )
 
                             ],

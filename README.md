@@ -44,4 +44,5 @@ SettingsPage:
  - Konto löschen Button mit Nutzerbestätigung.
  - Passwort/Email/Name ändern lasen
 
-
+Entfernung von Email in der Anmeldungsseite per button
+Beim registrieren weiteres Feld "Passwort wiederholen"
