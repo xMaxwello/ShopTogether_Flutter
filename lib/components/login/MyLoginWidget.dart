@@ -3,8 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 
-class MyLoginWidget extends StatelessWidget {
-
+class MyLoginWidget extends StatefulWidget {
   final String title;
   final List<Function()> buttonFunctions;
   final List<TextEditingController> controllers;
@@ -17,8 +16,13 @@ class MyLoginWidget extends StatelessWidget {
   const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword, required this.title});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyLoginWidget> createState() => _MyLoginWidgetState();
+}
 
+class _MyLoginWidgetState extends State<MyLoginWidget> {
+
+  @override
+  Widget build(BuildContext context) {
 
     return Consumer<MyLoginProvider>(
         builder: (BuildContext context,
@@ -38,17 +42,39 @@ class MyLoginWidget extends StatelessWidget {
                 children: [
 
                   Text(
-                      title,
+                    widget.title,
                     style: GoogleFonts.tiltNeon(
-                      fontSize: 24
+                        fontSize: 24
                     ),
                   ),
 
-                  for (int i = 0; i<controllers.length;i++)
+                  for (int i = 0; i<widget.controllers.length;i++)
                     TextFormField(
-                      controller: controllers[i],
-                      decoration: InputDecoration(labelText: inputLabels[i]),
-                      obscureText: isInputPassword[i],
+                      controller: widget.controllers[i],
+                      decoration: InputDecoration(
+                        labelText: widget.inputLabels[i],
+                        suffixIcon: IconButton(
+                          onPressed: () {
+
+                            if (widget.isInputPassword[i]) {
+
+                               setState(() {
+                                 value.showPasswords[i] = !value.showPasswords[i];
+                                 Provider.of<MyLoginProvider>(context, listen: false).updateShowPasswords(value.showPasswords);
+                               });
+                            } else {
+
+                              widget.controllers[i].clear();
+                            }
+
+                          },
+                          icon: Icon(
+                            widget.isInputPassword[i] ? Icons.password : Icons.clear,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                      obscureText: value.showPasswords[i],
                     ),
                   const SizedBox(height: 30),
 
@@ -58,7 +84,7 @@ class MyLoginWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
 
-                      for (int i = 0;i < buttonLabels.length;i++)
+                      for (int i = 0;i < widget.buttonLabels.length;i++)
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,17 +92,17 @@ class MyLoginWidget extends StatelessWidget {
                           children: [
 
                             ElevatedButton(
-                                onPressed: buttonFunctions[i],
+                                onPressed: widget.buttonFunctions[i],
                                 style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(buttonBackgroundColors[i]),
+                                  backgroundColor: MaterialStateProperty.all(widget.buttonBackgroundColors[i]),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
                                   child: Text(
-                                    buttonLabels[i],
+                                    widget.buttonLabels[i],
                                     style: GoogleFonts.tiltNeon(
                                         fontSize: 19,
-                                        color: buttonForegroundColors[i]
+                                        color: widget.buttonForegroundColors[i]
                                     ),
                                   ),
                                 )

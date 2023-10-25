@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/pages/MyHomePage.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -18,6 +17,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final TextEditingController _prenameController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
@@ -26,6 +26,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
     _prenameController.text = "";
     _nameController.text = "";
     _passwordController.text = "";
+    _confirmPasswordController.text = "";
     _emailController.text = "";
   }
 
@@ -33,16 +34,22 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     refreshInputs();
 
+    List<TextEditingController> controllers = [_prenameController, _nameController, _emailController, _passwordController, _confirmPasswordController];
+
+    List<bool> showPassword = List.generate(controllers.length, (index) => true);
+    Provider.of<MyLoginProvider>(context, listen: false).updateShowPasswords(showPassword);
+
+
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
           title: "Registrierung",
           buttonFunctions: [_register, _toLogin],
-          controllers: [_prenameController, _nameController, _emailController, _passwordController],
-          inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*"],
+          controllers: controllers,
+          inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*", "Passwort wiederholen"],
           buttonLabels: const ["Registrieren", "Zur Anmeldung"],
           buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
           buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
-          isInputPassword: const [false, false, false, true],
+          isInputPassword: const [false, false, false, true, true],
         )
     );
   }
@@ -51,11 +58,16 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     refreshInputs();
 
+    List<TextEditingController> controllers = [_emailController, _passwordController];
+
+    List<bool> showPassword = List.generate(controllers.length, (index) => true);
+    Provider.of<MyLoginProvider>(context, listen: false).updateShowPasswords(showPassword);
+
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
           title: "Anmeldung",
           buttonFunctions: [_login, _toRegister],
-          controllers: [_emailController, _passwordController],
+          controllers: controllers,
           inputLabels: const ["E-Mail*", "Passwort*"],
           buttonLabels: const ["Anmelden", "Zur Registrierung"],
           buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
@@ -133,9 +145,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     bool error = false;
 
-    if (_passwordController.text == "" || _prenameController.text == "" ||
+    if (_passwordController.text == "" || _confirmPasswordController.text == "" || _prenameController.text == "" ||
         _nameController.text == "" || _emailController.text == "") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Es müssen alle Felder mit "*" ausgefüllt werden!')));
+      error = true;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!')));
       error = true;
     }
 
