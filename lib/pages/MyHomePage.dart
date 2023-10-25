@@ -12,13 +12,16 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSettingsPage = Provider.of<MySettingsProvider>(context).isSettingsPage; //TODO: Überarbeitung-1: Einheitlich Arbeiten hier fehlt der Consumer. Wie rufen die Variable nicht wie hier einfach auf, sondern immer in einem Consumer
+    final isSettingsPage = Provider.of<MySettingsProvider>(context).isSettingsPage;
 
     ///get status bar height
     double height = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      body: Padding(
+      body: Consumer<MySettingsProvider>(
+      builder: (context, mySettingsProvider, child){
+        final isSettingsPage = MySettingsProvider().isSettingsPage;
+      return Padding(
         padding: EdgeInsets.only(top: height), ///set the padding = status bar height
         child: isSettingsPage
         ? const MySettingsWidget()
@@ -60,13 +63,16 @@ class MyHomePage extends StatelessWidget {
                           color: Colors.white
                       ),
                     ),
-                  )
+                  ),
               ),
 
             ],
           ),
         ),
+      );
+      },
       ),
+
       bottomNavigationBar: BottomAppBar(
         color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.2),
         child: const MyHomeNavigationBar(),
