@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../functions/snackbars/MySnackBar.dart';
+
 class MyEmailVerificationPage extends StatelessWidget {
   const MyEmailVerificationPage({super.key});
 
@@ -61,8 +63,9 @@ class MyEmailVerificationPage extends StatelessWidget {
                           if (user != null) {
 
                             await user.sendEmailVerification();
+                            MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.black38);
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sie sind nicht angemeldet!')));
+                            MySnackBar.showMySnackBar(context, 'Sie sind nicht angemeldet!');
                           }
                         },
                         child: Text(

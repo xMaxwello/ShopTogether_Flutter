@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 
 class MyLoginProvider extends ChangeNotifier {
   Widget? _widget;
-  List<bool> _showPasswords = [];
+  List<bool>? _showPasswords;
 
   Widget? get widget => _widget;
-  List<bool> get showPasswords => _showPasswords;
+  List<bool>? get showPasswords => _showPasswords;
 
   void updateWidget(Widget widget) {
     _widget = widget;

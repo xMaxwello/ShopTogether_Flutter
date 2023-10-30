@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoppinglist',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -59,30 +59,24 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
 
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
 
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
+        if (user != null) {
+          bool isVerified = user.emailVerified;
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else {
+          if (isVerified) {
 
-          if (snapshot.hasData) {
-            bool isVerified = snapshot.data!.emailVerified;
-
-            if (isVerified) {
-
-              return const MyHomePage();
-            } else {
-
-              return const MyEmailVerificationPage();
-            }
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
           } else {
-            return const MyLoginPage();
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyEmailVerificationPage()));
           }
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLoginPage()));
         }
-      },
-    );
+
+    });
+
+    return const Text("Laden...");
   }
 }

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
+import 'package:shopping_app/functions/snackbars/MySnackBar.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -30,13 +31,22 @@ class _MyLoginPageState extends State<MyLoginPage> {
     _emailController.text = "";
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    refreshInputs();
+  }
+
   void updateToRegisterPage() {
 
     refreshInputs();
 
     List<TextEditingController> controllers = [_prenameController, _nameController, _emailController, _passwordController, _confirmPasswordController];
 
-    List<bool> showPassword = List.generate(controllers.length, (index) => true);
+    List<bool> _showPassword = const [false, false, false, true, true];
+    List<bool> showPassword = List.generate(controllers.length, (index) => _showPassword.elementAt(index));
+
     Provider.of<MyLoginProvider>(context, listen: false).updateShowPasswords(showPassword);
 
 
@@ -49,7 +59,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
           buttonLabels: const ["Registrieren", "Zur Anmeldung"],
           buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
           buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
-          isInputPassword: const [false, false, false, true, true],
+          isInputPassword: _showPassword,
         )
     );
   }
@@ -60,8 +70,11 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     List<TextEditingController> controllers = [_emailController, _passwordController];
 
-    List<bool> showPassword = List.generate(controllers.length, (index) => true);
+    List<bool> _showPassword = const [false, true];
+    List<bool> showPassword = List.generate(controllers.length, (index) => _showPassword.elementAt(index));
+
     Provider.of<MyLoginProvider>(context, listen: false).updateShowPasswords(showPassword);
+
 
     Provider.of<MyLoginProvider>(context, listen: false).updateWidget(
         MyLoginWidget(
@@ -79,22 +92,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   void _toRegister() async {
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        updateToRegisterPage();
-      });
-    });
-
+    updateToRegisterPage();
   }
 
-  void _toLogin() {
+  void _toLogin() async {
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
+    //TODO: Nach EmailVerifizierung und Abbrechen, gibts ein State fehler
 
-          updateToLoginPage();
-      });
-    });
+    updateToLoginPage();
   }
 
   Future<void> _login() async {
@@ -102,7 +107,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
     bool error = false;
 
     if (_emailController.text == "" || _passwordController.text == "") {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Es müssen alle Felder mit "*" ausgefüllt werden!')));
+      MySnackBar.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
 
@@ -116,27 +121,27 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
       } on FirebaseAuthException catch(e) {
 
-        if (e.code == 'user-not-found') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Benutzer nicht gefunden.')));
+        if (e.code == 'user-not-found') { //TODO: Es kommt immer diese Fehlermeldung: INVALID_LOGIN_CREDENTIALS wenn User bei Anmeldung nicht vorhanden ist
+          MySnackBar.showMySnackBar(context, 'Benutzer nicht gefunden.');
         } else if (e.code == 'wrong-password') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Falsches Passwort.')));
+          MySnackBar.showMySnackBar(context, 'Falsches Passwort.');
         } else if (e.code == 'user-disabled') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Benutzerkonto deaktiviert.')));
+          MySnackBar.showMySnackBar(context, 'Benutzerkonto deaktiviert.');
         } else if (e.code == 'too-many-requests') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Zu viele Anfragen. Versuchen Sie es später erneut.')));
+          MySnackBar.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
         } else if (e.code == 'network-request-failed') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.')));
+          MySnackBar.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
         } else if (e.code == 'invalid-email') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.')));
+          MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
+          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
         }
 
         print("Firebase Error Code: ${e.code}");
 
     } catch (e) {
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
+        MySnackBar.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
       }
     }
   }
@@ -147,12 +152,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     if (_passwordController.text == "" || _confirmPasswordController.text == "" || _prenameController.text == "" ||
         _nameController.text == "" || _emailController.text == "") {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Es müssen alle Felder mit "*" ausgefüllt werden!')));
+      MySnackBar.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!')));
+      MySnackBar.showMySnackBar(context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
       error = true;
     }
 
@@ -166,30 +171,25 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
         userCredential.user!.sendEmailVerification();
 
+        MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.blueGrey);
+
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ihr Passwort ist zu schwach!')));
+          MySnackBar.showMySnackBar(context, 'Ihr Passwort ist zu schwach!');
         } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Die eingegebene E-Mail ist bereits vergeben!')));
+          MySnackBar.showMySnackBar(context, 'Die eingegebene E-Mail ist bereits vergeben!');
         } else if (e.code == 'invalid-email') {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.')));
+          MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
+          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
         }
 
       } catch(e) {
 
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!')));
+        MySnackBar.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
       }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    refreshInputs();
   }
 
   @override
