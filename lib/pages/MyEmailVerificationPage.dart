@@ -1,16 +1,47 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../functions/snackbars/MySnackBar.dart';
+import 'MyHomePage.dart';
 
-class MyEmailVerificationPage extends StatelessWidget {
-  const MyEmailVerificationPage({super.key});
+class MyEmailVerificationAuthPage extends StatefulWidget {
+  const MyEmailVerificationAuthPage({super.key});
+
+  @override
+  State<MyEmailVerificationAuthPage> createState() => _MyEmailVerificationAuthPageState();
+}
+
+class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPage> {
+
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+      await FirebaseAuth.instance.currentUser?.reload();
+      final user = FirebaseAuth.instance.currentUser;
+      if (user?.emailVerified ?? false) {
+        timer.cancel();
+
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
+        MySnackBar.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", backgroundColor: Colors.blueGrey);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    ///TODO: Refresh screen, IsEmailVerified Listener
 
     return Scaffold(
       body: Stack(
@@ -56,24 +87,24 @@ class MyEmailVerificationPage extends StatelessWidget {
                     const SizedBox(height: 20,),
 
                     ElevatedButton(
-                        onPressed: () async {
+                      onPressed: () async {
 
-                          User? user = FirebaseAuth.instance.currentUser;
+                        User? user = FirebaseAuth.instance.currentUser;
 
-                          if (user != null) {
+                        if (user != null) {
 
-                            await user.sendEmailVerification();
-                            MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.black38);
-                          } else {
-                            MySnackBar.showMySnackBar(context, 'Sie sind nicht angemeldet!');
-                          }
-                        },
-                        child: Text(
-                            "E-Mail erneut senden",
-                          style: GoogleFonts.tiltNeon(
-                              fontSize: 20
-                          ),
+                          await user.sendEmailVerification();
+                          MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.black38);
+                        } else {
+                          MySnackBar.showMySnackBar(context, 'Sie sind nicht angemeldet!');
+                        }
+                      },
+                      child: Text(
+                        "E-Mail erneut senden",
+                        style: GoogleFonts.tiltNeon(
+                            fontSize: 20
                         ),
+                      ),
                     ),
 
                     ElevatedButton(

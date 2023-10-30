@@ -69,7 +69,7 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
           } else {
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyEmailVerificationPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyEmailVerificationAuthPage()));
           }
         } else {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const MyLoginPage()));
@@ -77,6 +77,8 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
 
     });
 
-    return const Text("Laden...");
+    return const Scaffold(
+      body: CircularProgressIndicator(),
+    );
   }
 }
