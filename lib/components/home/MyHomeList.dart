@@ -112,6 +112,7 @@ class _MyHomeListState extends State<MyHomeList> {
                       myProduct: MyProduct(
                           productID: data.docs.elementAt(index).get("productID"),
                           productName: data.docs.elementAt(index).get("productName"),
+                          selectedUserUUID: data.docs.elementAt(index).get("selectedUserUUID"),
                           productCount: data.docs.elementAt(index).get("productCount"),
                           productImageUrl: data.docs.elementAt(index).get("productImageUrl")
                       ),
