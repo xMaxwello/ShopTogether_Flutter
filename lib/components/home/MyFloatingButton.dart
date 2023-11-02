@@ -17,11 +17,14 @@ class MyFloatingButton extends StatefulWidget {
 
 class _MyFloatingButtonState extends State<MyFloatingButton> {
 
+  bool toggle = false;
+
   @override
   Widget build(BuildContext context) {
 
     void floatingButtonAction() {
-      ///TODO: An die Barcode-Seite weiterleiten
+      ///TODO: weiterleiten
+
     }
 
     return Consumer<MyFloatingButtonProvider>(

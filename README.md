@@ -46,3 +46,4 @@ SettingsPage:
 
 Entfernung von Email in der Anmeldungsseite per button
 Beim registrieren weiteres Feld "Passwort wiederholen"
+Produkte Leuten zu weisen

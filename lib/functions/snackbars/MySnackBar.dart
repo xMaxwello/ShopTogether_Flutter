@@ -10,7 +10,7 @@ class MySnackBar {
           content: Text(
             showText,
             style: GoogleFonts.tiltNeon(
-                fontSize: 18
+                fontSize: 16
             ),
           ),
           backgroundColor: backgroundColor,

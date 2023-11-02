@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoppinglist',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
@@ -56,6 +56,7 @@ class MyAuthenticationWrapper extends StatefulWidget {
 }
 
 class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
+
   @override
   Widget build(BuildContext context) {
 

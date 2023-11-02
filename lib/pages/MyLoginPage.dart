@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
+import 'package:shopping_app/functions/MyFirebaseAuth.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/snackbars/MySnackBar.dart';
 
@@ -112,16 +113,14 @@ class _MyLoginPageState extends State<MyLoginPage> {
     }
 
     if (!error) {
-
       try {
         await _auth.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
-
       } on FirebaseAuthException catch(e) {
 
-        if (e.code == 'user-not-found') { //TODO: Es kommt immer diese Fehlermeldung: INVALID_LOGIN_CREDENTIALS wenn User bei Anmeldung nicht vorhanden ist
+        if (e.code == 'user-not-found') { //TODO: Es kommt immer diese Fehlermeldung: INVALID_LOGIN_CREDENTIALS wenn User bei Anmeldung nicht vorhanden ist => user vorher überprüfen ob er vorhanden ist
           MySnackBar.showMySnackBar(context, 'Benutzer nicht gefunden.');
         } else if (e.code == 'wrong-password') {
           MySnackBar.showMySnackBar(context, 'Falsches Passwort.');
@@ -134,10 +133,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
         } else if (e.code == 'invalid-email') {
           MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
         } else {
-          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          MySnackBar.showMySnackBar(context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
+          print("Firebase Error Code: ${e.code}");
         }
-
-        print("Firebase Error Code: ${e.code}");
 
     } catch (e) {
 
