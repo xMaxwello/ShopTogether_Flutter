@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/components/settings/MyUserCard.dart';
 
 class MySettingsWidget extends StatefulWidget {
   const MySettingsWidget({super.key});
@@ -21,7 +22,6 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -40,43 +40,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                       ),
                     ),
                   ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 16.0),
-                    color: Color.lerp(Colors.white, Theme
-                        .of(context)
-                        .colorScheme
-                        .primary, 0.05),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Vorname Nachname",
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Accounteinstellungen",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              Icon(Icons.arrow_forward, size: 16,
-                                  color: Colors.black54)
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  const MyUserCard(),
                   ListTile(
                     title: const Text("Mit Fingerabdruck/FaceID sichern"),
                     trailing: Switch(

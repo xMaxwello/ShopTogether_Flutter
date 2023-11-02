@@ -44,6 +44,8 @@ SettingsPage:
  - Konto löschen Button mit Nutzerbestätigung.
  - Passwort/Email/Name ändern lasen
 
+Booleans in einer Liste einpacken im Provider (for Schleife) mit update funktion (i)
+
 Entfernung von Email in der Anmeldungsseite per button
 Beim registrieren weiteres Feld "Passwort wiederholen"
 Produkte Leuten zu weisen
