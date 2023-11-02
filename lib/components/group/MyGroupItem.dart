@@ -10,8 +10,8 @@ class MyGroupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    int usersLength = myGroupItem.users.length;
-    int shoppingListLength = myGroupItem.shoppingList.length;
+    int usersLength = myGroupItem.userUUIDs.length;
+    int shoppingListLength = myGroupItem.products.length;
 
     return GestureDetector(
         onTap: () {

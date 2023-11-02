@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
 import 'package:shopping_app/components/product/MyProductItem.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
+import 'package:shopping_app/objects/groups/MyGroup.dart';
+import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 
@@ -55,6 +58,79 @@ class _MyHomeListState extends State<MyHomeList> {
             MyItemsProvider value,
             Widget? child){
 
+          Stream<QuerySnapshot<Map<String, dynamic>>> getTable = value.isGroup ?
+          FirebaseFirestore.instance.collection("groups").snapshots() :
+          FirebaseFirestore.instance.collection("users").snapshots();
+
+      return StreamBuilder(
+          stream: getTable,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text(
+                  "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            // Hier kannst du auf die Firestore-Daten zugreifen
+            final data = snapshot.data;
+
+            if (data == null || data.docs.isEmpty) {
+              return Center(
+                child: widget.isListEmptyWidget,
+              );
+            }
+
+            return ListView.builder(
+              itemCount: data.docs.length,
+              controller: _controller,
+              itemBuilder: (context, index) {
+                return MyBasicStructItem(///the basic struct of the group, product, ... elements
+
+                    content:
+                    value.isGroup == true ?
+                    MyGroupItem(
+                      myGroupItem: MyGroup(
+                          groupID: data.docs.elementAt(index).get("groupID"),
+                          groupName: data.docs.elementAt(index).get("groupName"),
+                          userUUIDs: data.docs.elementAt(index).get("userUUIDs"),
+                          products: data.docs.elementAt(index).get("products")
+                      ),
+                    )
+                        :
+                    MyProductItem(
+                      myProduct: MyProduct(
+                          productID: data.docs.elementAt(index).get("productID"),
+                          productName: data.docs.elementAt(index).get("productName"),
+                          productCount: data.docs.elementAt(index).get("productCount"),
+                          productImageUrl: data.docs.elementAt(index).get("productImageUrl")
+                      ),
+                    )
+
+                );
+              },
+            );
+          }
+
+      );
+    });
+
+    /*
+    return Consumer<MyItemsProvider>(
+        builder: (BuildContext context,
+            MyItemsProvider value,
+            Widget? child){
+
           if (value.elements.isEmpty) {
 
             return Center(
@@ -84,5 +160,6 @@ class _MyHomeListState extends State<MyHomeList> {
           }
         }
     );
+    * */
   }
 }

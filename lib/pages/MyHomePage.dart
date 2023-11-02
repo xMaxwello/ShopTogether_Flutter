@@ -25,53 +25,53 @@ class MyHomePage extends StatelessWidget {
             child: mySettingsProvider.isSettingsPage
                 ? const MySettingsWidget()
                 : MyHomeList(
-              isListEmptyWidget: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
+                  isListEmptyWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
 
-                  Text(
-                    "Die Liste ist leer!",
-                    style: GoogleFonts.tiltNeon(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 10,),
-                  ElevatedButton(
-                    onPressed: () {
-
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Color.lerp(Colors.white, Theme
-                              .of(context)
-                              .colorScheme
-                              .primary, 0.8)),
-                      minimumSize: MaterialStateProperty.resolveWith<Size?>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
-                            return const Size(230, 42);
-                          }
-                          return const Size(180, 40);
-                        },
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 5, bottom: 5),
-                      child: Text(
-                        "Gruppe Hinzufügen",
+                      Text(
+                        "Die Liste ist leer!",
                         style: GoogleFonts.tiltNeon(
-                            fontSize: 16,
-                            color: Colors.white
+                          fontSize: 16,
                         ),
                       ),
-                    ),
-                  ),
+                      const SizedBox(height: 10,),
+                      ElevatedButton(
+                        onPressed: () {
 
-                ],
-              ),
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.lerp(Colors.white, Theme
+                                  .of(context)
+                                  .colorScheme
+                                  .primary, 0.8)),
+                          minimumSize: MaterialStateProperty.resolveWith<Size?>(
+                                (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return const Size(230, 42);
+                              }
+                              return const Size(180, 40);
+                            },
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15, right: 15, top: 5, bottom: 5),
+                          child: Text(
+                            "Gruppe Hinzufügen",
+                            style: GoogleFonts.tiltNeon(
+                                fontSize: 16,
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
             ),
           ),
           bottomNavigationBar: BottomAppBar(
