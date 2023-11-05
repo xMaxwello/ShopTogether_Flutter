@@ -6,12 +6,14 @@ class MySettingsProvider with ChangeNotifier {
   bool _isNotificationsEnabled = true;
   bool _isVibrationEnabled = true;
   bool _isSoundEnabled = true;
+  bool _showAccountSettings = false;
 
   bool get isSettingsPage => _isSettingsPage;
   bool get isBiometricLock => _isBiometricLock;
   bool get isNotificationsEnabled => _isNotificationsEnabled;
   bool get isVibrationEnabled => _isVibrationEnabled;
   bool get isSoundEnabled => _isSoundEnabled;
+  bool get showAccountSettings => _showAccountSettings;
 
   void updateIsSettingsPage(bool value) {
     _isSettingsPage = value;
@@ -35,6 +37,11 @@ class MySettingsProvider with ChangeNotifier {
 
   void updateIsSoundEnabled(bool value) {
     _isSoundEnabled = value;
+    notifyListeners();
+  }
+
+  void updateShowAccountSettings(bool value){
+    _showAccountSettings = value;
     notifyListeners();
   }
   
