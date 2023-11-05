@@ -6,5 +6,19 @@ class MyUser extends ChangeNotifier {
   final String surname;
   final List<String> groupUUIDs;
 
-  MyUser({required this.prename, required this.surname, required this.groupUUIDs, required this.userUUID,});
+  MyUser({
+    required this.prename,
+    required this.surname,
+    required this.groupUUIDs,
+    required this.userUUID,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productID': prename,
+      'productName': surname,
+      'selectedUserUUID': groupUUIDs,
+      'productCount': userUUID,
+    };
+  }
 }

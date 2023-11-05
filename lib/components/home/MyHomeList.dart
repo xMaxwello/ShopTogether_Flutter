@@ -95,27 +95,17 @@ class _MyHomeListState extends State<MyHomeList> {
               itemCount: data.docs.length,
               controller: _controller,
               itemBuilder: (context, index) {
+
                 return MyBasicStructItem(///the basic struct of the group, product, ... elements
 
                     content:
                     value.isGroup == true ?
                     MyGroupItem(
-                      myGroupItem: MyGroup(
-                          groupID: data.docs.elementAt(index).get("groupID"),
-                          groupName: data.docs.elementAt(index).get("groupName"),
-                          userUUIDs: data.docs.elementAt(index).get("userUUIDs"),
-                          products: data.docs.elementAt(index).get("products")
-                      ),
+                      myGroup: MyGroup.fromQuery(data.docs.elementAt(index))
                     )
                         :
                     MyProductItem(
-                      myProduct: MyProduct(
-                          productID: data.docs.elementAt(index).get("productID"),
-                          productName: data.docs.elementAt(index).get("productName"),
-                          selectedUserUUID: data.docs.elementAt(index).get("selectedUserUUID"),
-                          productCount: data.docs.elementAt(index).get("productCount"),
-                          productImageUrl: data.docs.elementAt(index).get("productImageUrl")
-                      ),
+                      myProduct: MyProduct.fromQuery(data.docs.elementAt(index))
                     )
 
                 );

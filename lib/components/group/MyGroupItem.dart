@@ -3,15 +3,15 @@ import 'package:shopping_app/objects/groups/MyGroup.dart';
 
 class MyGroupItem extends StatelessWidget {
 
-  final MyGroup myGroupItem;
+  final MyGroup myGroup;
 
-  const MyGroupItem({super.key, required this.myGroupItem});
+  const MyGroupItem({super.key, required this.myGroup});
 
   @override
   Widget build(BuildContext context) {
 
-    int usersLength = myGroupItem.userUUIDs.length;
-    int shoppingListLength = myGroupItem.products.length;
+    int usersLength = myGroup.userUUIDs.length;
+    int shoppingListLength = myGroup.products.length;
 
     return GestureDetector(
         onTap: () {
@@ -24,7 +24,7 @@ class MyGroupItem extends StatelessWidget {
           children: [
 
             Text(
-              myGroupItem.groupName,
+              myGroup.groupName,
               style: const TextStyle(
                   fontSize: 20
               ),

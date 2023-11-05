@@ -98,8 +98,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   void _toLogin() async {
 
-    //TODO: Nach EmailVerifizierung und Abbrechen, gibts ein State fehler
-
     updateToLoginPage();
   }
 
@@ -132,8 +130,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
           MySnackBar.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
         } else if (e.code == 'invalid-email') {
           MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
-        } else {
+        } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
           MySnackBar.showMySnackBar(context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
+        } else {
+          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
           print("Firebase Error Code: ${e.code}");
         }
 

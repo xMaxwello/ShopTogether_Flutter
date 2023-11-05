@@ -7,6 +7,8 @@ import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
 import 'package:shopping_app/components/settings/MySettingsWidget.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 
+import '../functions/functions/MyFunctions.dart';
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
@@ -17,6 +19,7 @@ class MyHomePage extends StatelessWidget {
 
     return Consumer<MySettingsProvider>(
       builder: (context, mySettingsProvider, child) {
+
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.only(top: height),
@@ -39,9 +42,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 10,),
                       ElevatedButton(
-                        onPressed: () {
-
-                        },
+                        onPressed: MyFunctions.addGroup,
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(
                               Color.lerp(Colors.white, Theme

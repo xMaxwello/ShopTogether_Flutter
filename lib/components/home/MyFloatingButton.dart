@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/functions/MyFunctions.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 
@@ -22,10 +23,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
   @override
   Widget build(BuildContext context) {
 
-    void floatingButtonAction() {
-      ///TODO: weiterleiten
 
-    }
 
     return Consumer<MyFloatingButtonProvider>(
         builder: (BuildContext context,
@@ -45,7 +43,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
                   .of(context)
                   .colorScheme
                   .primary, 0.8),
-              onPressed: floatingButtonAction,
+              onPressed: MyFunctions.addGroup,
               child: Icon(
                 widget.iconData,
                 color: Colors.white,
@@ -54,7 +52,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
                 :
             FloatingActionButton.extended(
               key: const ValueKey<bool>(true),
-              onPressed: floatingButtonAction,
+              onPressed: MyFunctions.addGroup,
               backgroundColor: Color.lerp(Colors.white, Theme
                   .of(context)
                   .colorScheme
