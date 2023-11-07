@@ -21,6 +21,40 @@ class MyFirestore {
 
   static void removeUser(String uuid) {
 
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("users").doc(uuid);
+
+    ref.get().then((group) {
+
+      if (group.exists) {
+
+        List<dynamic> userUUIDs = group.get("groupUUIDs");
+        for (var userUUID in userUUIDs) {
+
+          FirebaseFirestore.instance.collection("groups").doc(userUUID.toString()).get().then((user) {
+            if (user.exists) {
+
+              List<String> groupUUIDs = List<String>.from(user.get("userUUIDs"));
+              groupUUIDs.remove(uuid);
+              user.reference.update({
+                "groupUUIDs": groupUUIDs,
+              });
+            }
+          });
+        }
+        ref.delete();
+      }
+    });
+  }
+
+  /// removes the current user completely from the system
+  ///
+  static void removeCurrentUserCompletely() {
+
+    User user = FirebaseAuth.instance.currentUser!;
+
+    removeUser(user.uid);
+    user.delete();
   }
 
   static void updateUser(String uuid, MyUser myUser) {
@@ -60,7 +94,9 @@ class MyFirestore {
       ///create a new group
       DocumentReference ref = FirebaseFirestore.instance.collection("groups").doc();
 
+      ///update uuid from goup and add user who created the group
       myGroup.updateGroupUUID(myGroup, ref.id);
+      myGroup.updateUserUUIDs(myGroup, [uuidFromCurrentUser]);
       ref.set(myGroup.toMap());
 
       ///add the uuid from group in the current user
@@ -71,8 +107,32 @@ class MyFirestore {
     }
   }
 
-  static void removeGroup(String id) {
+  static void removeGroup(String uuid) {
 
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(uuid);
+
+    ref.get().then((group) {
+
+      if (group.exists) {
+
+        List<dynamic> userUUIDs = group.get("userUUIDs");
+        for (var userUUID in userUUIDs) {
+
+          FirebaseFirestore.instance.collection("users").doc(userUUID.toString()).get().then((user) {
+            if (user.exists) {
+
+              List<String> groupUUIDs = List<String>.from(user.get("groupUUIDs"));
+              groupUUIDs.remove(uuid);
+              user.reference.update({
+                "groupUUIDs": groupUUIDs,
+              });
+            }
+          });
+        }
+        ref.delete();
+      }
+    });
   }
 
   static void updateGroup(String id, MyProduct myProduct) {
@@ -86,6 +146,7 @@ class MyFirestore {
   }
 
   static void removeProduct(String id) {
+
 
   }
 

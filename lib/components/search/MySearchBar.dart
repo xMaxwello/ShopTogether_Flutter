@@ -9,8 +9,6 @@ class MySearchBar extends StatefulWidget {
 
 class _MySearchBarState extends State<MySearchBar> {
 
-  bool isDark = false;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,6 +17,11 @@ class _MySearchBarState extends State<MySearchBar> {
           builder: (BuildContext context, SearchController controller) {
 
             return SearchBar(
+              surfaceTintColor: MaterialStateProperty.all(
+                  Color.lerp(Colors.white, Theme
+                      .of(context)
+                      .colorScheme
+                      .primary, 0.8)),
               controller: controller,
               onTap: () {
                 controller.openView();
@@ -29,14 +32,12 @@ class _MySearchBarState extends State<MySearchBar> {
               leading: const Icon(Icons.search),
               trailing: <Widget> [
                 IconButton(
-                  isSelected: isDark,
                   onPressed: () {
                     setState(() {
-                      isDark = !isDark;
+                      ///TODO: add function
                     });
                   },
                   icon: const Icon(Icons.qr_code),
-                  selectedIcon: const Icon(Icons.brightness_2_outlined),
                 ),
               ],
               padding: const MaterialStatePropertyAll<EdgeInsets>(
@@ -46,7 +47,7 @@ class _MySearchBarState extends State<MySearchBar> {
           suggestionsBuilder: (BuildContext context, SearchController controller) {
             return List<ListTile>.generate(5, (int index) {
               final String item = 'item $index';
-              return ListTile(
+              return ListTile( ///TODO: edit to the Productitem
                 title: Text(item),
                 onTap: () {
                   controller.closeView(item);

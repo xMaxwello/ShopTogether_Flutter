@@ -126,16 +126,20 @@ class _MyHomeListState extends State<MyHomeList> {
                           }
 
                           ///if there no groups
-                          if (groupsFromUser.isEmpty && value.isGroup && selectedGroupIndex != -1) {
+                          if (groupsFromUser.isEmpty && (value.isGroup || selectedGroupIndex != -1)) {
                             return Expanded(
-                              child: widget.isListEmptyWidget,
+                              child: Center(
+                                child: widget.isListEmptyWidget,
+                              ),
                             );
                           }
 
                           ///if there no products in group
                           if (!value.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
                             return Expanded(
-                              child: widget.isListEmptyWidget,
+                              child: Center(
+                                child: widget.isListEmptyWidget,
+                              ),
                             );
                           }
 
@@ -164,7 +168,6 @@ class _MyHomeListState extends State<MyHomeList> {
                           );
                         });
                   })
-
             ],
           );
     });

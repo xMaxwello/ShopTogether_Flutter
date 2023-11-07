@@ -5,9 +5,9 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 class MyGroup extends ChangeNotifier {
 
   String groupUUID;
-  final String groupName;
-  final List<String> userUUIDs;
-  final List<MyProduct> products;
+  String groupName;
+  List<String> userUUIDs;
+  List<MyProduct> products;
 
   MyGroup({
     required this.groupUUID,
@@ -18,6 +18,10 @@ class MyGroup extends ChangeNotifier {
 
   void updateGroupUUID(MyGroup group, String newUUID) {
     group.groupUUID = newUUID;
+  }
+
+  void updateUserUUIDs(MyGroup group, List<String> userUUIDs) {
+    group.userUUIDs = userUUIDs;
   }
 
   Map<String, dynamic> toMap() {
