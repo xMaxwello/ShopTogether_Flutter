@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
-class MyProductItem extends StatelessWidget {
+class MyProductAddItem extends StatelessWidget {
 
   final MyProduct myProduct;
 
-  const MyProductItem({
+  const MyProductAddItem({
     Key? key, required this.myProduct}) : super(key: key);
 
   @override
@@ -52,18 +52,8 @@ class MyProductItem extends StatelessWidget {
                       const SizedBox(width: 10),
 
                       // Stückzahl
-                      IconButton(
-                          onPressed: () {
-
-                          },
-                          icon: const Icon(Icons.remove)
-                      ),
-                      Text(myProduct.productCount.toString()),
-                      IconButton(
-                          onPressed: () {
-
-                          },
-                          icon: const Icon(Icons.add)
+                      const Icon(
+                        Icons.add
                       ),
                     ],
                   ),

@@ -139,10 +139,8 @@ class MyFirestore {
 
   }
 
-  static void addProduct(MyProduct myProduct) {///TODO: Hier gibts noch fehler: MyProducts wird in Groups geschrieben doc(id) verwenden
-    FirebaseFirestore.instance.collection("groups").doc().set({
-      "products": myProduct.toMap()
-    });
+  static void addProduct(String groupUUID, MyProduct myProduct) {
+
   }
 
   static void removeProduct(String id) {

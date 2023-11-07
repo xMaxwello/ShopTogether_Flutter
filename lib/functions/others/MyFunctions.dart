@@ -20,13 +20,14 @@ class MyFunctions {
   static void addProduct() {
 
     MyFirestore.addProduct(
-        MyProduct(
-            productID: "",
-            productName: "Milch",
-            selectedUserUUID: "fsdfsd",
-            productCount: 3,
-            productImageUrl: ""
-        )
+      "",
+      MyProduct(
+          productID: "",
+          productName: "Milch",
+          selectedUserUUID: "fsdfsd",
+          productCount: 3,
+          productImageUrl: ""
+      )
     );
   }
 }

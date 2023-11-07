@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/components/product/MyProductAddItem.dart';
+import 'package:shopping_app/components/product/MyProductItem.dart';
+import 'package:shopping_app/functions/firestore/MyFirestore.dart';
+import 'package:shopping_app/objects/products/MyProduct.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar({super.key});
@@ -35,6 +39,7 @@ class _MySearchBarState extends State<MySearchBar> {
                   onPressed: () {
                     setState(() {
                       ///TODO: add function
+                      //MyFirestore.addProduct(myProduct);
                     });
                   },
                   icon: const Icon(Icons.qr_code),
@@ -45,12 +50,22 @@ class _MySearchBarState extends State<MySearchBar> {
             );
           },
           suggestionsBuilder: (BuildContext context, SearchController controller) {
-            return List<ListTile>.generate(5, (int index) {
-              final String item = 'item $index';
-              return ListTile( ///TODO: edit to the Productitem
-                title: Text(item),
+            return List<ListTile>.generate(10, (int index) {
+
+              MyProduct myProduct = MyProduct(
+                  productID: "",
+                  productName: "Schnitzel",
+                  selectedUserUUID: "",
+                  productCount: 1,
+                  productImageUrl: ""
+              );
+
+              return ListTile(
+                title: MyProductAddItem(
+                    myProduct: myProduct
+                ),
                 onTap: () {
-                  controller.closeView(item);
+                  controller.closeView(myProduct.productID);
                 },
               );
             });
