@@ -6,6 +6,7 @@ import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
 import 'package:shopping_app/components/product/MyProductItem.dart';
 import 'package:shopping_app/components/search/MySearchBar.dart';
+import 'package:shopping_app/functions/firestore/MyFirestore.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
@@ -81,17 +82,21 @@ class _MyHomeListState extends State<MyHomeList> {
 
                           if (snapshotUsers.hasError || snapshotGroups.hasError) {
                             return const Expanded(
-                              child: Text(
-                                "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
-                                softWrap: true,
-                                textAlign: TextAlign.center,
+                              child: Center(
+                                child: Text(
+                                  "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
                             );
                           }
 
                           if (snapshotUsers.connectionState == ConnectionState.waiting || snapshotGroups.connectionState == ConnectionState.waiting) {
                             return const Expanded(
-                              child: CircularProgressIndicator(),
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             );
                           }
 
@@ -101,7 +106,9 @@ class _MyHomeListState extends State<MyHomeList> {
 
                           if (userData == null || groupsData == null) {
                             return Expanded(
-                              child: widget.isListEmptyWidget,
+                              child: Center(
+                                child: widget.isListEmptyWidget,
+                              ),
                             );
                           }
 
@@ -152,17 +159,40 @@ class _MyHomeListState extends State<MyHomeList> {
                             controller: _controller,
                             itemBuilder: (context, index) {
 
-                              return MyBasicStructItem(///the basic struct of the group, product, ... elements
-                                  selectedUUID: currentUser!.groupUUIDs[index],
-                                  content:
-                                  value.isGroup == true ?
-                                  MyGroupItem(///shows all groups of current user
-                                      myGroup: groupsFromUser.elementAt(index)
-                                  )
-                                      :
-                                  MyProductItem(///shows products of selected group from current user
-                                      myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
-                                  )
+                              return Dismissible(
+                                key: Key(groupsFromUser[index].groupUUID),
+                                background: Container(
+                                  color: Colors.red[300],
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.only(right: 20.0),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onDismissed: (direction) {
+                                  setState(() {
+
+                                    ///remove group or product if the item is swiped
+                                    if (value.isGroup) {
+                                      MyFirestore.removeGroup(groupsFromUser[index].groupUUID);
+                                    } else {
+                                      MyFirestore.removeProduct(groupsFromUser[selectedGroupIndex].products[index].productID);
+                                    }
+                                  });
+                                },
+                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements
+                                    selectedUUID: currentUser!.groupUUIDs[index],
+                                    content:
+                                    value.isGroup == true ?
+                                    MyGroupItem(///shows all groups of current user
+                                        myGroup: groupsFromUser.elementAt(index)
+                                    )
+                                        :
+                                    MyProductItem(///shows products of selected group from current user
+                                        myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
+                                    )
+                                )
                               );
                             },
                           );
