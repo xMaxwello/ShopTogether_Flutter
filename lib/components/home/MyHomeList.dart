@@ -63,98 +63,110 @@ class _MyHomeListState extends State<MyHomeList> {
             MyItemsProvider value,
             Widget? child){
 
-          return StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotUsers) {
+          return Column(
+            children: [
 
-                return StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("groups").snapshots(),
-                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
+              value.isGroup == false ?
+              const MySearchBar()
+                  :
+              const SizedBox(),
 
-                    if (snapshotUsers.hasError || snapshotGroups.hasError) {
-                      return const Center(
-                        child: Text(
-                          "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    }
-                    
-                    if (snapshotUsers.connectionState == ConnectionState.waiting || snapshotGroups.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("users").snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotUsers) {
 
-                    ///data has no errors and can be used
-                    final userData = snapshotUsers.data;
-                    final groupsData = snapshotGroups.data;
+                    return StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("groups").snapshots(),
+                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
 
-                    if (userData == null || groupsData == null) {
-                      return Center(
-                        child: widget.isListEmptyWidget,
-                      );
-                    }
+                          if (snapshotUsers.hasError || snapshotGroups.hasError) {
+                            return const Expanded(
+                              child: Text(
+                                "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }
 
-                    ///get users
-                    List<MyUser> users = userData.docs.map(
-                            (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
+                          if (snapshotUsers.connectionState == ConnectionState.waiting || snapshotGroups.connectionState == ConnectionState.waiting) {
+                            return const Expanded(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
 
-                    ///get current user
-                    String uuid = FirebaseAuth.instance.currentUser!.uid;
-                    MyUser? currentUser = users.where((MyUser user) => user.uuid == uuid).firstOrNull;
+                          ///data has no errors and can be used
+                          final userData = snapshotUsers.data;
+                          final groupsData = snapshotGroups.data;
 
-                    ///get all groups
-                    List<MyGroup> groups = groupsData.docs.map(
-                            (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
+                          if (userData == null || groupsData == null) {
+                            return Expanded(
+                              child: widget.isListEmptyWidget,
+                            );
+                          }
 
-                    ///get groups from current user
-                    List<MyGroup> groupsFromUser = groups.where((group) => currentUser!.groupUUIDs.contains(group.groupUUID)).toList();
+                          ///get users
+                          List<MyUser> users = userData.docs.map(
+                                  (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-                    ///get index of selected group
-                    if (value.selectedGroupUUID != "") {
-                      selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == value.selectedGroupUUID);
-                    }
+                          ///get current user
+                          String uuid = FirebaseAuth.instance.currentUser!.uid;
+                          MyUser? currentUser = users.where((MyUser user) => user.uuid == uuid).firstOrNull;
 
-                    ///if there no groups
-                    if (groupsFromUser.isEmpty && value.isGroup && selectedGroupIndex != -1) {
-                      return Center(
-                        child: widget.isListEmptyWidget,
-                      );
-                    }
+                          ///get all groups
+                          List<MyGroup> groups = groupsData.docs.map(
+                                  (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-                    ///if there no products in group
-                    if (!value.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
-                      return Center(
-                        child: widget.isListEmptyWidget,
-                      );
-                    }
+                          ///get groups from current user
+                          List<MyGroup> groupsFromUser = groups.where((group) => currentUser!.groupUUIDs.contains(group.groupUUID)).toList();
 
-                    return ListView.builder(
-                      itemCount: value.isGroup ?
-                      groupsFromUser.length :
-                      (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0),
+                          ///get index of selected group
+                          if (value.selectedGroupUUID != "") {
+                            selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == value.selectedGroupUUID);
+                          }
 
-                      controller: _controller,
-                      itemBuilder: (context, index) {
+                          ///if there no groups
+                          if (groupsFromUser.isEmpty && value.isGroup && selectedGroupIndex != -1) {
+                            return Expanded(
+                              child: widget.isListEmptyWidget,
+                            );
+                          }
 
-                        return MyBasicStructItem(///the basic struct of the group, product, ... elements
-                            selectedUUID: currentUser!.groupUUIDs[index],
-                            content:
-                            value.isGroup == true ?
-                            MyGroupItem(///shows all groups of current user
-                                myGroup: groupsFromUser.elementAt(index)
-                            )
-                                :
-                            MyProductItem(///shows products of selected group from current user
-                                myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
-                            )
-                        );
-                      },
-                    );
-                  });
-              });
+                          ///if there no products in group
+                          if (!value.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
+                            return Expanded(
+                              child: widget.isListEmptyWidget,
+                            );
+                          }
+
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: value.isGroup ?
+                            groupsFromUser.length :
+                            (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0),
+
+                            controller: _controller,
+                            itemBuilder: (context, index) {
+
+                              return MyBasicStructItem(///the basic struct of the group, product, ... elements
+                                  selectedUUID: currentUser!.groupUUIDs[index],
+                                  content:
+                                  value.isGroup == true ?
+                                  MyGroupItem(///shows all groups of current user
+                                      myGroup: groupsFromUser.elementAt(index)
+                                  )
+                                      :
+                                  MyProductItem(///shows products of selected group from current user
+                                      myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
+                                  )
+                              );
+                            },
+                          );
+                        });
+                  })
+
+            ],
+          );
     });
   }
 }
