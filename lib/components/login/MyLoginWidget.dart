@@ -25,8 +25,6 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
   @override
   Widget build(BuildContext context) {
 
-    //TODO: Buttons aktualisieren sich nicht, wenn man die Farbe aktualisiert => Man muss die App komplett neu installieren, damit es übernommen wird
-
     return Consumer<MyLoginProvider>(
         builder: (BuildContext context,
             MyLoginProvider value,

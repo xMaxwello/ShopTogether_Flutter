@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 
@@ -59,9 +60,12 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             // on the corresponding Icon on the BottomBar
                             switch(iconView) {
                               case 0: //Shows Homepage
-                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false);
+                                Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false);
+                                Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(true);
+                                break;
                               case 1: //Shows SettingsPage
-                              Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(true);
+                                Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(true);
+                                break;
                             }
                           });
                         },

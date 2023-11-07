@@ -2,10 +2,11 @@ import 'package:flutter/foundation.dart';
 
 class MyItemsProvider extends ChangeNotifier {
   bool _isGroup = true;
-  //List _elements = [];
+  String _selectedGroupUUID = "";
+  
 
   bool get isGroup => _isGroup;
-  //List get elements => _elements;
+  String get selectedGroupUUID => _selectedGroupUUID;
 
 
   void updateIsGroup(bool isGroup) {
@@ -13,9 +14,8 @@ class MyItemsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /*
-  void updateElements(List elements) {
-    _elements = elements;
+  void updateItemIndex(String selectedGroupUUID) {
+    _selectedGroupUUID = selectedGroupUUID;
     notifyListeners();
-  }*/
+  }
 }

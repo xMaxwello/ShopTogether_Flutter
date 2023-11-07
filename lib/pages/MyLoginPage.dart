@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
+import 'package:shopping_app/functions/firestore/MyFirestore.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/snackbars/MySnackBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shopping_app/objects/users/MyUsers.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -111,7 +112,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
     }
 
     if (!error) {
+
       try {
+
         await _auth.signInWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
@@ -167,8 +170,19 @@ class _MyLoginPageState extends State<MyLoginPage> {
             password: _passwordController.text
         );
 
-        userCredential.user!.sendEmailVerification();
+        String uuid = FirebaseAuth.instance.currentUser!.uid;
 
+        ///create a user in the database, where prename and surname are saved
+        MyUser user = MyUser(
+          uuid: uuid,
+          prename: _prenameController.text,
+          surname: _nameController.text,
+          groupUUIDs: []
+        );
+        MyFirestore.addUser(user);
+
+        ///Send the email-verification
+        userCredential.user!.sendEmailVerification();
         MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.blueGrey);
 
       } on FirebaseAuthException catch(e) {

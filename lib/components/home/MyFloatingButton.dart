@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/functions/MyFunctions.dart';
+import 'package:shopping_app/functions/others/MyFunctions.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 

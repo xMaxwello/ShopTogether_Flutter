@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
@@ -9,6 +10,7 @@ import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
+import '../../objects/users/MyUsers.dart';
 
 class MyHomeList extends StatefulWidget {
 
@@ -50,6 +52,8 @@ class _MyHomeListState extends State<MyHomeList> {
     _controller.addListener(_scrollListener);
   }
 
+  int selectedGroupIndex = -1;
+
   @override
   Widget build(BuildContext context) {
 
@@ -58,99 +62,98 @@ class _MyHomeListState extends State<MyHomeList> {
             MyItemsProvider value,
             Widget? child){
 
-          Stream<QuerySnapshot<Map<String, dynamic>>> getTable = value.isGroup ?
-          FirebaseFirestore.instance.collection("groups").snapshots() :
-          FirebaseFirestore.instance.collection("users").snapshots();
+          return StreamBuilder(
+              stream: FirebaseFirestore.instance.collection("users").snapshots(),
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotUsers) {
 
-      return StreamBuilder(
-          stream: getTable,
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                return StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("groups").snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
 
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text(
-                  "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                ),
-              );
-            }
+                    if (snapshotUsers.hasError || snapshotGroups.hasError) {
+                      return const Center(
+                        child: Text(
+                          "Es ist ein Fehler aufgetreten, \nbitte kontaktieren Sie den Support!",
+                          softWrap: true,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    }
+                    
+                    if (snapshotUsers.connectionState == ConnectionState.waiting || snapshotGroups.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+                    ///data has no errors and can be used
+                    final userData = snapshotUsers.data;
+                    final groupsData = snapshotGroups.data;
 
-            // Hier kannst du auf die Firestore-Daten zugreifen
-            final data = snapshot.data;
+                    if (userData == null || groupsData == null) {
+                      return Center(
+                        child: widget.isListEmptyWidget,
+                      );
+                    }
 
-            if (data == null || data.docs.isEmpty) {
-              return Center(
-                child: widget.isListEmptyWidget,
-              );
-            }
+                    ///get users
+                    List<MyUser> users = userData.docs.map(
+                            (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-            return ListView.builder(
-              itemCount: data.docs.length,
-              controller: _controller,
-              itemBuilder: (context, index) {
+                    ///get current user
+                    String uuid = FirebaseAuth.instance.currentUser!.uid;
+                    MyUser? currentUser = users.where((MyUser user) => user.uuid == uuid).firstOrNull;
 
-                return MyBasicStructItem(///the basic struct of the group, product, ... elements
+                    ///get all groups
+                    List<MyGroup> groups = groupsData.docs.map(
+                            (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-                    content:
-                    value.isGroup == true ?
-                    MyGroupItem(
-                      myGroup: MyGroup.fromQuery(data.docs.elementAt(index))
-                    )
-                        :
-                    MyProductItem(
-                      myProduct: MyProduct.fromQuery(data.docs.elementAt(index))
-                    )
+                    ///get groups from current user
+                    List<MyGroup> groupsFromUser = groups.where((group) => currentUser!.groupUUIDs.contains(group.groupUUID)).toList();
 
-                );
-              },
-            );
-          }
+                    ///get index of selected group
+                    if (value.selectedGroupUUID != "") {
+                      selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == value.selectedGroupUUID);
+                    }
 
-      );
+                    ///if there no groups
+                    if (groupsFromUser.isEmpty && value.isGroup && selectedGroupIndex != -1) {
+                      return Center(
+                        child: widget.isListEmptyWidget,
+                      );
+                    }
+
+                    ///if there no products in group
+                    if (!value.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
+                      return Center(
+                        child: widget.isListEmptyWidget,
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: value.isGroup ?
+                      groupsFromUser.length :
+                      groupsFromUser.elementAt(selectedGroupIndex).products.length,
+
+                      controller: _controller,
+                      itemBuilder: (context, index) {
+
+                        return MyBasicStructItem(///the basic struct of the group, product, ... elements
+                            selectedUUID: currentUser!.groupUUIDs[index],
+                            content:
+                            value.isGroup == true ?
+                            MyGroupItem(///shows all groups of current user
+                                myGroup: groupsFromUser.elementAt(index)
+                            )
+                                :
+                            MyProductItem(///shows products of selected group from current user
+                                myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
+                            )
+                        );
+                        },
+                    );
+                  });
+              });
     });
-
-    /*
-    return Consumer<MyItemsProvider>(
-        builder: (BuildContext context,
-            MyItemsProvider value,
-            Widget? child){
-
-          if (value.elements.isEmpty) {
-
-            return Center(
-              child: widget.isListEmptyWidget,
-            );
-          } else {
-
-            return ListView.builder(
-              itemCount: value.elements.length,
-              controller: _controller,
-              itemBuilder: (context, index) {
-                return MyBasicStructItem(///the basic struct of the group, product, ... elements
-
-                    content:
-                    value.isGroup == true ?
-                    MyGroupItem(
-                      myGroupItem: value.elements[index],
-                    )
-                        :
-                    MyProductItem(
-                      myProduct: value.elements[index],
-                    )
-
-                );
-              },
-            );
-          }
-        }
-    );
-    * */
   }
 }

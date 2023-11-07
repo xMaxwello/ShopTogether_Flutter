@@ -13,11 +13,7 @@ class MyGroupItem extends StatelessWidget {
     int usersLength = myGroup.userUUIDs.length;
     int shoppingListLength = myGroup.products.length;
 
-    return GestureDetector(
-        onTap: () {
-
-      },
-      child: Padding(
+    return Padding(
         padding: const EdgeInsets.only(left: 8, right: 8, top: 15, bottom: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,7 +65,6 @@ class MyGroupItem extends StatelessWidget {
 
           ],
         )
-      )
-    );
+      );
   }
 }
