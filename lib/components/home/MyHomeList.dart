@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
 import 'package:shopping_app/components/product/MyProductItem.dart';
+import 'package:shopping_app/components/search/MySearchBar.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
@@ -133,7 +134,7 @@ class _MyHomeListState extends State<MyHomeList> {
                     return ListView.builder(
                       itemCount: value.isGroup ?
                       groupsFromUser.length :
-                      groupsFromUser.elementAt(selectedGroupIndex).products.length,
+                      (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0),
 
                       controller: _controller,
                       itemBuilder: (context, index) {
@@ -150,7 +151,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                 myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
                             )
                         );
-                        },
+                      },
                     );
                   });
               });
