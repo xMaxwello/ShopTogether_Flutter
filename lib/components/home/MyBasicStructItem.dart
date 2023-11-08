@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 
@@ -30,6 +31,7 @@ class MyBasicStructItem extends StatelessWidget {
 
                   Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(selectedUUID);
                   Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(false);
+                  Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                 },
               child:
                   Card(

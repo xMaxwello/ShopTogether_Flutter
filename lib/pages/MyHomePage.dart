@@ -91,7 +91,8 @@ class MyHomePage extends StatelessWidget {
               child: const MyHomeNavigationBar(),
             ),
 
-            appBar: const PreferredSize(
+            appBar: mySettingsProvider.isSettingsPage ?
+            null : const PreferredSize(
               preferredSize: Size.fromHeight(100),
               child: MyAppBar(),
             ),
