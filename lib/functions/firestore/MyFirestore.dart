@@ -141,6 +141,18 @@ class MyFirestore {
 
   static void addProduct(String groupUUID, MyProduct myProduct) {
 
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    ref.get().then((DocumentSnapshot group) {
+
+      MyGroup groupData = MyGroup.fromMap(group.data() as Map<String, dynamic>);
+      List<MyProduct> products = groupData.products;
+      products.add(myProduct);
+      FirebaseFirestore.instance.collection("groups").doc(groupUUID).update({
+        "products": products
+      });
+    });
   }
 
   static void removeProduct(String id) {
@@ -148,7 +160,7 @@ class MyFirestore {
 
   }
 
-  static void updateProduct(String id, MyProduct) {
+  static void updateProduct(String id, MyProduct myProduct) {
 
   }
 
