@@ -33,6 +33,5 @@ class MyFunctions {
 
   static void addUserToGroup() {
 
-
   }
 }

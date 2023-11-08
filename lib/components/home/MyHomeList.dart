@@ -160,7 +160,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                     if (itemsValue.isGroup) {
                                       MyFirestore.removeGroup(groupsFromUser[index].groupUUID);
                                     } else {
-                                      MyFirestore.removeProduct(groupsFromUser[selectedGroupIndex].products[index].productID);
+                                      MyFirestore.removeProduct(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
                                     }
                                   });
                                 },
@@ -173,9 +173,10 @@ class _MyHomeListState extends State<MyHomeList> {
                                     )
                                         :
                                     MyProductItem(///shows products of selected group from current user
-                                        myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: "")
-                                    )
-                                )
+                                      myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: ""),
+                                      selectedGroupUUID: itemsValue.selectedGroupUUID,
+                                    ),
+                                ),
                             );
                           },
                         );

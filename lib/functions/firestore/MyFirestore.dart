@@ -140,24 +140,55 @@ class MyFirestore {
   }
 
   static void addProduct(String groupUUID, MyProduct myProduct) {
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    ref.get().then((group) {
+      List<Map<String, dynamic>> productsData =
+      List<Map<String, dynamic>>.from(group.get("products") ?? []);
+      productsData.add(myProduct.toMap());
+      ref.update({"products": productsData});
+    });
+  }
+
+  static void removeProduct(String groupUUID, String productUUID) {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
 
-    ref.get().then((DocumentSnapshot group) {
+    ref.get().then((group) {
+      List<Map<String, dynamic>> productsData =
+      List<Map<String, dynamic>>.from(group.get("products") ?? []);
 
-      MyGroup groupData = MyGroup.fromMap(group.data() as Map<String, dynamic>);
-      List<MyProduct> products = groupData.products;
-      products.add(myProduct);
-      FirebaseFirestore.instance.collection("groups").doc(groupUUID).update({
-        "products": products
-      });
+      Map<String, dynamic>? myProduct = productsData.where((element) => element["productID"] == productUUID).firstOrNull;
+      
+      if (myProduct != null) {
+
+        productsData.remove(myProduct);
+        ref.update({"products": productsData});
+      }
     });
   }
 
-  static void removeProduct(String id) {
+  static void updateProductCount(String groupUUID, String productUUID, int addCount) {
 
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
 
+    ref.get().then((group) {
+      List<Map<String, dynamic>> productsData =
+      List<Map<String, dynamic>>.from(group.get("products") ?? []);
+
+      Map<String, dynamic>? myProduct = productsData
+          .where((element) => element["productID"] == productUUID)
+          .firstOrNull;
+
+      if (myProduct != null) {
+
+        myProduct['productCount'] = myProduct['productCount'] + addCount;
+        ref.update({"products": productsData});
+      }
+    });
   }
 
   static void updateProduct(String id, MyProduct myProduct) {

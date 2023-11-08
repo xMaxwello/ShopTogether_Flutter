@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
+import '../../functions/firestore/MyFirestore.dart';
+
 class MyProductItem extends StatelessWidget {
 
   final MyProduct myProduct;
+  final String selectedGroupUUID;
 
   const MyProductItem({
-    Key? key, required this.myProduct}) : super(key: key);
+    Key? key, required this.myProduct, required this.selectedGroupUUID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +47,7 @@ class MyProductItem extends StatelessWidget {
                       // Produktname
                       Expanded(
                         child: Text(
-                          myProduct.productName,
+                          myProduct.productName, ///shows the product name
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -55,6 +58,10 @@ class MyProductItem extends StatelessWidget {
                       IconButton(
                           onPressed: () {
 
+                            ///the amount of the product shouldn`t be under 1
+                            if (myProduct.productCount != 1) {
+                              MyFirestore.updateProductCount(selectedGroupUUID, myProduct.productID, -1);
+                            }
                           },
                           icon: const Icon(Icons.remove)
                       ),
@@ -62,6 +69,8 @@ class MyProductItem extends StatelessWidget {
                       IconButton(
                           onPressed: () {
 
+                            ///add amount to the product
+                            MyFirestore.updateProductCount(selectedGroupUUID, myProduct.productID, 1);
                           },
                           icon: const Icon(Icons.add)
                       ),
