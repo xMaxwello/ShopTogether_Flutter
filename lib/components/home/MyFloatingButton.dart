@@ -9,8 +9,9 @@ class MyFloatingButton extends StatefulWidget {
   final String buttonTitle;
   final IconData iconData;
   final bool isChangeByScroll;
+  final Function() function;
 
-  const MyFloatingButton({super.key, required this.buttonTitle, required this.iconData, required this.isChangeByScroll});
+  const MyFloatingButton({super.key, required this.buttonTitle, required this.iconData, required this.isChangeByScroll, required this.function});
 
   @override
   State<MyFloatingButton> createState() => _MyFloatingButtonState();
@@ -43,7 +44,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
                   .of(context)
                   .colorScheme
                   .primary, 0.8),
-              onPressed: MyFunctions.addGroup,
+              onPressed: widget.function,
               child: Icon(
                 widget.iconData,
                 color: Colors.white,
@@ -52,7 +53,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
                 :
             FloatingActionButton.extended(
               key: const ValueKey<bool>(true),
-              onPressed: MyFunctions.addGroup,
+              onPressed: widget.function,
               backgroundColor: Color.lerp(Colors.white, Theme
                   .of(context)
                   .colorScheme

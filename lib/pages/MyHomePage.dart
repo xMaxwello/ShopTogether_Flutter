@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/appBar/MyAppBar.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
@@ -90,11 +91,17 @@ class MyHomePage extends StatelessWidget {
               child: const MyHomeNavigationBar(),
             ),
 
-            floatingActionButton: mySettingsProvider.isSettingsPage || !myItemsProvider.isGroup
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(100),
+              child: MyAppBar(),
+            ),
+
+            floatingActionButton: mySettingsProvider.isSettingsPage
                 ? null
-                : const MyFloatingButton(
-              buttonTitle: 'Gruppe',
-              iconData: Icons.group_add,
+                : MyFloatingButton(
+              buttonTitle: myItemsProvider.isGroup ? 'Gruppe' : 'Mitglied',
+              iconData: myItemsProvider.isGroup ? Icons.group_add : Icons.person_add,
+              function: myItemsProvider.isGroup ? MyFunctions.addGroup : MyFunctions.addUserToGroup,
               isChangeByScroll: true,
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
