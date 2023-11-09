@@ -47,7 +47,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                       style: Theme.of(context).textTheme.titleLarge
                     ),
 
-                    for (int i = 0; i<widget.controllers.length;i++)
+                    for (int i = 0; i < widget.controllers.length;i++)
                       TextFormField(
                         controller: widget.controllers[i],
                         style: Theme.of(context).textTheme.displaySmall,

@@ -121,7 +121,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
         );
       } on FirebaseAuthException catch(e) {
 
-        if (e.code == 'user-not-found') { //TODO: Es kommt immer diese Fehlermeldung: INVALID_LOGIN_CREDENTIALS wenn User bei Anmeldung nicht vorhanden ist => user vorher überprüfen ob er vorhanden ist
+        if (e.code == 'user-not-found') {
           MySnackBar.showMySnackBar(context, 'Benutzer nicht gefunden.');
         } else if (e.code == 'wrong-password') {
           MySnackBar.showMySnackBar(context, 'Falsches Passwort.');

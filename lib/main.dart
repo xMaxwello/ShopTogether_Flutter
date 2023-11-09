@@ -61,7 +61,7 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) { ///TODO: Auf den Zurück (Neben Home Button) Button dann gibt es Probleme
 
         if (user != null) {
           bool isVerified = user.emailVerified;

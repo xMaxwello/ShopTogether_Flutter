@@ -149,6 +149,7 @@ class _MyHomeListState extends State<MyHomeList> {
 
                             return Dismissible(
                                 key: itemsValue.isGroup ? Key(groupsFromUser[index].groupUUID) : Key(groupsFromUser[selectedGroupIndex].products[index].productID),
+                                direction: DismissDirection.endToStart,
                                 background: Container(
                                   color: Colors.red[300],
                                   alignment: Alignment.centerRight,
@@ -179,7 +180,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                         :
                                     MyProductItem(///shows products of selected group from current user
                                       myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: ""),
-                                      selectedGroupUUID: itemsValue.selectedGroupUUID, //TODO: Max ein product...
+                                      selectedGroupUUID: itemsValue.selectedGroupUUID,
                                     ),
                                 ),
                             );
