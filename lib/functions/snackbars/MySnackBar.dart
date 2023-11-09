@@ -17,7 +17,7 @@ class MySnackBar {
                 fontSize: 16
             ),
           ),
-          backgroundColor: isError ? Colors.red[300]: Theme.of(context).snackBarTheme.backgroundColor,
+          backgroundColor: isError ? Theme.of(context).colorScheme.error: Theme.of(context).snackBarTheme.backgroundColor,
           action: isFunctionAvailable == false ? null : SnackBarAction(
             label: actionLabel,
             onPressed: actionFunction,

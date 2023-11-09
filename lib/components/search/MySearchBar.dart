@@ -75,7 +75,6 @@ class _MySearchBarState extends State<MySearchBar> {
                       onTap: () {
                         MyFirestore.addProduct(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
-                        FocusManager.instance.primaryFocus?.unfocus();
                       },
                     );
                   });
