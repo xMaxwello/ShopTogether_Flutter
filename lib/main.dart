@@ -39,9 +39,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shoppinglist',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black54),
+        useMaterial3: true
+      ),
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: const MyAuthenticationWrapper(),
     );

@@ -147,13 +147,8 @@ class _MyHomeListState extends State<MyHomeList> {
                           controller: _controller,
                           itemBuilder: (context, index) {
 
-                            print("index: " + index.toString());
-                            print(currentUser!.groupUUIDs[index]);
-                            print(groupsFromUser.elementAt(index).groupUUID);
-                            print(selectedGroupIndex);
-
                             return Dismissible(
-                                key: Key(groupsFromUser[index].groupUUID),
+                                key: itemsValue.isGroup ? Key(groupsFromUser[index].groupUUID) : Key(groupsFromUser[selectedGroupIndex].products[index].productID),
                                 background: Container(
                                   color: Colors.red[300],
                                   alignment: Alignment.centerRight,
@@ -175,16 +170,16 @@ class _MyHomeListState extends State<MyHomeList> {
                                   });
                                 },
                                 child: MyBasicStructItem(///the basic struct of the group, product, ... elements
-                                    selectedUUID: groupUUIDs[index],
+                                    selectedUUID: itemsValue.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID,
                                     content:
                                     itemsValue.isGroup == true ?
                                     MyGroupItem(///shows all groups of current user
-                                        myGroup: groupsFromUser.elementAt(index) ///TODO: in selectedGroup wird product erstellt und im da drüber wird es angezeigt das ein item drin ist
+                                        myGroup: groupsFromUser.elementAt(index)
                                     )
                                         :
                                     MyProductItem(///shows products of selected group from current user
                                       myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: ""),
-                                      selectedGroupUUID: itemsValue.selectedGroupUUID,
+                                      selectedGroupUUID: itemsValue.selectedGroupUUID, //TODO: Max ein product...
                                     ),
                                 ),
                             );
