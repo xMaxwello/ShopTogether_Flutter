@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
@@ -19,32 +21,31 @@ class MyFirestore {
     }
   }
 
-  static void removeUser(String uuid) {
+  static void removeUser(String uuid) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("users").doc(uuid);
 
-    ref.get().then((group) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
-      if (group.exists) {
+    if (snapshot.exists) {
 
-        List<dynamic> userUUIDs = group.get("groupUUIDs");
-        for (var userUUID in userUUIDs) {
+      List<dynamic> userUUIDs = snapshot.get("groupUUIDs");
+      for (var userUUID in userUUIDs) {
 
-          FirebaseFirestore.instance.collection("groups").doc(userUUID.toString()).get().then((user) {
-            if (user.exists) {
+        FirebaseFirestore.instance.collection("groups").doc(userUUID.toString()).get().then((user) {
+          if (user.exists) {
 
-              List<String> groupUUIDs = List<String>.from(user.get("userUUIDs"));
-              groupUUIDs.remove(uuid);
-              user.reference.update({
-                "groupUUIDs": groupUUIDs,
-              });
-            }
-          });
-        }
-        ref.delete();
+            List<String> groupUUIDs = List<String>.from(user.get("userUUIDs"));
+            groupUUIDs.remove(uuid);
+            user.reference.update({
+              "groupUUIDs": groupUUIDs,
+            });
+          }
+        });
       }
-    });
+      ref.delete();
+    }
   }
 
   /// removes the current user completely from the system
@@ -107,77 +108,113 @@ class MyFirestore {
     }
   }
 
-  static void removeGroup(String uuid) {
+  static void removeGroup(String uuid) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(uuid);
 
-    ref.get().then((group) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
-      if (group.exists) {
+    if (snapshot.exists) {
 
-        List<dynamic> userUUIDs = group.get("userUUIDs");
-        for (var userUUID in userUUIDs) {
+      List<dynamic> userUUIDs = snapshot.get("userUUIDs");
+      for (var userUUID in userUUIDs) {
 
-          FirebaseFirestore.instance.collection("users").doc(userUUID.toString()).get().then((user) {
-            if (user.exists) {
+        FirebaseFirestore.instance.collection("users").doc(userUUID.toString()).get().then((user) {
+          if (user.exists) {
 
-              List<String> groupUUIDs = List<String>.from(user.get("groupUUIDs"));
-              groupUUIDs.remove(uuid);
-              user.reference.update({
-                "groupUUIDs": groupUUIDs,
-              });
-            }
-          });
-        }
-        ref.delete();
+            List<String> groupUUIDs = List<String>.from(user.get("groupUUIDs"));
+            groupUUIDs.remove(uuid);
+            user.reference.update({
+              "groupUUIDs": groupUUIDs,
+            });
+          }
+        });
       }
-    });
+      ref.delete();
+    }
   }
 
   static void updateGroup(String id, MyProduct myProduct) {
 
   }
 
-  static void addProduct(String groupUUID, MyProduct myProduct) {
+  static Future<String> getUnusedProductUUID(String groupUUID) async {
+
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
 
-    ref.get().then((group) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+
+      String productUUID;
       List<Map<String, dynamic>> productsData =
-      List<Map<String, dynamic>>.from(group.get("products") ?? []);
-      productsData.add(myProduct.toMap());
-      ref.update({"products": productsData});
-    });
+      List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
+
+      do {
+        productUUID = (Random().nextInt(999999) + 100000).toString();
+      } while (productsData.any((product) => product["productID"] == productUUID));
+
+      return productUUID;
+    }
+
+    return "0";
   }
 
-  static void removeProduct(String groupUUID, String productUUID) {
+  static void addProduct(String groupUUID, MyProduct myProduct) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
 
-    ref.get().then((group) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+
+      String getUUID = await getUnusedProductUUID(groupUUID);
+
+      myProduct.updateProductUUID(myProduct, getUUID);
+
       List<Map<String, dynamic>> productsData =
-      List<Map<String, dynamic>>.from(group.get("products") ?? []);
+      List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
+      productsData.add(myProduct.toMap());
+      ref.update({"products": productsData});
+    }
+  }
+
+  static void removeProduct(String groupUUID, String productUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+
+      List<Map<String, dynamic>> productsData =
+      List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
 
       Map<String, dynamic>? myProduct = productsData.where((element) => element["productID"] == productUUID).firstOrNull;
-      
+
       if (myProduct != null) {
 
         productsData.remove(myProduct);
         ref.update({"products": productsData});
       }
-    });
+    }
   }
 
-  static void updateProductCount(String groupUUID, String productUUID, int addCount) {
+  static void updateProductCount(String groupUUID, String productUUID, int addCount) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
 
-    ref.get().then((group) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+
       List<Map<String, dynamic>> productsData =
-      List<Map<String, dynamic>>.from(group.get("products") ?? []);
+      List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
 
       Map<String, dynamic>? myProduct = productsData
           .where((element) => element["productID"] == productUUID)
@@ -188,10 +225,10 @@ class MyFirestore {
         myProduct['productCount'] = myProduct['productCount'] + addCount;
         ref.update({"products": productsData});
       }
-    });
+    }
   }
 
-  static void updateProduct(String id, MyProduct myProduct) {
+  static void updateProduct(String id, MyProduct myProduct) async {
 
   }
 

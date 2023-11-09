@@ -112,6 +112,11 @@ class _MyHomeListState extends State<MyHomeList> {
                         ///get groups from current user
                         List<MyGroup> groupsFromUser = groups.where((group) => currentUser!.groupUUIDs.contains(group.groupUUID)).toList();
 
+                        groupsFromUser.sort((a, b) => a.groupUUID.compareTo(b.groupUUID));
+
+                        List<String> groupUUIDs = currentUser!.groupUUIDs;
+                        groupUUIDs.sort((a, b) => a.compareTo(b));
+
                         ///get index of selected group
                         if (itemsValue.selectedGroupUUID != "") {
                           selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
@@ -142,6 +147,11 @@ class _MyHomeListState extends State<MyHomeList> {
                           controller: _controller,
                           itemBuilder: (context, index) {
 
+                            print("index: " + index.toString());
+                            print(currentUser!.groupUUIDs[index]);
+                            print(groupsFromUser.elementAt(index).groupUUID);
+                            print(selectedGroupIndex);
+
                             return Dismissible(
                                 key: Key(groupsFromUser[index].groupUUID),
                                 background: Container(
@@ -165,11 +175,11 @@ class _MyHomeListState extends State<MyHomeList> {
                                   });
                                 },
                                 child: MyBasicStructItem(///the basic struct of the group, product, ... elements
-                                    selectedUUID: currentUser!.groupUUIDs[index],
+                                    selectedUUID: groupUUIDs[index],
                                     content:
                                     itemsValue.isGroup == true ?
                                     MyGroupItem(///shows all groups of current user
-                                        myGroup: groupsFromUser.elementAt(index)
+                                        myGroup: groupsFromUser.elementAt(index) ///TODO: in selectedGroup wird product erstellt und im da drüber wird es angezeigt das ein item drin ist
                                     )
                                         :
                                     MyProductItem(///shows products of selected group from current user
@@ -182,7 +192,6 @@ class _MyHomeListState extends State<MyHomeList> {
                         );
                       });
                 });
-
-          });
+        });
   }
 }

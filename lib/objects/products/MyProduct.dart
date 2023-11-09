@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class MyProduct extends ChangeNotifier {
-  final String productID;
+  String productID;
   final String productName;
   final String selectedUserUUID;
   final int productCount;
@@ -24,6 +24,10 @@ class MyProduct extends ChangeNotifier {
       'productCount': productCount,
       'productImageUrl': productImageUrl,
     };
+  }
+
+  void updateProductUUID(MyProduct product, String newUUID) {
+    product.productID = newUUID;
   }
 
   factory MyProduct.fromMap(Map<String, dynamic> map) {

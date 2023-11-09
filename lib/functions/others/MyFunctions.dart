@@ -17,7 +17,7 @@ class MyFunctions {
     );
   }
 
-  static void addProduct() {
+  static void addProduct() async {
 
     MyFirestore.addProduct(
       "",
