@@ -21,9 +21,7 @@ class MyGroupItem extends StatelessWidget {
 
             Text(
               myGroup.groupName,
-              style: const TextStyle(
-                  fontSize: 20
-              ),
+              style: Theme.of(context).textTheme.titleMedium
             ),
 
             Padding(
@@ -33,30 +31,28 @@ class MyGroupItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
 
-                  const Icon(
+                  Icon(
                     Icons.person,
-                    size: 28,
+                    size: Theme.of(context).iconTheme.size,
+                    color: Theme.of(context).iconTheme.color,
                   ),
                   const SizedBox(width: 3,),
                   Text(
                     usersLength.toString(),
-                    style: const TextStyle(
-                      fontSize: 18
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium
                   ),
 
                   const SizedBox(width: 20,),
 
-                  const Icon(
+                  Icon(
                     Icons.shopping_bag,
-                    size: 28,
+                    size: Theme.of(context).iconTheme.size,
+                    color: Theme.of(context).iconTheme.color,
                   ),
                   const SizedBox(width: 3,),
                   Text(
                     shoppingListLength.toString(),
-                    style: const TextStyle(
-                        fontSize: 18
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium
                   )
 
                 ],

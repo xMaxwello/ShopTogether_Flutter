@@ -28,11 +28,7 @@ class _MySearchBarState extends State<MySearchBar> {
                 builder: (BuildContext context, SearchController controller) {
 
                   return SearchBar(
-                    surfaceTintColor: MaterialStateProperty.all(
-                        Color.lerp(Colors.white, Theme
-                            .of(context)
-                            .colorScheme
-                            .primary, 0.8)),
+                    surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                     controller: controller,
                     onTap: () {
                       controller.openView();
@@ -40,7 +36,10 @@ class _MySearchBarState extends State<MySearchBar> {
                     onChanged: (_) {
                       controller.openView();
                     },
-                    leading: const Icon(Icons.search),
+                    leading: Icon(
+                      Icons.search,
+                      size: Theme.of(context).iconTheme.size,
+                    ),
                     trailing: <Widget> [
                       IconButton(
                         onPressed: () {
@@ -48,7 +47,10 @@ class _MySearchBarState extends State<MySearchBar> {
                             ///TODO: add function
                           });
                         },
-                        icon: const Icon(Icons.qr_code),
+                        icon: Icon(
+                          Icons.qr_code,
+                          size: Theme.of(context).iconTheme.size,
+                        ),
                       ),
                     ],
                     padding: const MaterialStatePropertyAll<EdgeInsets>(
@@ -73,6 +75,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       onTap: () {
                         MyFirestore.addProduct(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
+                        FocusManager.instance.primaryFocus?.unfocus();
                       },
                     );
                   });

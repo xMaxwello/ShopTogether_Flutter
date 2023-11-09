@@ -7,7 +7,7 @@ class LightTheme {
 
     return ThemeData(
 
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent[100]!),
+      colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigoAccent[100]!, error: Colors.red[200]),
 
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: Colors.indigoAccent,
@@ -21,8 +21,8 @@ class LightTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: Colors.white, backgroundColor: Colors.blue, // Hintergrundfarbe
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24), // Innenabstand
+          foregroundColor: Colors.white, backgroundColor: Colors.blue,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8), // Randradius
           ),
@@ -47,11 +47,22 @@ class LightTheme {
           color: Colors.grey[200]
       ),
 
-      cardTheme: const CardTheme(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          side: BorderSide(strokeAlign: BorderSide.strokeAlignCenter, color: Colors.indigoAccent)
+      cardTheme: CardTheme(
+        shadowColor: Colors.black38,
+        color: Colors.grey[100],
+        elevation: 20,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
         )
+      ),
+
+      snackBarTheme: SnackBarThemeData(
+        actionTextColor: Colors.white,
+        backgroundColor: Colors.indigoAccent[100]
+      ),
+
+      searchBarTheme: SearchBarThemeData(
+        surfaceTintColor: MaterialStateProperty.all(Colors.indigoAccent[100]),
       ),
 
       iconTheme: IconThemeData(
@@ -75,6 +86,19 @@ class LightTheme {
         titleSmall: GoogleFonts.tiltNeon(
             fontSize: 14,
             color: Colors.grey[900]
+        ),
+        titleMedium: GoogleFonts.tiltNeon(
+            fontSize: 19,
+            color: Colors.grey[900]
+        ),
+        titleLarge: GoogleFonts.tiltNeon(
+            fontSize: 24,
+            color: Colors.grey[900]
+        ),
+        displayLarge: GoogleFonts.tiltNeon(
+          fontSize: 40,
+          color: Colors.grey[900],
+          backgroundColor: Colors.white
         ),
       ),
 

@@ -40,50 +40,53 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                       ),
                     ),
                   ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 16.0),
-                    color: Color.lerp(Colors.white, Theme
-                        .of(context)
-                        .colorScheme
-                        .primary, 0.05),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Vorname Nachname",
-                            style: TextStyle(
-                              fontSize: 24,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 10),
+                        ),
+                      ),
+                      child: Card(
+                        color: Theme.of(context).cardTheme.color,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                "Accounteinstellungen",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
+                                "Vorname Nachname",
+                                style: Theme.of(context).textTheme.titleLarge
                               ),
-                              Icon(Icons.arrow_forward, size: 16,
-                                  color: Colors.black54)
+                              const SizedBox(height: 8.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Accounteinstellungen",
+                                    style: Theme.of(context).textTheme.bodySmall
+                                  ),
+                                  Icon(
+                                      Icons.arrow_forward,
+                                      size: Theme.of(context).iconTheme.size,
+                                      color: Colors.black54)
+                                ],
+                              ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
+
                   ListTile(
-                    title: const Text("Mit Fingerabdruck/FaceID sichern"),
+                    title: Text(
+                      "Mit Fingerabdruck/FaceID sichern",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     trailing: Switch(
-                      activeColor: Color.lerp(Colors.white, Theme
-                          .of(context)
-                          .colorScheme
-                          .primary, 0.9),
+                      activeColor: Theme.of(context).colorScheme.primary,
                       value: settingsProvider.isBiometricLock,
                       onChanged: (value) {
                           settingsProvider.updateIsBiometricLock(value);
@@ -91,12 +94,12 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     ),
                   ),
                   ListTile(
-                    title: const Text("Push-Benachrichtigung erlauben"),
+                    title: Text(
+                      "Push-Benachrichtigung erlauben",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     trailing: Switch(
-                      activeColor: Color.lerp(Colors.white, Theme
-                          .of(context)
-                          .colorScheme
-                          .primary, 0.9),
+                      activeColor: Theme.of(context).colorScheme.primary,
                       value: settingsProvider.isNotificationsEnabled,
                       onChanged: (value) {
                           settingsProvider.updateIsNotificationsEnabled(value);
@@ -104,12 +107,12 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     ),
                   ),
                   ListTile(
-                    title: const Text("Vibration beim Scannen"),
+                    title: Text(
+                      "Vibration beim Scannen",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     trailing: Switch(
-                      activeColor: Color.lerp(Colors.white, Theme
-                          .of(context)
-                          .colorScheme
-                          .primary, 0.9),
+                      activeColor: Theme.of(context).colorScheme.primary,
                       value: settingsProvider.isVibrationEnabled,
                       onChanged: (value) {
                           settingsProvider.updateIsVibrationEnabled(value);
@@ -117,12 +120,12 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     ),
                   ),
                   ListTile(
-                    title: const Text("In-App Töne"),
+                    title: Text(
+                      "In-App Töne",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     trailing: Switch(
-                      activeColor: Color.lerp(Colors.white, Theme
-                          .of(context)
-                          .colorScheme
-                          .primary, 0.9),
+                      activeColor: Theme.of(context).colorScheme.primary,
                       value: settingsProvider.isSoundEnabled,
                       onChanged: (value) {
                           settingsProvider.updateIsSoundEnabled(value);

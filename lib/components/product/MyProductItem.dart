@@ -28,7 +28,7 @@ class MyProductItem extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
-                      // Produktbild oder Placeholder
+
                       Container(
                         width: 50,
                         height: 50,
@@ -45,11 +45,10 @@ class MyProductItem extends StatelessWidget {
 
                       const SizedBox(width: 10),
 
-                      // Produktname
                       Expanded(
                         child: Text(
                           myProduct.productName, ///shows the product name
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
 
@@ -69,28 +68,33 @@ class MyProductItem extends StatelessWidget {
                               MySnackBar.showMySnackBar(
                                 context,
                                 "Wollen Sie das Product löschen?",
-                                backgroundColor: Colors.blueGrey,
-                                foregroundColor: Colors.white,
                                 isFunctionAvailable: true,
+                                isError: false,
                                 actionLabel: "Löschen",
                                 actionFunction: () {
 
                                   MyFirestore.removeProduct(selectedGroupUUID, myProduct.productID);
                                 },
-                                actionColor: Colors.redAccent[100]
                               );
                             }
                           },
                           icon: const Icon(Icons.remove)
                       ),
-                      Text(myProduct.productCount.toString()),
+                      Text(
+                        myProduct.productCount.toString(),
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                       IconButton(
                           onPressed: () {
 
                             ///add amount to the product
                             MyFirestore.updateProductCount(selectedGroupUUID, myProduct.productID, 1);
                           },
-                          icon: const Icon(Icons.add)
+                          icon: Icon(
+                            Icons.add,
+                            size: Theme.of(context).iconTheme.size,
+                            color: Theme.of(context).iconTheme.color,
+                          )
                       ),
                     ],
                   ),

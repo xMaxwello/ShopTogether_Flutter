@@ -7,7 +7,7 @@ class MySnackBar {
 
   }
 
-  static void showMySnackBar(BuildContext context, String showText, {Color backgroundColor = Colors.red, Color foregroundColor = Colors.white, bool isFunctionAvailable = false, Function() actionFunction = defaultActionFunc, actionLabel = 'Bestätigen', actionColor = Colors.white}) {
+  static void showMySnackBar(BuildContext context, String showText, {bool isError = true, bool isFunctionAvailable = false, Function() actionFunction = defaultActionFunc, actionLabel = 'Bestätigen'}) {
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -17,11 +17,11 @@ class MySnackBar {
                 fontSize: 16
             ),
           ),
-          backgroundColor: backgroundColor,
+          backgroundColor: isError ? Colors.red[300]: Theme.of(context).snackBarTheme.backgroundColor,
           action: isFunctionAvailable == false ? null : SnackBarAction(
             label: actionLabel,
             onPressed: actionFunction,
-            textColor: actionColor,
+            textColor: Theme.of(context).snackBarTheme.actionTextColor,
           ),
         ));
   }

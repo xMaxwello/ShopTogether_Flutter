@@ -183,7 +183,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
         ///Send the email-verification
         userCredential.user!.sendEmailVerification();
-        MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.blueGrey);
+        MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false);
 
       } on FirebaseAuthException catch(e) {
 
@@ -231,10 +231,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
                       Text(
                         "Einkaufsapp",
-                        style: GoogleFonts.tiltNeon(
-                            fontSize: 40,
-                            backgroundColor: Colors.white
-                        ),
+                        style: Theme.of(context).textTheme.displayLarge
                       ),
                       const SizedBox(height: 60,),
 
@@ -265,7 +262,6 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 ),
               ),
             ),
-
           ],
         ),
     );

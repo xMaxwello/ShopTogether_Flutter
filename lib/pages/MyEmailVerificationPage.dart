@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../functions/snackbars/MySnackBar.dart';
 import 'MyHomePage.dart';
@@ -29,7 +28,7 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
         timer.cancel();
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
-        MySnackBar.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", backgroundColor: Colors.blueGrey);
+        MySnackBar.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", isError: false);
       }
     });
   }
@@ -69,17 +68,13 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
 
                     Text(
                       "E-Mail Adresse verifizieren",
-                      style: GoogleFonts.tiltNeon(
-                          fontSize: 24
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
 
                     const SizedBox(height: 30,),
                     Text(
                       "Bevor Sie die App benutzen können, müssen\n Sie Ihre E-Mail Adresse verifizieren!",
-                      style: GoogleFonts.tiltNeon(
-                        fontSize: 16,
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium,
                       softWrap: true,
                       textAlign: TextAlign.center,
                     ),
@@ -94,16 +89,14 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
                         if (user != null) {
 
                           await user.sendEmailVerification();
-                          MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', backgroundColor: Colors.black38);
+                          MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false,);
                         } else {
                           MySnackBar.showMySnackBar(context, 'Sie sind nicht angemeldet!');
                         }
                       },
                       child: Text(
                         "E-Mail erneut senden",
-                        style: GoogleFonts.tiltNeon(
-                            fontSize: 20
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
                       ),
                     ),
 
@@ -113,9 +106,7 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
                       },
                       child: Text(
                         "Abbruch",
-                        style: GoogleFonts.tiltNeon(
-                            fontSize: 20
-                        ),
+                        style: Theme.of(context).textTheme.labelMedium
                       ),
                     ),
 

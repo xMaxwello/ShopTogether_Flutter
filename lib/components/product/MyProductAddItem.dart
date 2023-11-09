@@ -45,15 +45,17 @@ class MyProductAddItem extends StatelessWidget {
                       Expanded(
                         child: Text(
                           myProduct.productName,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
 
                       const SizedBox(width: 10),
 
                       // Stückzahl
-                      const Icon(
-                        Icons.add
+                      Icon(
+                        Icons.add,
+                        size: Theme.of(context).iconTheme.size,
+                        color: Theme.of(context).iconTheme.color,
                       ),
                     ],
                   ),

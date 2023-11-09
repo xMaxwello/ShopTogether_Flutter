@@ -35,11 +35,19 @@ class MyBasicStructItem extends StatelessWidget {
                 },
               child:
                   Card(
-                    color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.08),
-                    shadowColor: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.6),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                      child: content,
+                    color: Theme.of(context).cardTheme.color,
+                    shadowColor: Theme.of(context).cardTheme.shadowColor,
+                    elevation: Theme.of(context).cardTheme.elevation,
+                    child: Container(
+                        decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 10),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+                        child: content,
+                      ),
                     ),
                 ),
               ),
