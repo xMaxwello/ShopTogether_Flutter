@@ -24,7 +24,7 @@ class LightTheme {
           foregroundColor: Colors.white, backgroundColor: Colors.blue,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Randradius
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
       ),
@@ -94,6 +94,10 @@ class LightTheme {
         titleLarge: GoogleFonts.tiltNeon(
             fontSize: 24,
             color: Colors.grey[900]
+        ),
+        displaySmall: GoogleFonts.tiltNeon(
+            fontSize: 16,
+            color: Colors.black
         ),
         displayLarge: GoogleFonts.tiltNeon(
           fontSize: 40,

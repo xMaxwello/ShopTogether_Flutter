@@ -31,8 +31,8 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
             Widget? child) {
 
             return Card(
-              color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.08),
-              elevation: 20,
+              color: Theme.of(context).cardTheme.color,
+              elevation: Theme.of(context).cardTheme.elevation,
               clipBehavior: Clip.antiAlias,
               child: Padding(
                 padding: const EdgeInsets.all(25),
@@ -44,15 +44,15 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
 
                     Text(
                       widget.title,
-                      style: GoogleFonts.tiltNeon(
-                          fontSize: 24
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge
                     ),
 
                     for (int i = 0; i<widget.controllers.length;i++)
                       TextFormField(
                         controller: widget.controllers[i],
+                        style: Theme.of(context).textTheme.displaySmall,
                         decoration: InputDecoration(
+                          labelStyle: Theme.of(context).textTheme.displaySmall,
                           labelText: widget.inputLabels[i],
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -68,7 +68,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
 
                             },
                             icon: Icon(
-                              widget.isInputPassword[i] ? Icons.remove_red_eye : Icons.clear,
+                              widget.isInputPassword[i] ? (value.showPasswords![i] ? Icons.remove_red_eye : Icons.visibility_off) : Icons.clear,
                               size: 20,
                             ),
                           ),

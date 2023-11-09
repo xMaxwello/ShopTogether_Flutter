@@ -59,8 +59,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
           controllers: controllers,
           inputLabels: const ["Vorname*", "Nachname*", "E-Mail*", "Passwort*", "Passwort wiederholen*"],
           buttonLabels: const ["Registrieren", "Zur Anmeldung"],
-          buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
-          buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
+          buttonForegroundColors: [Colors.white, Theme.of(context).colorScheme.primary],
+          buttonBackgroundColors: [Theme.of(context).colorScheme.primary, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
           isInputPassword: _showPassword,
         )
     );
@@ -85,8 +85,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
           controllers: controllers,
           inputLabels: const ["E-Mail*", "Passwort*"],
           buttonLabels: const ["Anmelden", "Zur Registrierung"],
-          buttonForegroundColors: [Colors.white, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!],
-          buttonBackgroundColors: [Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)!, Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.005)!],
+          buttonForegroundColors: [Colors.white, Theme.of(context).colorScheme.primary],
+          buttonBackgroundColors: [Theme.of(context).colorScheme.primary,  Colors.white],
           isInputPassword: const [false, true],
         )
     );
