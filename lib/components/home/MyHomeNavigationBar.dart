@@ -79,11 +79,12 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
 
                               Icon(
                                 icons[iconView],
-                                size: 28,
-                                color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8),
+                                size: Theme.of(context).iconTheme.size! + 2,
+                                color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
                               ),
                               Text(
-                                  titles[iconView]
+                                titles[iconView],
+                                style: Theme.of(context).textTheme.titleSmall,
                               )
 
                             ],
@@ -96,10 +97,12 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
 
                               Icon(
                                 icons[iconView],
-                                size: 25,
+                                size: Theme.of(context).iconTheme.size,
+                                color: Theme.of(context).iconTheme.color,
                               ),
                               Text(
-                                  titles[iconView]
+                                titles[iconView],
+                                style: Theme.of(context).textTheme.titleSmall,
                               )
 
                             ],

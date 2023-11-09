@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/appBar/MyAppBar.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
@@ -41,9 +40,7 @@ class MyHomePage extends StatelessWidget {
 
                     Text(
                       "Die Liste ist leer!",
-                      style: GoogleFonts.tiltNeon(
-                        fontSize: 16,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall
                     ),
                     const SizedBox(height: 10,),
 
@@ -51,30 +48,13 @@ class MyHomePage extends StatelessWidget {
 
                     ElevatedButton(
                       onPressed: MyFunctions.addGroup,
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.lerp(Colors.white, Theme
-                                .of(context)
-                                .colorScheme
-                                .primary, 0.8)),
-                        minimumSize: MaterialStateProperty.resolveWith<Size?>(
-                              (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return const Size(230, 42);
-                            }
-                            return const Size(180, 40);
-                          },
-                        ),
-                      ),
+                      style: Theme.of(context).elevatedButtonTheme.style,
                       child: Padding(
                         padding: const EdgeInsets.only(
                             left: 15, right: 15, top: 5, bottom: 5),
                         child: Text(
                           "Gruppe Hinzufügen",
-                          style: GoogleFonts.tiltNeon(
-                              fontSize: 16,
-                              color: Colors.white
-                          ),
+                          style: Theme.of(context).textTheme.labelSmall
                         ),
                       ),
                     )
@@ -86,9 +66,15 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
             ),
-            bottomNavigationBar: BottomAppBar(
-              color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.2),
-              child: const MyHomeNavigationBar(),
+            bottomNavigationBar:  ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: BottomAppBar(
+                color: Theme.of(context).bottomAppBarTheme.color,
+                child: const MyHomeNavigationBar(),
+              ),
             ),
 
             appBar: mySettingsProvider.isSettingsPage ?

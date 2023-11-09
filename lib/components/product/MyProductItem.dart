@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/functions/snackbars/MySnackBar.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/firestore/MyFirestore.dart';
@@ -60,7 +61,24 @@ class MyProductItem extends StatelessWidget {
 
                             ///the amount of the product shouldn`t be under 1
                             if (myProduct.productCount != 1) {
+
                               MyFirestore.updateProductCount(selectedGroupUUID, myProduct.productID, -1);
+                            } else {
+
+                              ///if amount of the product is 1 and the user want to reduce the amount this message will show up
+                              MySnackBar.showMySnackBar(
+                                context,
+                                "Wollen Sie das Product löschen?",
+                                backgroundColor: Colors.blueGrey,
+                                foregroundColor: Colors.white,
+                                isFunctionAvailable: true,
+                                actionLabel: "Löschen",
+                                actionFunction: () {
+
+                                  MyFirestore.removeProduct(selectedGroupUUID, myProduct.productID);
+                                },
+                                actionColor: Colors.redAccent[100]
+                              );
                             }
                           },
                           icon: const Icon(Icons.remove)

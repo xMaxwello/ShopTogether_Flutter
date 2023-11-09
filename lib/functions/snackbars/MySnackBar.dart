@@ -3,7 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class MySnackBar {
 
-  static void showMySnackBar(BuildContext context, String showText, {Color backgroundColor = Colors.red, Color foregroundColor = Colors.white}) {
+  static void defaultActionFunc() {
+
+  }
+
+  static void showMySnackBar(BuildContext context, String showText, {Color backgroundColor = Colors.red, Color foregroundColor = Colors.white, bool isFunctionAvailable = false, Function() actionFunction = defaultActionFunc, actionLabel = 'Bestätigen', actionColor = Colors.white}) {
 
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -14,6 +18,11 @@ class MySnackBar {
             ),
           ),
           backgroundColor: backgroundColor,
+          action: isFunctionAvailable == false ? null : SnackBarAction(
+            label: actionLabel,
+            onPressed: actionFunction,
+            textColor: actionColor,
+          ),
         ));
   }
 }

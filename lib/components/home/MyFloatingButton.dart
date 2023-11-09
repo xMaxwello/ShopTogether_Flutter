@@ -40,33 +40,34 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
                 ?
             FloatingActionButton(
               key: const ValueKey<bool>(false),
-              backgroundColor: Color.lerp(Colors.white, Theme
-                  .of(context)
-                  .colorScheme
-                  .primary, 0.8),
+              backgroundColor: Theme
+                  .of(context).floatingActionButtonTheme.backgroundColor,
               onPressed: widget.function,
               child: Icon(
                 widget.iconData,
-                color: Colors.white,
+                color: Theme
+                    .of(context).floatingActionButtonTheme.foregroundColor,
+                size: Theme
+                    .of(context).floatingActionButtonTheme.iconSize,
               ),
             )
                 :
             FloatingActionButton.extended(
               key: const ValueKey<bool>(true),
               onPressed: widget.function,
-              backgroundColor: Color.lerp(Colors.white, Theme
-                  .of(context)
-                  .colorScheme
-                  .primary, 0.8),
+              backgroundColor: Theme
+                  .of(context).floatingActionButtonTheme.backgroundColor,
               label: Text(
                 widget.buttonTitle,
-                style: const TextStyle(
-                    color: Colors.white
-                ),
+                style: Theme
+                    .of(context).floatingActionButtonTheme.extendedTextStyle,
               ),
               icon: Icon(
                 widget.iconData,
-                color: Colors.white,
+                color: Theme
+                    .of(context).floatingActionButtonTheme.foregroundColor,
+                size: Theme
+                    .of(context).floatingActionButtonTheme.iconSize,
               ),
             )
 

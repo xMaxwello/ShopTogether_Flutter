@@ -8,6 +8,8 @@ import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarPr
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
+import 'package:shopping_app/themes/DarkTheme.dart';
+import 'package:shopping_app/themes/LightTheme.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
@@ -38,14 +40,8 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Shoppinglist',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black54),
-        useMaterial3: true
-      ),
+      theme: LightTheme.getLightTheme(), ///theme class
+      darkTheme: DarkTheme.getDarkTheme(), ///theme class
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       home: const MyAuthenticationWrapper(),
