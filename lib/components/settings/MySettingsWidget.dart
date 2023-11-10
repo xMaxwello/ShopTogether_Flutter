@@ -102,6 +102,19 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                         },
                       ),
                     ),
+                    ListTile(
+                      title: const Text("Dark Theme"),
+                      trailing: Switch(
+                        activeColor: Color.lerp(Colors.white, Theme
+                            .of(context)
+                            .colorScheme
+                            .primary, 0.9),
+                        value: settingsProvider.isDarkThemeEnabled,
+                        onChanged: (value) {
+                          settingsProvider.updateIsDarkThemeEnabled(value);
+                        },
+                      ),
+                    ),
 
                   ],
                 ),

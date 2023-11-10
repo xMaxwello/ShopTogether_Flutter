@@ -6,25 +6,56 @@ import '../../snackbars/MySnackBar.dart';
 class MyAccountSettingsProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> updateEmail(BuildContext context, String newEmail) async {
+  Future<void> updateEmail(BuildContext context, String newEmail, String password) async {
+    if (newEmail.isEmpty || password.isEmpty) {
+      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', backgroundColor: Colors.blueGrey);
+      return;
+    }
+
     User? user = _auth.currentUser;
     try {
-      await user?.updateEmail(newEmail);
-      MySnackBar.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.');
-      notifyListeners();
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updateEmail(newEmail);
+      MySnackBar.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.', backgroundColor: Colors.blueGrey);
     } on FirebaseAuthException catch (e) {
-      MySnackBar.showMySnackBar(context, 'Die E-Mail konnte nicht geändert werden. Bitte versuchen Sie es später noch einmal.');
+      MySnackBar.showMySnackBar(context, 'Fehler: ${e.message}', backgroundColor: Colors.red);
     }
   }
 
-  Future<void> updatePassword(BuildContext context, String newPassword) async {
+  Future<void> updatePassword(BuildContext context, String oldPassword, String newPassword, String repeatNewPassword) async {
+    if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
+      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', backgroundColor: Colors.red);
+      return;
+    }
+
+    if (newPassword != repeatNewPassword) {
+      MySnackBar.showMySnackBar(context, 'Die neuen Passwörter stimmen nicht überein.', backgroundColor: Colors.red);
+      return;
+    }
+
     User? user = _auth.currentUser;
+
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user!.email!,
+      password: oldPassword,
+    );
+
     try {
-      await user?.updatePassword(newPassword);
-      MySnackBar.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.');
-      notifyListeners();
+      await user.reauthenticateWithCredential(credential);
+
+      await user.updatePassword(newPassword);
+      MySnackBar.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.', backgroundColor: Colors.blueGrey);
     } on FirebaseAuthException catch (e) {
-      MySnackBar.showMySnackBar(context, 'Das Passwort konnte nicht geändert werden. Bitte versuchen Sie es später noch einmal.');
+      if (e.code == 'wrong-password') {
+        MySnackBar.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
+      } else {
+        MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.');
+      }
     }
   }
 
@@ -32,7 +63,7 @@ class MyAccountSettingsProvider with ChangeNotifier {
     User? user = _auth.currentUser;
     try {
       await user?.delete();
-      MySnackBar.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.');
+      MySnackBar.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', backgroundColor: Colors.blueGrey);
       notifyListeners();
     } on FirebaseAuthException catch (e) {
       MySnackBar.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
