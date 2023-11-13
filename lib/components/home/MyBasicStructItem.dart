@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
-
-import '../../functions/providers/items/MyItemsProvider.dart';
 
 class MyBasicStructItem extends StatelessWidget {
 
   final Widget content;
-  final String selectedUUID;
+  final Function() onTapFunction;
 
-  const MyBasicStructItem({super.key, required this.selectedUUID, required this.content});
+  const MyBasicStructItem({super.key, required this.content, required this.onTapFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +23,7 @@ class MyBasicStructItem extends StatelessWidget {
             children: [
 
             GestureDetector(
-                onTap: () {
-
-                  Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(selectedUUID);
-                  Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(false);
-                  Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
-                },
+                onTap: onTapFunction,
               child:
                   Card(
                     color: Theme.of(context).cardTheme.color,

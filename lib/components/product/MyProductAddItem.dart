@@ -1,70 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
-class MyProductAddItem extends StatelessWidget {
+class MyProductAddItem extends ListTile {
 
   final MyProduct myProduct;
+  final Function() addProductFunction;
+  final Function() showProductInfoFunction;
 
   const MyProductAddItem({
-    Key? key, required this.myProduct}) : super(key: key);
+    Key? key, required this.myProduct, required this.addProductFunction, required this.showProductInfoFunction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-            margin: const EdgeInsets.only(left: 6, right: 6),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+    return MyBasicStructItem(
+      onTapFunction: showProductInfoFunction,
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 5, top: 5, left: 10, right: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      // Produktbild oder Placeholder
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: myProduct.productImageUrl.isNotEmpty ? Image.network(
-                          myProduct.productImageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
-                        ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      // Produktname
-                      Expanded(
-                        child: Text(
-                          myProduct.productName,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-
-                      const SizedBox(width: 10),
-
-                      // Stückzahl
-                      Icon(
-                        Icons.add,
-                        size: Theme.of(context).iconTheme.size,
-                        color: Theme.of(context).iconTheme.color,
-                      ),
-                    ],
+                Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                  child: myProduct.productImageUrl.isNotEmpty
+                      ? Image.network(
+                    myProduct.productImageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                    const Center(child: Icon(Icons.error)),
+                  )
+                      : const Center(child: Icon(Icons.image, color: Colors.grey)),
                 ),
-                const SizedBox(height: 4,),
+                const SizedBox(width: 10),
+                Text(
+                  myProduct.productName,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ],
-            )
+            ),
+            GestureDetector(
+              onTap: addProductFunction,
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).listTileTheme.tileColor,
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Icon(
+                      Icons.add,
+                      size: Theme.of(context).iconTheme.size,
+                      color: Theme.of(context).listTileTheme.iconColor,
+                    ),
+                  )
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

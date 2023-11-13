@@ -65,16 +65,21 @@ class _MySearchBarState extends State<MySearchBar> {
                         productName: "Schnitzel",
                         selectedUserUUID: "",
                         productCount: 1,
+                        productVolumen: 0,
+                        productVolumenType: '',
                         productImageUrl: ""
                     );
 
-                    return ListTile(
-                      title: MyProductAddItem(
-                          myProduct: myProduct
-                      ),
-                      onTap: () {
+                    return MyProductAddItem(
+                      myProduct: myProduct,
+                      addProductFunction: () {
+
                         MyFirestore.addProduct(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
+                      },
+                      showProductInfoFunction: () {
+                        ///TODO: show Product info
+                        print("Product info");
                       },
                     );
                   });

@@ -52,6 +52,8 @@ class MyProductItem extends StatelessWidget {
                         ),
                       ),
 
+                      ///TODO: Hier noch die Volumenangaben/Mengenangaben hinpacken, falls vorhanden: 2x Cola Dosen (=> 0,5l)
+
                       const SizedBox(width: 10),
 
                       // Stückzahl

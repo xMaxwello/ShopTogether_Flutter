@@ -26,6 +26,8 @@ class MyFunctions {
           productName: "Milch",
           selectedUserUUID: "fsdfsd",
           productCount: 3,
+          productVolumen: 0,
+          productVolumenType: '',
           productImageUrl: ""
       )
     );

@@ -43,6 +43,11 @@ class LightTheme {
         )
       ),
 
+      listTileTheme: ListTileThemeData(
+        iconColor: Colors.black,
+        tileColor: Colors.white24
+      ),
+
       bottomAppBarTheme: BottomAppBarTheme(
           color: Colors.grey[200]
       ),

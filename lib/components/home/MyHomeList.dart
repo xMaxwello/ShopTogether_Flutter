@@ -171,7 +171,11 @@ class _MyHomeListState extends State<MyHomeList> {
                                   });
                                 },
                                 child: MyBasicStructItem(///the basic struct of the group, product, ... elements
-                                    selectedUUID: itemsValue.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID,
+                                  onTapFunction: () {
+                                    Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(itemsValue.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID);
+                                    Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(false);
+                                    Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
+                                  },
                                     content:
                                     itemsValue.isGroup == true ?
                                     MyGroupItem(///shows all groups of current user
@@ -179,7 +183,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                     )
                                         :
                                     MyProductItem(///shows products of selected group from current user
-                                      myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productImageUrl: ""),
+                                      myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
                                       selectedGroupUUID: itemsValue.selectedGroupUUID,
                                     ),
                                 ),

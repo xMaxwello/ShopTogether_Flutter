@@ -6,6 +6,8 @@ class MyProduct extends ChangeNotifier {
   final String productName;
   final String selectedUserUUID;
   final int productCount;
+  final int productVolumen;
+  final String productVolumenType;
   final String productImageUrl;
 
   MyProduct({
@@ -13,6 +15,8 @@ class MyProduct extends ChangeNotifier {
     required this.productName,
     required this.selectedUserUUID,
     required this.productCount,
+    required this.productVolumen,
+    required this.productVolumenType,
     required this.productImageUrl,
   });
 
@@ -22,6 +26,8 @@ class MyProduct extends ChangeNotifier {
       'productName': productName,
       'selectedUserUUID': selectedUserUUID,
       'productCount': productCount,
+      'productVolumen': productVolumen,
+      'productVolumenType': productVolumenType,
       'productImageUrl': productImageUrl,
     };
   }
@@ -36,6 +42,8 @@ class MyProduct extends ChangeNotifier {
       productName: map['productName'] as String,
       selectedUserUUID: map['selectedUserUUID'] as String,
       productCount: map['productCount'] as int,
+      productVolumen: map['productVolumen'] as int,
+      productVolumenType: map['productVolumenType'] as String,
       productImageUrl: map['productImageUrl'] as String,
     );
   }
@@ -48,6 +56,8 @@ class MyProduct extends ChangeNotifier {
       productName: data['productName'] as String,
       selectedUserUUID: data['selectedUserUUID'] as String,
       productCount: data['productCount'] as int,
+      productVolumen: data['productVolumen'] as int,
+      productVolumenType: data['productVolumenType'] as String,
       productImageUrl: data['productImageUrl'] as String,
     );
   }
