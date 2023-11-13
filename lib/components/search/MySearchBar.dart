@@ -50,12 +50,12 @@ class _MySearchBarState extends State<MySearchBar> {
 
                             ///TODO: add function
 
-                            /*MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
+                            MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
                             myFoodService.getProductByBarcode('3017620422003').then((product) {
                               if (product != null) {
                                 print(product.brands);
                               }
-                            });*/
+                            });
                           });
                         },
                         icon: Icon(

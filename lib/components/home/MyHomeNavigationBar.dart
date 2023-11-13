@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/pages/MyHomePage.dart';
+
+import '../../pages/MySettingsPage.dart';
 
 class MyHomeNavigationBar extends StatefulWidget {
 
@@ -60,11 +63,10 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                             // on the corresponding Icon on the BottomBar
                             switch(iconView) {
                               case 0: //Shows Homepage
-                                Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(false);
-                                Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(true);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
                                 break;
                               case 1: //Shows SettingsPage
-                                Provider.of<MySettingsProvider>(context, listen: false).updateIsSettingsPage(true);
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const MySettingsPage()));
                                 break;
                             }
                           });

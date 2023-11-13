@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/pages/MySettingsPage.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../search/MySearchBar.dart';
 
 class MyAppBar extends StatefulWidget {
-  const MyAppBar({super.key});
+
+  final bool isGroup;
+
+  const MyAppBar({super.key, required this.isGroup});
 
   @override
   State<MyAppBar> createState() => _MyAppBarState();
@@ -22,7 +27,7 @@ class _MyAppBarState extends State<MyAppBar> {
               MyItemsProvider value,
               Widget? child){
 
-            if (value.isGroup) {
+            if (widget.isGroup) {
               return Column(
                 children: [
 
@@ -48,7 +53,10 @@ class _MyAppBarState extends State<MyAppBar> {
                 SizedBox(
                   height: 40,
                 ),
-                MySearchBar()
+
+                ///the search bar for the products
+                MySearchBar(),
+
               ],
             );
           }),

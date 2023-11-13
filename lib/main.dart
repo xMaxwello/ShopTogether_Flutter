@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       title: 'Shoppinglist',
       theme: LightTheme.getLightTheme(), ///theme class
       darkTheme: DarkTheme.getDarkTheme(), ///theme class
-      themeMode: ThemeMode.light, ///TODO: das mit Dark mode noch machen
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       home: const MyAuthenticationWrapper(),
     );
@@ -61,7 +61,7 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
   @override
   Widget build(BuildContext context) {
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) { ///TODO: Auf den Zurück (Neben Home Button) Button dann gibt es Probleme
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
 
         if (user != null) {
           bool isVerified = user.emailVerified;

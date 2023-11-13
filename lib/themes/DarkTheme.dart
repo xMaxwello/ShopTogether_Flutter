@@ -6,7 +6,7 @@ class DarkTheme {
 
     return ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black54),
-        useMaterial3: true
+        useMaterial3: true ///TODO: das mit Dark mode noch machen
     );
   }
 }

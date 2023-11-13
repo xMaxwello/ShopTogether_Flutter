@@ -46,13 +46,25 @@ class MyProductItem extends StatelessWidget {
                       const SizedBox(width: 10),
 
                       Expanded(
-                        child: Text(
-                          myProduct.productName, ///shows the product name
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
+                        child: Column(
+                          children: [
 
-                      ///TODO: Hier noch die Volumenangaben/Mengenangaben hinpacken, falls vorhanden: 2x Cola Dosen (=> 0,5l)
+                            Text(
+                              myProduct.productName, ///shows the product name
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+
+                            myProduct.productVolumen == 0 && myProduct.productVolumenType == "" ?
+                            const SizedBox()
+                            :
+                            Text( /// shows product volumen
+                              myProduct.productVolumen.toString() + myProduct.productVolumenType,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+
+                          ],
+                        )
+                      ),
 
                       const SizedBox(width: 10),
 

@@ -1,23 +1,24 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/appBar/MyAppBar.dart';
-import 'package:shopping_app/components/home/MyFloatingButton.dart';
-import 'package:shopping_app/components/home/MyHomeList.dart';
-import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
-import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
+import '../components/appBar/MyAppBar.dart';
+import '../components/home/MyFloatingButton.dart';
+import '../components/home/MyHomeList.dart';
+import '../components/home/MyHomeNavigationBar.dart';
 import '../functions/others/MyFunctions.dart';
+import '../functions/providers/items/MyItemsProvider.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyProductPage extends StatefulWidget {
+  const MyProductPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyProductPage> createState() => _MyProductPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyProductPageState extends State<MyProductPage> {
 
   late Timer _timer;
 
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
           ///set the padding = status bar height
           child: MyHomeList(
-            isGroup: true,
+            isGroup: false,
             isListEmptyWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,19 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: Theme.of(context).textTheme.bodySmall
                 ),
                 const SizedBox(height: 10,),
-
-                ElevatedButton(
-                  onPressed: MyFunctions.addGroup,
-                  style: Theme.of(context).elevatedButtonTheme.style,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 5, bottom: 5),
-                    child: Text(
-                        "Gruppe Hinzufügen",
-                        style: Theme.of(context).textTheme.labelSmall
-                    ),
-                  ),
-                )
 
               ],
             ),
@@ -104,14 +92,14 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100),
           child: MyAppBar(
-            isGroup: true
+            isGroup: false,
           ),
         ),
 
         floatingActionButton: const MyFloatingButton(
-          buttonTitle: 'Gruppe',
-          iconData: Icons.group_add,
-          function: MyFunctions.addGroup,
+          buttonTitle: 'Mitglied',
+          iconData: Icons.person_add,
+          function: MyFunctions.addUserToGroup,
           isChangeByScroll: true,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -119,3 +107,4 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 }
+

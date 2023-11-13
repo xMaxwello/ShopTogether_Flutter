@@ -9,6 +9,7 @@ import 'package:shopping_app/functions/firestore/MyFirestore.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
+import 'package:shopping_app/pages/MyProductPage.dart';
 
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import '../../objects/users/MyUsers.dart';
@@ -16,8 +17,9 @@ import '../../objects/users/MyUsers.dart';
 class MyHomeList extends StatefulWidget {
 
   final Widget isListEmptyWidget;
+  final bool isGroup;
 
-  const MyHomeList({super.key, required this.isListEmptyWidget});
+  const MyHomeList({super.key, required this.isListEmptyWidget, required this.isGroup});
 
   @override
   State<MyHomeList> createState() => _MyHomeListState();
@@ -131,20 +133,20 @@ class _MyHomeListState extends State<MyHomeList> {
                         }
 
                         ///if there no groups
-                        if (groupsFromUser.isEmpty && (itemsValue.isGroup || selectedGroupIndex != -1)) {
+                        if (groupsFromUser.isEmpty && (widget.isGroup || selectedGroupIndex != -1)) {
                           return Center(
                             child: widget.isListEmptyWidget,
                           );
                         }
 
                         ///if there no products in group
-                        if (!itemsValue.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
+                        if (!widget.isGroup && selectedGroupIndex != -1 && groupsFromUser.elementAt(selectedGroupIndex).products.isEmpty) {
                           return Center(
                             child: widget.isListEmptyWidget,
                           );
                         }
 
-                        int itemLength = itemsValue.isGroup ?
+                        int itemLength = widget.isGroup ?
                         groupsFromUser.length :
                         (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0);
 
@@ -156,7 +158,7 @@ class _MyHomeListState extends State<MyHomeList> {
                           itemBuilder: (context, index) {
 
                             return Dismissible(
-                                key: itemsValue.isGroup ? Key(groupsFromUser[index].groupUUID) : Key(groupsFromUser[selectedGroupIndex].products[index].productID),
+                                key: widget.isGroup ? Key(groupsFromUser[index].groupUUID) : Key(groupsFromUser[selectedGroupIndex].products[index].productID),
                                 direction: DismissDirection.endToStart,
                                 background: Container(
                                   color: Colors.red[300],
@@ -171,7 +173,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                   setState(() {
 
                                     ///remove group or product if the item is swiped
-                                    if (itemsValue.isGroup) {
+                                    if (widget.isGroup) {
                                       MyFirestore.removeGroup(groupsFromUser[index].groupUUID);
                                     } else {
                                       MyFirestore.removeProduct(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
@@ -180,12 +182,16 @@ class _MyHomeListState extends State<MyHomeList> {
                                 },
                                 child: MyBasicStructItem(///the basic struct of the group, product, ... elements
                                   onTapFunction: () {
-                                    Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(itemsValue.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID);
-                                    Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(false);
+
+                                    if (widget.isGroup) {
+
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
+                                    }
+                                    Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(widget.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID);
                                     Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                                   },
                                     content:
-                                    itemsValue.isGroup == true ?
+                                    widget.isGroup == true ?
                                     MyGroupItem(///shows all groups of current user
                                         myGroup: groupsFromUser.elementAt(index)
                                     )
