@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
-import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyHomePage.dart';
 
 import '../../pages/MySettingsPage.dart';

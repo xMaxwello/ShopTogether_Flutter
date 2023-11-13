@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
 import 'package:shopping_app/functions/firestore/MyFirestore.dart';

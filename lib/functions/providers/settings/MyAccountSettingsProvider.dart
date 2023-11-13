@@ -8,7 +8,7 @@ class MyAccountSettingsProvider with ChangeNotifier {
 
   Future<void> updateEmail(BuildContext context, String newEmail, String password) async {
     if (newEmail.isEmpty || password.isEmpty) {
-      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', backgroundColor: Colors.blueGrey);
+      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
       return;
     }
 
@@ -21,20 +21,20 @@ class MyAccountSettingsProvider with ChangeNotifier {
 
       await user.reauthenticateWithCredential(credential);
       await user.updateEmail(newEmail);
-      MySnackBar.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.', backgroundColor: Colors.blueGrey);
+      MySnackBar.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.', isError: false);
     } on FirebaseAuthException catch (e) {
-      MySnackBar.showMySnackBar(context, 'Fehler: ${e.message}', backgroundColor: Colors.red);
+      MySnackBar.showMySnackBar(context, 'Fehler: ${e.message}');
     }
   }
 
   Future<void> updatePassword(BuildContext context, String oldPassword, String newPassword, String repeatNewPassword) async {
     if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
-      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', backgroundColor: Colors.red);
+      MySnackBar.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
       return;
     }
 
     if (newPassword != repeatNewPassword) {
-      MySnackBar.showMySnackBar(context, 'Die neuen Passwörter stimmen nicht überein.', backgroundColor: Colors.red);
+      MySnackBar.showMySnackBar(context, 'Die neuen Passwörter stimmen nicht überein.');
       return;
     }
 
@@ -49,7 +49,7 @@ class MyAccountSettingsProvider with ChangeNotifier {
       await user.reauthenticateWithCredential(credential);
 
       await user.updatePassword(newPassword);
-      MySnackBar.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.', backgroundColor: Colors.blueGrey);
+      MySnackBar.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.', isError: false);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         MySnackBar.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
@@ -63,7 +63,7 @@ class MyAccountSettingsProvider with ChangeNotifier {
     User? user = _auth.currentUser;
     try {
       await user?.delete();
-      MySnackBar.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', backgroundColor: Colors.blueGrey);
+      MySnackBar.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
       notifyListeners();
     } on FirebaseAuthException catch (e) {
       MySnackBar.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
