@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       title: 'Shoppinglist',
       theme: LightTheme.getLightTheme(), ///theme class
       darkTheme: DarkTheme.getDarkTheme(), ///theme class
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light, ///TODO: das mit Dark mode noch machen
       debugShowCheckedModeBanner: false,
       home: const MyAuthenticationWrapper(),
     );

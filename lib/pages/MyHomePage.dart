@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/appBar/MyAppBar.dart';
@@ -10,11 +13,38 @@ import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dar
 
 import '../functions/others/MyFunctions.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+
+      try {
+
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await user.reload();
+        }
+      } catch(e) {
+        print(e.toString());
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     ///get status bar height
     double height = MediaQuery.of(context).padding.top;
 
@@ -39,8 +69,8 @@ class MyHomePage extends StatelessWidget {
                   children: [
 
                     Text(
-                      "Die Liste ist leer!",
-                      style: Theme.of(context).textTheme.bodySmall
+                        "Die Liste ist leer!",
+                        style: Theme.of(context).textTheme.bodySmall
                     ),
                     const SizedBox(height: 10,),
 
@@ -53,14 +83,14 @@ class MyHomePage extends StatelessWidget {
                         padding: const EdgeInsets.only(
                             left: 15, right: 15, top: 5, bottom: 5),
                         child: Text(
-                          "Gruppe Hinzufügen",
-                          style: Theme.of(context).textTheme.labelSmall
+                            "Gruppe Hinzufügen",
+                            style: Theme.of(context).textTheme.labelSmall
                         ),
                       ),
                     )
 
-                    :
-                        const SizedBox(),
+                        :
+                    const SizedBox(),
 
                   ],
                 ),

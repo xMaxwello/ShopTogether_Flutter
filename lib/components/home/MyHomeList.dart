@@ -102,19 +102,27 @@ class _MyHomeListState extends State<MyHomeList> {
                                 (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
                         ///get current user
-                        String uuid = FirebaseAuth.instance.currentUser!.uid;
-                        MyUser? currentUser = users.where((MyUser user) => user.uuid == uuid).firstOrNull;
+
+                        User? fireUser = FirebaseAuth.instance.currentUser;
+                        if (fireUser == null) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        MyUser? currentUser = users.where((MyUser user) => user.uuid == fireUser.uid).firstOrNull;
+                        if (currentUser == null) {
+                          return const CircularProgressIndicator();
+                        }
 
                         ///get all groups
                         List<MyGroup> groups = groupsData.docs.map(
                                 (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
                         ///get groups from current user
-                        List<MyGroup> groupsFromUser = groups.where((group) => currentUser!.groupUUIDs.contains(group.groupUUID)).toList();
+                        List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
 
                         groupsFromUser.sort((a, b) => a.groupUUID.compareTo(b.groupUUID));
 
-                        List<String> groupUUIDs = currentUser!.groupUUIDs;
+                        List<String> groupUUIDs = currentUser.groupUUIDs;
                         groupUUIDs.sort((a, b) => a.compareTo(b));
 
                         ///get index of selected group
