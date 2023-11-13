@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
-import 'package:shopping_app/pages/MySettingsPage.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../search/MySearchBar.dart';
@@ -38,9 +36,7 @@ class _MyAppBarState extends State<MyAppBar> {
                   Text(
                     "Einkaufsapp",
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.tiltNeon(
-                      fontSize: 30
-                    ),
+                    style: Theme.of(context).textTheme.headlineLarge
                   ),
 
                 ]

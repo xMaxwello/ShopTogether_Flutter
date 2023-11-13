@@ -7,6 +7,8 @@ class MyFunctions {
 
   static void addGroup() {
 
+    ///TODO: function
+
     MyFirestore.addGroup(
         MyGroup(
           groupUUID: "",
@@ -18,7 +20,7 @@ class MyFunctions {
   }
 
   static void addProduct() async {
-
+    ///TODO: function
     MyFirestore.addProduct(
       "",
       MyProduct(
@@ -35,5 +37,6 @@ class MyFunctions {
 
   static void addUserToGroup() {
 
+    ///TODO: function
   }
 }

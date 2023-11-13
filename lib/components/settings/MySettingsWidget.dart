@@ -27,16 +27,13 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                 children: [
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 16.0),
+                    padding: const EdgeInsets.only(
+                        top: 40.0, left: 16.0, right: 16.0),
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
                         "Einstellungen",
-                        style: GoogleFonts.tiltNeon(
-                            fontSize: 32,
-                            color: Colors.black
-                        ),
+                        style: Theme.of(context).textTheme.headlineLarge
                       ),
                     ),
                   ),
