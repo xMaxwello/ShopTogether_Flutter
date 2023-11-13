@@ -16,15 +16,19 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MySettingsProvider>(
-        builder: (BuildContext context, MySettingsProvider settingsProvider,
-            Widget? child) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
+        builder: (BuildContext context, MySettingsProvider settingsProvider, Widget? child) { ///TODO: Lukas start
+          if (settingsProvider.showAccountSettings) {
+            return MyAccountSettingsWidget(onBack: () {
+              settingsProvider.updateShowAccountSettings(false);
+              },
+            );
+          } else { ///TODO: Lukas end
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
 
                   Padding(
                     padding: const EdgeInsets.only(
@@ -126,14 +130,27 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                       value: settingsProvider.isSoundEnabled,
                       onChanged: (value) {
                           settingsProvider.updateIsSoundEnabled(value);
-                      },
+                        },
+                      ),
                     ),
-                  ),
+                    ListTile(
+                      title: const Text("Dark Theme"),
+                      trailing: Switch(
+                        activeColor: Color.lerp(Colors.white, Theme
+                            .of(context)
+                            .colorScheme
+                            .primary, 0.9),
+                        value: settingsProvider.isDarkThemeEnabled,
+                        onChanged: (value) {
+                          settingsProvider.updateIsDarkThemeEnabled(value);
+                        },
+                      ),
+                    ),
 
-                ],
-              ),
+                  ],
+                ),
 
-              const SizedBox(height: 15,),
+                const SizedBox(height: 15,),
 
               ElevatedButton(
                 onPressed: () async {
