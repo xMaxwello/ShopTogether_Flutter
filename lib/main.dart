@@ -39,14 +39,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<MySettingsProvider>(
+        builder: (context, settingsProvider, child) {
+          return MaterialApp(
+            title: 'Shoppinglist',
+            theme: LightTheme.getLightTheme(),
 
-    return MaterialApp(
-      title: 'Shoppinglist',
-      theme: LightTheme.getLightTheme(), ///theme class
-      darkTheme: DarkTheme.getDarkTheme(), ///theme class
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      home: const MyAuthenticationWrapper(),
+            ///theme class
+            darkTheme: DarkTheme.getDarkTheme(),
+
+            ///theme class
+            themeMode: settingsProvider.currentThemeMode,
+
+            ///TODO: Change Theme based on boolean in Settings
+            debugShowCheckedModeBanner: false,
+            home: const MyAuthenticationWrapper(),
+          );
+        }
     );
   }
 }
@@ -81,8 +90,9 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
 
     });
 
-    return const Scaffold(
-      body: CircularProgressIndicator(),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: const CircularProgressIndicator(),
     );
   }
 }

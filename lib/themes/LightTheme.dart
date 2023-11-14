@@ -43,7 +43,7 @@ class LightTheme {
         )
       ),
 
-      listTileTheme: ListTileThemeData(
+      listTileTheme: const ListTileThemeData(
         iconColor: Colors.black,
         tileColor: Colors.white24
       ),
@@ -82,7 +82,7 @@ class LightTheme {
         ),
         labelSmall: GoogleFonts.tiltNeon(
             fontSize: 16,
-            color: Colors.white
+            color: Colors.black38
         ),
         bodySmall: GoogleFonts.tiltNeon(
             fontSize: 16,
