@@ -12,13 +12,6 @@ class MyOpenFoodFactsService {
     OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
       OpenFoodFactsLanguage.GERMAN
     ];
-
-    /*
-    OpenFoodAPIConfiguration.globalUser = User(
-    userId: 'myUsername',
-    password: 'myPassword',
-    );
-    * */
   }
 
   Future<Product?> getProductByBarcode(String barcode) async {
@@ -37,5 +30,27 @@ class MyOpenFoodFactsService {
     } else {
       throw Exception('product not found, please insert data for $barcode');
     }
+  }
+
+  Future<SearchResult?> getProductByName(List<String> terms) async {
+
+    ///TODO: Hier
+
+    final ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
+        parametersList: [
+          StatesTagsParameter(
+              map: {}
+          ),
+        ],
+        version: ProductQueryVersion.v3
+    );
+
+    User user = const User(
+        userId: "mopa",
+        password: ""
+    );
+    final SearchResult result = await OpenFoodAPIClient.searchProducts(user, configuration);
+
+    return result;
   }
 }
