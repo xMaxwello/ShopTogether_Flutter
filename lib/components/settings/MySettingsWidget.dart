@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/pages/MyAccountSettingsPage.dart';
 
-import 'MyAccountSettingsWidget.dart';
 
 class MySettingsWidget extends StatefulWidget {
   const MySettingsWidget({super.key});
@@ -18,21 +18,12 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
   Widget build(BuildContext context) {
     return Consumer<MySettingsProvider>(
         builder: (BuildContext context, MySettingsProvider settingsProvider, Widget? child) {
-          ///TODO: Lukas start
-          if (settingsProvider.showAccountSettings) {
-            return MyAccountSettingsWidget(onBack: () {
-              settingsProvider.updateShowAccountSettings(false);
-            },
-            );
-          } else {
-            ///TODO: Lukas end
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 40.0, left: 16.0, right: 16.0),
@@ -47,7 +38,13 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                         ),
                       ),
                     ),
-                    Padding(
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyAccountSettingsPage(),
+                        ),
+                        );
+                      },
+                    child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: Container(
                         decoration: BoxDecoration(
@@ -101,7 +98,9 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                           ),
                         ),
                       ),
+                      ),
                     ),
+
 
                     ListTile(
                       title: Text(
@@ -219,7 +218,6 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                 ),
               ],
             );
-          }
         });
   }
 }

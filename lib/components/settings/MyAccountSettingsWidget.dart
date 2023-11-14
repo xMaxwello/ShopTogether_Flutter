@@ -5,9 +5,8 @@ import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvi
 
 
 class MyAccountSettingsWidget extends StatelessWidget {
-  final VoidCallback onBack;
 
-  const MyAccountSettingsWidget({super.key, required this.onBack});
+  const MyAccountSettingsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +79,9 @@ class MyAccountSettingsWidget extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             ElevatedButton(
-              onPressed: onBack,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                     Color.lerp(Colors.white, Theme
