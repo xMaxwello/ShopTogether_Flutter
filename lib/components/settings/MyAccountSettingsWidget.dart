@@ -149,15 +149,17 @@ class MyAccountSettingsWidget extends StatelessWidget {
             children: [
               TextField(
                 controller: emailController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Neue E-Mail',
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Aktuelles Passwort',
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
             ],
@@ -165,7 +167,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text('Abbrechen',
-              style: Theme.of(context).textTheme.labelSmall,
+                style: GoogleFonts.tiltNeon(),
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
@@ -173,7 +175,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
             ),
             TextButton(
               child: Text('Ändern',
-                  style: Theme.of(context).textTheme.labelSmall,
+                style: GoogleFonts.tiltNeon(),
               ),
               onPressed: () async {
                 final String newEmail = emailController.text;
@@ -208,22 +210,25 @@ class MyAccountSettingsWidget extends StatelessWidget {
               TextField(
                 controller: oldPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Altes Passwort',
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
               TextField(
                 controller: newPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Neues Passwort',
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
               TextField(
                 controller: repeatNewPasswordController,
                 obscureText: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: 'Neues Passwort wiederholen',
+                  hintStyle: Theme.of(context).textTheme.labelSmall,
                 ),
               ),
             ],
@@ -231,7 +236,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               child: Text('Abbrechen',
-                style: Theme.of(context).textTheme.labelSmall,
+                style: GoogleFonts.tiltNeon(),
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
@@ -239,7 +244,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
             ),
             TextButton(
               child: Text('Ändern',
-                style: Theme.of(context).textTheme.labelSmall,
+                style: GoogleFonts.tiltNeon(),
               ),
               onPressed: () async {
                 final String oldPassword = oldPasswordController.text;

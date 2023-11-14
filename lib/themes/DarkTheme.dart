@@ -71,12 +71,12 @@ class DarkTheme {
       ),
 
       searchBarTheme: SearchBarThemeData(
-        surfaceTintColor: MaterialStateProperty.all(Colors.indigoAccent[100]),
+        surfaceTintColor: MaterialStateProperty.all(const Color(0xff555555)),
       ),
 
       iconTheme: const IconThemeData(
           size: 26,
-          color: Colors.white
+          color: Color(0xff959595)
       ),
 
       textTheme: TextTheme(
@@ -86,7 +86,7 @@ class DarkTheme {
         ),
         labelSmall: GoogleFonts.tiltNeon(
             fontSize: 16,
-            color: Colors.white
+            color: const Color(0xff959595)
         ),
         bodySmall: GoogleFonts.tiltNeon(
             fontSize: 16,
@@ -98,11 +98,11 @@ class DarkTheme {
         ),
         titleSmall: GoogleFonts.tiltNeon(
             fontSize: 14,
-            color: Colors.grey[900]
+            color: Colors.white
         ),
         titleMedium: GoogleFonts.tiltNeon(
             fontSize: 19,
-            color: Colors.grey[900]
+            color: Colors.white
         ),
         titleLarge: GoogleFonts.tiltNeon(
             fontSize: 24,
