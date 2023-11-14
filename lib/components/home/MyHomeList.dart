@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
 import 'package:shopping_app/components/product/MyProductItem.dart';
-import 'package:shopping_app/functions/firestore/MyFirestore.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
@@ -55,6 +55,7 @@ class _MyHomeListState extends State<MyHomeList> {
     _controller.addListener(_scrollListener);
   }
 
+  ///saves the selected index of the group
   int selectedGroupIndex = -1;
 
   @override
@@ -174,9 +175,9 @@ class _MyHomeListState extends State<MyHomeList> {
 
                                     ///remove group or product if the item is swiped
                                     if (widget.isGroup) {
-                                      MyFirestore.removeGroup(groupsFromUser[index].groupUUID);
+                                      MyFirestoreService.removeGroup(groupsFromUser[index].groupUUID);
                                     } else {
-                                      MyFirestore.removeProduct(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
+                                      MyFirestoreService.removeProduct(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
                                     }
                                   });
                                 },

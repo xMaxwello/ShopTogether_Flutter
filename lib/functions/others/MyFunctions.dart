@@ -1,7 +1,7 @@
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../objects/groups/MyGroup.dart';
-import '../firestore/MyFirestore.dart';
+import '../services/firestore/MyFirestoreService.dart';
 
 class MyFunctions {
 
@@ -9,7 +9,7 @@ class MyFunctions {
 
     ///TODO: function
 
-    MyFirestore.addGroup(
+    MyFirestoreService.addGroup(
         MyGroup(
           groupUUID: "",
           groupName: "Hallo",
@@ -21,7 +21,7 @@ class MyFunctions {
 
   static void addProduct() async {
     ///TODO: function
-    MyFirestore.addProduct(
+    MyFirestoreService.addProduct(
       "",
       MyProduct(
           productID: "",

@@ -70,7 +70,7 @@ class DarkTheme {
           backgroundColor: Colors.indigoAccent[100]
       ),
 
-      searchBarTheme: SearchBarThemeData(
+      searchBarTheme: SearchBarThemeData( ///TODO: Würde ich etwas dunkler machen, damit das mit den ProductAddItem etwas besser passt
         surfaceTintColor: MaterialStateProperty.all(const Color(0xff555555)),
       ),
 

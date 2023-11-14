@@ -23,8 +23,6 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
   @override
   Widget build(BuildContext context) {
 
-
-
     return Consumer<MyFloatingButtonProvider>(
         builder: (BuildContext context,
             MyFloatingButtonProvider value,
@@ -35,6 +33,7 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
             switchInCurve: Curves.easeIn,
             switchOutCurve: Curves.easeInOut,
 
+            ///if the user scrolls then the floating action button shalln't be extended, otherwise it shall be extended
             child: (value.isExtended == false) && widget.isChangeByScroll
                 ?
             FloatingActionButton(

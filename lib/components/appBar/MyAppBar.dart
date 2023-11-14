@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../functions/providers/items/MyItemsProvider.dart';
 import '../search/MySearchBar.dart';
 
 class MyAppBar extends StatefulWidget {
@@ -17,44 +14,42 @@ class MyAppBar extends StatefulWidget {
 class _MyAppBarState extends State<MyAppBar> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, top: 10),
-      child: Consumer<MyItemsProvider>(
-          builder: (BuildContext context,
-              MyItemsProvider value,
-              Widget? child){
 
-            if (widget.isGroup) {
-              return Column(
-                children: [
+    if (widget.isGroup) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 10, top: 10),
+        child: Column(
+            children: [
 
-                  const SizedBox(
-                    height: 60,
-                  ),
+              const SizedBox(
+                height: 60,
+              ),
 
-                  Text(
-                    "Einkaufsapp",
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineLarge
-                  ),
+              Text(
+                  "Einkaufsapp",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineLarge
+              ),
 
-                ]
-              );
-            }
+            ]
+        ),
+      );
+    }
 
-            return const Column(
-              children: [
+    return const Padding(
+      padding: EdgeInsets.only(bottom: 10, top: 10),
+      child: Column(
+        children: [
 
-                SizedBox(
-                  height: 40,
-                ),
+          SizedBox(
+            height: 40,
+          ),
 
-                ///the search bar for the products
-                MySearchBar(),
+          ///the search bar for the products
+          MySearchBar(),
 
-              ],
-            );
-          }),
+        ],
+      ),
     );
   }
 }

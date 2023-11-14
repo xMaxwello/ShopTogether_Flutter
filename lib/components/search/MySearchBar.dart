@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
-import 'package:shopping_app/functions/firestore/MyFirestore.dart';
-import 'package:shopping_app/functions/openfoodfacts/MyOpenFoodFactsService.dart';
+import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
+import '../../functions/services/firestore/MyFirestoreService.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar({super.key});
@@ -83,7 +83,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       myProduct: myProduct,
                       addProductFunction: () {
 
-                        MyFirestore.addProduct(itemsValue.selectedGroupUUID, myProduct);
+                        MyFirestoreService.addProduct(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
                       },
                       showProductInfoFunction: () {

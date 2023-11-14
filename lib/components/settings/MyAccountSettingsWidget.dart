@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvider.dart';
 
-
 class MyAccountSettingsWidget extends StatelessWidget {
 
   const MyAccountSettingsWidget({super.key});
@@ -28,6 +27,9 @@ class MyAccountSettingsWidget extends StatelessWidget {
                 ),
               ),
             ),
+            ///TODO: Zwischen Titel und ListTiles etwas mehr abstand
+
+            ///TODO: For Schleife für ListTiles (List<String> für Text + List<Function()> für die Funktionen)
             ListTile(
               title: Text('Name ändern',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -133,6 +135,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
     );
   }
 
+  ///TODO: Erstelle einen neuen Folder (Dialog) und dann jeweils für jeden Dialog einen neue Datei oder alle in eine Datei aber aufjedenfall unter functions/dialogs/...
   void _changeEmailDialog(BuildContext context, MyAccountSettingsProvider provider) {
     final TextEditingController emailController = TextEditingController();
     final TextEditingController passwordController = TextEditingController();

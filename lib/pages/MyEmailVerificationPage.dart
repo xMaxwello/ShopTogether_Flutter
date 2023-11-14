@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../functions/snackbars/MySnackBar.dart';
+import '../functions/services/snackbars/MySnackBarService.dart';
 import 'MyHomePage.dart';
 
 class MyEmailVerificationAuthPage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
         timer.cancel();
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
-        MySnackBar.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", isError: false);
+        MySnackBarService.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", isError: false);
       }
     });
   }
@@ -89,9 +89,9 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
                         if (user != null) {
 
                           await user.sendEmailVerification();
-                          MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false,);
+                          MySnackBarService.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false,);
                         } else {
-                          MySnackBar.showMySnackBar(context, 'Sie sind nicht angemeldet!');
+                          MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet!');
                         }
                       },
                       child: Text(

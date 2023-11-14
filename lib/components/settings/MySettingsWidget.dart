@@ -101,7 +101,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                       ),
                     ),
 
-
+                    ///TODO: For Schleife für ListTiles (List<String> für Text + List<Function()> für die Funktionen)
                     ListTile(
                       title: Text(
                         "Mit Fingerabdruck/FaceID sichern",
@@ -183,7 +183,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                         activeColor: Theme
                             .of(context)
                             .colorScheme
-                            .primary,
+                            .primary, ///TODO: Es wird auf die HomePage seite geswitch (das ist nicht schlimm). Allerdings wird in der NavigationBar unten nicht die Task (Gruppen) auf Blau geswitcht
                         value: settingsProvider.isDarkThemeEnabled,
                         onChanged: (value) {
                           settingsProvider.updateIsDarkThemeEnabled(value);

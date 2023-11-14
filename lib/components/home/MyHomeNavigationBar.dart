@@ -16,11 +16,6 @@ class MyHomeNavigationBar extends StatefulWidget {
 class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     List<IconData> icons = [Icons.group,Icons.settings];

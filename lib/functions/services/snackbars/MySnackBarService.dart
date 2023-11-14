@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MySnackBar {
+class MySnackBarService {
 
-  static void defaultActionFunc() {
-
-  }
+  static void defaultActionFunc() {}
 
   static void showMySnackBar(BuildContext context, String showText, {bool isError = true, bool isFunctionAvailable = false, Function() actionFunction = defaultActionFunc, actionLabel = 'Bestätigen'}) {
 

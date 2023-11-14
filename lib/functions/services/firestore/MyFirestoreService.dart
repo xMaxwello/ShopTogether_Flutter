@@ -5,9 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
-import '../../objects/users/MyUsers.dart';
+import '../../../objects/users/MyUsers.dart';
 
-class MyFirestore {
+
+class MyFirestoreService {
 
   static void addUser(MyUser myUser) {
 

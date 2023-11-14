@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/login/MyLoginWidget.dart';
-import 'package:shopping_app/functions/firestore/MyFirestore.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/functions/snackbars/MySnackBar.dart';
+import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
 
 class MyLoginPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     refreshInputs();
   }
-
+ ///TODO: Functionen auslagern in eine Externe Klasse
   void updateToRegisterPage() {
 
     refreshInputs();
@@ -106,7 +106,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
     bool error = false;
 
     if (_emailController.text == "" || _passwordController.text == "") {
-      MySnackBar.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
+      MySnackBarService.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
 
@@ -121,27 +121,27 @@ class _MyLoginPageState extends State<MyLoginPage> {
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'user-not-found') {
-          MySnackBar.showMySnackBar(context, 'Benutzer nicht gefunden.');
+          MySnackBarService.showMySnackBar(context, 'Benutzer nicht gefunden.');
         } else if (e.code == 'wrong-password') {
-          MySnackBar.showMySnackBar(context, 'Falsches Passwort.');
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
         } else if (e.code == 'user-disabled') {
-          MySnackBar.showMySnackBar(context, 'Benutzerkonto deaktiviert.');
+          MySnackBarService.showMySnackBar(context, 'Benutzerkonto deaktiviert.');
         } else if (e.code == 'too-many-requests') {
-          MySnackBar.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
         } else if (e.code == 'network-request-failed') {
-          MySnackBar.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
         } else if (e.code == 'invalid-email') {
-          MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
         } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-          MySnackBar.showMySnackBar(context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
+          MySnackBarService.showMySnackBar(context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
         } else {
-          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
           print("Firebase Error Code: ${e.code}");
         }
 
     } catch (e) {
 
-        MySnackBar.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+        MySnackBarService.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
       }
     }
   }
@@ -152,12 +152,12 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
     if (_passwordController.text == "" || _confirmPasswordController.text == "" || _prenameController.text == "" ||
         _nameController.text == "" || _emailController.text == "") {
-      MySnackBar.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
+      MySnackBarService.showMySnackBar(context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      MySnackBar.showMySnackBar(context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
+      MySnackBarService.showMySnackBar(context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
       error = true;
     }
 
@@ -178,27 +178,27 @@ class _MyLoginPageState extends State<MyLoginPage> {
           surname: _nameController.text,
           groupUUIDs: []
         );
-        MyFirestore.addUser(user);
+        MyFirestoreService.addUser(user);
 
         ///Send the email-verification
         userCredential.user!.sendEmailVerification();
-        MySnackBar.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false);
+        MySnackBarService.showMySnackBar(context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false);
 
       } on FirebaseAuthException catch(e) {
 
         if (e.code == 'weak-password') {
-          MySnackBar.showMySnackBar(context, 'Ihr Passwort ist zu schwach!');
+          MySnackBarService.showMySnackBar(context, 'Ihr Passwort ist zu schwach!');
         } else if (e.code == 'email-already-in-use') {
-          MySnackBar.showMySnackBar(context, 'Die eingegebene E-Mail ist bereits vergeben!');
+          MySnackBarService.showMySnackBar(context, 'Die eingegebene E-Mail ist bereits vergeben!');
         } else if (e.code == 'invalid-email') {
-          MySnackBar.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
         } else {
-          MySnackBar.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
         }
 
       } catch(e) {
 
-        MySnackBar.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+        MySnackBarService.showMySnackBar(context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
       }
     }
   }
