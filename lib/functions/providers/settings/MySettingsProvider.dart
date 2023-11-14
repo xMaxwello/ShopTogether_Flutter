@@ -35,6 +35,8 @@ class MySettingsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  ThemeMode get currentThemeMode => _isDarkThemeEnabled ? ThemeMode.dark : ThemeMode.light;
+
   void updateIsDarkThemeEnabled(bool value) {
     _isDarkThemeEnabled = value;
     notifyListeners();

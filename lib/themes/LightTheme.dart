@@ -43,7 +43,7 @@ class LightTheme {
         )
       ),
 
-      listTileTheme: ListTileThemeData(
+      listTileTheme: const ListTileThemeData(
         iconColor: Colors.black,
         tileColor: Colors.white24
       ),

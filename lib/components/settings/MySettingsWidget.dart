@@ -105,10 +105,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     ListTile(
                       title: Text(
                         "Mit Fingerabdruck/FaceID sichern",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       trailing: Switch(
                         activeColor: Theme
@@ -179,12 +176,14 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                       ),
                     ),
                     ListTile(
-                      title: const Text("Dark Theme"),
+                      title: Text("Dark Theme",
+                      style: Theme.of(context).textTheme.bodySmall,
+                      ),
                       trailing: Switch(
-                        activeColor: Color.lerp(Colors.white, Theme
+                        activeColor: Theme
                             .of(context)
                             .colorScheme
-                            .primary, 0.9),
+                            .primary,
                         value: settingsProvider.isDarkThemeEnabled,
                         onChanged: (value) {
                           settingsProvider.updateIsDarkThemeEnabled(value);
