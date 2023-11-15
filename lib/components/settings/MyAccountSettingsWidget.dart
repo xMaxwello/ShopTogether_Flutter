@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvider.dart';
+import 'package:shopping_app/functions/dialog/emailDialog.dart';
+import 'package:shopping_app/functions/dialog/passwordDialog.dart';
+
 
 class MyAccountSettingsWidget extends StatelessWidget {
 
@@ -44,7 +47,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
               ),
               trailing: const Icon(Icons.edit, color: Color(0xff959595)),
               onTap: () {
-                _changeEmailDialog(context, accountSettingsProvider);
+                changeEmailDialog(context, accountSettingsProvider);
               },
             ),
             ListTile(
@@ -53,7 +56,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
               ),
               trailing: const Icon(Icons.edit, color: Color(0xff959595)),
               onTap: () {
-                _changePasswordDialog(context, accountSettingsProvider);
+                changePasswordDialog(context, accountSettingsProvider);
               },
             ),
             ListTile(
@@ -128,135 +131,6 @@ class MyAccountSettingsWidget extends StatelessWidget {
                     )
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  ///TODO: Erstelle einen neuen Folder (Dialog) und dann jeweils für jeden Dialog einen neue Datei oder alle in eine Datei aber aufjedenfall unter functions/dialogs/...
-  void _changeEmailDialog(BuildContext context, MyAccountSettingsProvider provider) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('E-Mail ändern',
-          style: Theme.of(context).textTheme.titleLarge,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Neue E-Mail',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Aktuelles Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Abbrechen',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Ändern',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () async {
-                final String newEmail = emailController.text;
-                final String password = passwordController.text;
-
-                Navigator.of(dialogContext).pop();
-                await provider.updateEmail(context, newEmail, password);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-  void _changePasswordDialog(BuildContext context, MyAccountSettingsProvider provider) {
-    final TextEditingController oldPasswordController = TextEditingController();
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController repeatNewPasswordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Passwort ändern',
-              style: Theme.of(context).textTheme.titleLarge,
-        ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: oldPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Altes Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Neues Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: repeatNewPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Neues Passwort wiederholen',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Abbrechen',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Ändern',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () async {
-                final String oldPassword = oldPasswordController.text;
-                final String newPassword = newPasswordController.text;
-                final String repeatNewPassword = repeatNewPasswordController.text;
-
-                Navigator.of(dialogContext).pop();
-                await provider.updatePassword(context, oldPassword, newPassword, repeatNewPassword);
-              },
             ),
           ],
         );
