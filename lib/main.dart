@@ -90,9 +90,8 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
 
     });
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: const CircularProgressIndicator(),
+    return const Scaffold(
+      body: CircularProgressIndicator(),
     );
   }
 }
