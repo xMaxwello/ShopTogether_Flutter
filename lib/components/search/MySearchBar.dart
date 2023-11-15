@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/bottomSheetTest/MyBottomSheetTestItem.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
 import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
@@ -48,12 +50,21 @@ class _MySearchBarState extends State<MySearchBar> {
 
                             ///TODO: add function
 
-                            MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
+                            showBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyDraggableScrollableWidget(
+                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
+                                  );
+                                }
+                            );
+
+                            /*MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
                             myFoodService.getProductByBarcode('3017620422003').then((product) {
                               if (product != null) {
                                 print(product.brands);
                               }
-                            });
+                            });*/
                           });
                         },
                         icon: Icon(
