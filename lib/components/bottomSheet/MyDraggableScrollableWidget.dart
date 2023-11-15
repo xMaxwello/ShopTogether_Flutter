@@ -31,15 +31,17 @@ class _MyDraggableScrollableWidgetState extends State<MyDraggableScrollableWidge
                       thickness: 5,
                     ),
 
-                    ListView(
-                      shrinkWrap: true,
-                      children: [
+                    Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: [
 
-                        for (int i = 0; i<widget.widgets.length;i++)
-                          widget.widgets.elementAt(i)
+                            for (int i = 0; i<widget.widgets.length;i++)
+                              widget.widgets.elementAt(i)
 
-                      ],
-                    )
+                          ],
+                        )
+                    ),
 
                   ],
                 );
