@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvider.dart';
+import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
+import 'package:shopping_app/functions/dialog/changeEmailDialog.dart';
+import 'package:shopping_app/functions/dialog/changePasswordDialog.dart';
+import 'package:shopping_app/functions/dialog/deleteAccountDialog.dart';
+
+///TODO: Email Adresse wird nicht übernommen, da die neue erst verifiziert werden muss
+///TODO: Funktion für 'Name ändern' muss noch implementiert werden
 
 class MyAccountSettingsWidget extends StatelessWidget {
 
@@ -9,9 +15,45 @@ class MyAccountSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MyAccountSettingsProvider>(
+    var service = Provider.of<MyAccountSettingsService>(context, listen: false);
+
+    List<String> titles = [
+      'Name ändern',
+      'E-Mail ändern',
+      'Passwort ändern',
+      'Account löschen',
+    ];
+
+    List<Function()> actions = [
+          () {}, // Funktion für 'Name ändern'
+          () => changeEmailDialog(context, service),
+          () => changePasswordDialog(context, service),
+          () => deleteAccountDialog(context, service),
+    ];
+
+    List<Widget> listTiles = [];
+    for (int i = 0; i < titles.length; i++) {
+      bool isDeleteAccount = i == titles.length - 1;
+      listTiles.add(
+        ListTile(
+          title: Text(
+            titles[i],
+            style: i == titles.length - 1 ? GoogleFonts.tiltNeon(
+              textStyle: const TextStyle(color: Colors.red),
+            ) : Theme.of(context).textTheme.bodySmall,
+          ),
+          trailing: Icon(
+            isDeleteAccount ? Icons.delete_forever : Icons.edit,
+            color: isDeleteAccount ? Colors.red : const Color(0xff959595),
+          ),
+          onTap: actions[i],
+        ),
+      );
+    }
+
+    return Consumer<MyAccountSettingsService>(
       builder: (BuildContext context,
-          MyAccountSettingsProvider accountSettingsProvider, Widget? child) {
+          MyAccountSettingsService service, Widget? child) {
         return Column(
           children: [
             Padding(
@@ -27,77 +69,11 @@ class MyAccountSettingsWidget extends StatelessWidget {
                 ),
               ),
             ),
-            ///TODO: Zwischen Titel und ListTiles etwas mehr abstand
 
-            ///TODO: For Schleife für ListTiles (List<String> für Text + List<Function()> für die Funktionen)
-            ListTile(
-              title: Text('Name ändern',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              trailing: const Icon(Icons.edit, color: Color(0xff959595)),
-              onTap: () {},
-            ),
-            ///TODO: Email Adresse wird nicht übernommen, da die neue erst verifiziert werden muss
-            ListTile(
-              title: Text('E-Mail ändern',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              trailing: const Icon(Icons.edit, color: Color(0xff959595)),
-              onTap: () {
-                _changeEmailDialog(context, accountSettingsProvider);
-              },
-            ),
-            ListTile(
-              title: Text('Passwort ändern',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              trailing: const Icon(Icons.edit, color: Color(0xff959595)),
-              onTap: () {
-                _changePasswordDialog(context, accountSettingsProvider);
-              },
-            ),
-            ListTile(
-              title: Text('Account löschen',
-                  style: GoogleFonts.tiltNeon(
-                  textStyle: const TextStyle(color: Colors.red),
-                  ),
-              ),
-              trailing: const Icon(Icons.delete_forever, color: Colors.red),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Account löschen?',
-                      style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      content: Text('Sind Sie sicher, dass Sie Ihren Account löschen möchten? Dies kann nicht rückgängig gemacht werden.',
-                      style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Abbrechen',
-                          style: GoogleFonts.tiltNeon(),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Löschen', style: GoogleFonts.tiltNeon(
-                            textStyle: const TextStyle(color: Colors.red),
-                          ),
-                          ),
-                          onPressed: () async {
-                            accountSettingsProvider.deleteAccount(context);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
+            const SizedBox(height: 25),
+
+            Column(children: listTiles),
+
             const SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
@@ -105,10 +81,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                    Color.lerp(Colors.white, Theme
-                        .of(context)
-                        .colorScheme
-                        .primary, 0.8)),
+                    Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)),
                 minimumSize: MaterialStateProperty.resolveWith<Size?>(
                       (Set<MaterialState> states) {
                     if (states.contains(MaterialState.pressed)) {
@@ -128,135 +101,6 @@ class MyAccountSettingsWidget extends StatelessWidget {
                     )
                 ),
               ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  ///TODO: Erstelle einen neuen Folder (Dialog) und dann jeweils für jeden Dialog einen neue Datei oder alle in eine Datei aber aufjedenfall unter functions/dialogs/...
-  void _changeEmailDialog(BuildContext context, MyAccountSettingsProvider provider) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('E-Mail ändern',
-          style: Theme.of(context).textTheme.titleLarge,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Neue E-Mail',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Aktuelles Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Abbrechen',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Ändern',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () async {
-                final String newEmail = emailController.text;
-                final String password = passwordController.text;
-
-                Navigator.of(dialogContext).pop();
-                await provider.updateEmail(context, newEmail, password);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
-  void _changePasswordDialog(BuildContext context, MyAccountSettingsProvider provider) {
-    final TextEditingController oldPasswordController = TextEditingController();
-    final TextEditingController newPasswordController = TextEditingController();
-    final TextEditingController repeatNewPasswordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Passwort ändern',
-              style: Theme.of(context).textTheme.titleLarge,
-        ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: oldPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Altes Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: newPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Neues Passwort',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-              TextField(
-                controller: repeatNewPasswordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: 'Neues Passwort wiederholen',
-                  hintStyle: Theme.of(context).textTheme.labelSmall,
-                ),
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Abbrechen',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Ändern',
-                style: GoogleFonts.tiltNeon(),
-              ),
-              onPressed: () async {
-                final String oldPassword = oldPasswordController.text;
-                final String newPassword = newPasswordController.text;
-                final String repeatNewPassword = repeatNewPasswordController.text;
-
-                Navigator.of(dialogContext).pop();
-                await provider.updatePassword(context, oldPassword, newPassword, repeatNewPassword);
-              },
             ),
           ],
         );

@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../snackbars/MySnackBarService.dart';
+
+class MyAccountSettingsService with ChangeNotifier {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
+    if (newEmail.isEmpty || password.isEmpty) {
+      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
+    }
+
+    User? user = _auth.currentUser;
+    if (user != null) {
+      MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+    }
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await user.updateEmail(newEmail);
+      MySnackBarService.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.', isError: false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+    } else if (e.code == 'too-many-requests') {
+        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+    } else if (e.code == 'network-request-failed') {
+        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+    } else if (e.code == 'invalid-email') {
+        MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+      } else {
+        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+        print("Firebase Error Code: ${e.code}");
+      }
+    }
+  }
+
+  Future<void> updatePasswordFromCurrentUser(BuildContext context, String oldPassword, String newPassword, String repeatNewPassword) async {
+    if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
+      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+    }
+
+    if (newPassword != repeatNewPassword) {
+      MySnackBarService.showMySnackBar(context, 'Die neuen Passwörter stimmen nicht überein.');
+    }
+
+    User? user = _auth.currentUser;
+    if (user != null) {
+      MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+    }
+
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user!.email!,
+      password: oldPassword,
+    );
+
+    try {
+      await user.reauthenticateWithCredential(credential);
+
+      await user.updatePassword(newPassword);
+      MySnackBarService.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.', isError: false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        MySnackBarService.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
+      } else if (e.code == 'too-many-requests') {
+        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+      } else if (e.code == 'network-request-failed') {
+        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+      } else {
+        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.');
+        print("Firebase Error Code: ${e.code}");
+      }
+    }
+  }
+
+  Future<void> deleteAccountFromCurrentUser(BuildContext context) async {
+    User? user = _auth.currentUser;
+    try {
+      await user?.delete();
+      MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+      } else {
+        MySnackBarService.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
+        print("Firebase Error Code: ${e.code}");
+      }
+    }
+  }
+
+}
