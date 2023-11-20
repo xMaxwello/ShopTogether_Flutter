@@ -1,16 +1,25 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
 
-class MyProductItem extends StatelessWidget {
+class MyProductItem extends StatefulWidget {
 
   final MyProduct myProduct;
   final String selectedGroupUUID;
 
-  const MyProductItem({
-    Key? key, required this.myProduct, required this.selectedGroupUUID}) : super(key: key);
+  const MyProductItem({Key? key, required this.myProduct, required this.selectedGroupUUID}) : super(key: key);
+
+  @override
+  State<MyProductItem> createState() => _MyProductItemState();
+}
+
+class _MyProductItemState extends State<MyProductItem> {
+
+  late Timer _timer;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +40,8 @@ class MyProductItem extends StatelessWidget {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: myProduct.productImageUrl.isNotEmpty ? Image.network(
-                      myProduct.productImageUrl,
+                    child: widget.myProduct.productImageUrl.isNotEmpty ? Image.network(
+                      widget.myProduct.productImageUrl,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
                     ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
@@ -48,15 +57,15 @@ class MyProductItem extends StatelessWidget {
                         children: [
 
                           Text(
-                            myProduct.productName, ///shows the product name
+                            widget.myProduct.productName, ///shows the product name
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
 
-                          myProduct.productVolumen == 0 && myProduct.productVolumenType == "" ?
+                          widget.myProduct.productVolumen == 0 && widget.myProduct.productVolumenType == "" ?
                           const SizedBox()
                               :
                           Text( /// shows product volumen
-                            myProduct.productVolumen.toString() + myProduct.productVolumenType,
+                            widget.myProduct.productVolumen.toString() + widget.myProduct.productVolumenType,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
 
@@ -66,13 +75,13 @@ class MyProductItem extends StatelessWidget {
 
                   const SizedBox(width: 10),
 
-                  IconButton(
-                      onPressed: () {
+                  GestureDetector(
+                      onTap: () {
 
                         ///the amount of the product shouldn`t be under 1
-                        if (myProduct.productCount != 1) {
+                        if (widget.myProduct.productCount != 1) {
 
-                          MyFirestoreService.updateProductCount(selectedGroupUUID, myProduct.productID, -1);
+                          MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, -1);
                         } else {
 
                           ///if amount of the product is 1 and the user want to reduce the amount this message will show up
@@ -84,24 +93,48 @@ class MyProductItem extends StatelessWidget {
                             actionLabel: "Löschen",
                             actionFunction: () {
 
-                              MyFirestoreService.removeProduct(selectedGroupUUID, myProduct.productID);
+                              MyFirestoreService.removeProduct(widget.selectedGroupUUID, widget.myProduct.productID);
                             },
                           );
                         }
                       },
-                      icon: const Icon(Icons.remove)
+                      onLongPress: () {
+                        _timer = Timer.periodic(
+                            const Duration(milliseconds: 100),
+                                (timer) {
+                                  MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, -1);
+                            }
+                        );
+                      },
+                      onLongPressEnd: (_) {
+                        _timer.cancel();
+                      },
+                      child: const Icon(Icons.remove)
                   ),
+                  const SizedBox(width: 5,),
                   Text(
-                    myProduct.productCount.toString(),
+                    widget.myProduct.productCount.toString(),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
-                  IconButton(
-                      onPressed: () {
+                  const SizedBox(width: 5,),
+                  GestureDetector(
+                      onTap: () {
 
                         ///add amount to the product
-                        MyFirestoreService.updateProductCount(selectedGroupUUID, myProduct.productID, 1);
+                        MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, 1);
                       },
-                      icon: Icon(
+                      onLongPress: () {
+                        _timer = Timer.periodic(
+                            const Duration(milliseconds: 100),
+                                (timer) {
+                                  MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, 1);
+                                }
+                        );
+                      },
+                      onLongPressEnd: (_) {
+                        _timer.cancel();
+                      },
+                      child: Icon(
                         Icons.add,
                         size: Theme.of(context).iconTheme.size,
                         color: Theme.of(context).iconTheme.color,
