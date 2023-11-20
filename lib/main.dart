@@ -90,7 +90,9 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
     });
 
     return const Scaffold(
-      body: CircularProgressIndicator(),
+      body: Center(
+        child: CircularProgressIndicator(),
+      )
     );
   }
 }
