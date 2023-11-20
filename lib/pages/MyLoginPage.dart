@@ -7,6 +7,8 @@ import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
 
+import '../functions/providers/settings/MySettingsProvider.dart';
+
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
 
@@ -206,63 +208,74 @@ class _MyLoginPageState extends State<MyLoginPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return Consumer<MySettingsProvider>(
+        builder: (BuildContext context, MySettingsProvider mySettingsProvider, Widget? child) {
 
-        body: Stack(
-          children: [
+          String getBackgroundImage() {
+            return mySettingsProvider.isDarkThemeEnabled
+                ? 'assets/background_dark.png'
+                : 'assets/background.png';
+          }
 
-            Container(
-            decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/background.png'),
-              fit: BoxFit.cover,),),
-            ),
+          return Scaffold(
 
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+            body: Stack(
+              children: [
 
-                      Text(
-                        "Einkaufsapp",
-                        style: Theme.of(context).textTheme.displayLarge
+                Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(getBackgroundImage()),
+                      fit: BoxFit.cover,),),
+                ),
+
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+
+                          Text(
+                            "Einkaufsapp",
+                            style: Theme.of(context).textTheme.displayLarge
+                          ),
+                          const SizedBox(height: 60,),
+
+                          Consumer<MyLoginProvider>(
+                              builder: (BuildContext context,
+                                  MyLoginProvider value,
+                                  Widget? child) {
+
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  setState(() {
+
+                                    if (value.widget == null) {
+
+                                      updateToLoginPage();
+                                    }
+                                  });
+                                });
+
+                                return SizedBox(
+                                  child: value.widget,
+                                );
+                              }),
+
+                          const SizedBox(height: 60,)
+
+                        ],
                       ),
-                      const SizedBox(height: 60,),
-
-                      Consumer<MyLoginProvider>(
-                          builder: (BuildContext context,
-                              MyLoginProvider value,
-                              Widget? child) {
-
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              setState(() {
-
-                                if (value.widget == null) {
-
-                                  updateToLoginPage();
-                                }
-                              });
-                            });
-
-                            return SizedBox(
-                              child: value.widget,
-                            );
-                          }),
-
-                      const SizedBox(height: 60,)
-
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
     );
   }
 }

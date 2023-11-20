@@ -114,12 +114,11 @@ class DarkTheme {
         ),
         displaySmall: GoogleFonts.tiltNeon(
             fontSize: 16,
-            color: Colors.black
+            color: Colors.white
         ),
         displayLarge: GoogleFonts.tiltNeon(
             fontSize: 40,
-            color: Colors.grey[900],
-            backgroundColor: Colors.white
+            color: Colors.white70,
         ),
         headlineLarge: GoogleFonts.tiltNeon(
             fontSize: 34,
