@@ -5,9 +5,9 @@ import 'package:shopping_app/functions/services/settings/MyAccountSettingsServic
 import 'package:shopping_app/functions/dialog/changeEmailDialog.dart';
 import 'package:shopping_app/functions/dialog/changePasswordDialog.dart';
 import 'package:shopping_app/functions/dialog/deleteAccountDialog.dart';
+import 'package:shopping_app/functions/dialog/changeUserNameDialog.dart';
 
 ///TODO: Email Adresse wird nicht übernommen, da die neue erst verifiziert werden muss
-///TODO: Funktion für 'Name ändern' muss noch implementiert werden
 
 class MyAccountSettingsWidget extends StatelessWidget {
 
@@ -25,7 +25,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
     ];
 
     List<Function()> actions = [
-          () {}, // Funktion für 'Name ändern'
+          () => changeUserNameDialog(context, service),
           () => changeEmailDialog(context, service),
           () => changePasswordDialog(context, service),
           () => deleteAccountDialog(context, service),

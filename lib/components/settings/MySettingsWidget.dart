@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/settings/MyUserCard.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyAccountSettingsPage.dart';
 
@@ -88,45 +89,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                         ),
                         );
                       },
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            left: BorderSide(color: Theme.of(context).colorScheme.primary, width: 10),
-                          ),
-                        ),
-                        child: Card(
-                          color: Theme.of(context).cardTheme.color,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                    "Vorname Nachname",
-                                    style: Theme.of(context).textTheme.titleLarge
-                                ),
-                                const SizedBox(height: 8.0),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                        "Accounteinstellungen",
-                                        style: Theme.of(context).textTheme.bodySmall
-                                    ),
-                                    Icon(
-                                        Icons.arrow_forward,
-                                        size: Theme.of(context).iconTheme.size,
-                                        color: Colors.black54)
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      ),
+                    child: const MyUserCard(),
                     ),
                     Column(
                         children: listTiles

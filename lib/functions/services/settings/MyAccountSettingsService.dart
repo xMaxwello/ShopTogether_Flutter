@@ -1,10 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
+    if (newPrename.isEmpty || newSurname.isEmpty || password.isEmpty) {
+      MySnackBarService.showMySnackBar(
+          context, 'Bitte füllen Sie alle Felder aus.', isError: false);
+    }
+
+    User? user = _auth.currentUser;
+    if (user == null) {
+      MySnackBarService.showMySnackBar(
+          context, 'Sie sind nicht angemeldet.', isError: true);
+    }
+
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user!.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
+          {
+            'prename': newPrename,
+            'surname': newSurname,
+          });
+      MySnackBarService.showMySnackBar(context, 'Name erfolgreich geändert', isError: false);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+      } else if (e.code == 'too-many-requests') {
+        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+      } else if (e.code == 'network-request-failed') {
+        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+      } else {
+        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.');
+        print("Firebase Error Code: ${e.code}");
+      }
+    }
+  }
 
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
     if (newEmail.isEmpty || password.isEmpty) {
@@ -12,7 +52,7 @@ class MyAccountSettingsService with ChangeNotifier {
     }
 
     User? user = _auth.currentUser;
-    if (user != null) {
+    if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
     }
     try {
@@ -50,7 +90,7 @@ class MyAccountSettingsService with ChangeNotifier {
     }
 
     User? user = _auth.currentUser;
-    if (user != null) {
+    if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
     }
 

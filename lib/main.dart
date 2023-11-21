@@ -14,6 +14,8 @@ import 'package:shopping_app/themes/LightTheme.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
+///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
+
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
