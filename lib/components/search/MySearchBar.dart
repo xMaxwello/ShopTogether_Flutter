@@ -54,7 +54,7 @@ class _MySearchBarState extends State<MySearchBar> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return MyDraggableScrollableWidget(
-                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
+                                      widgets: MyBottomSheetTestItem.generateBottomSheet(context)
                                   );
                                 }
                             );
