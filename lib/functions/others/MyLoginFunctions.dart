@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/pages/MyLoginPage.dart';
 
 import '../../components/login/MyLoginWidget.dart';
 import '../../objects/users/MyUsers.dart';
@@ -8,6 +9,7 @@ import '../providers/login/MyLoginProvider.dart';
 import '../services/firestore/MyFirestoreService.dart';
 import '../services/snackbars/MySnackBarService.dart';
 
+///Here are all functions which are contains in [MyLoginPage]
 class MyLoginFunctions {
 
   late BuildContext _context;

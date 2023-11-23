@@ -6,8 +6,12 @@ class MyBiometricsAuthService {
   ///the function authenticate with faceId, fingerprint the user
   ///
   /// [MyCustomException] key words:
-  /// - 'weak': the biometric types are to weak
+  /// - 'authentication-failed': the authentiation failed
+  /// - 'weak': the authentication types are to weak
+  /// - 'not-available': the authentification is not available
   Future<bool> authenticate() async {
+
+    bool isAuthenticate = false;
 
     LocalAuthentication auth = LocalAuthentication();
     bool isBiometricsAvailable = await auth.canCheckBiometrics;
@@ -17,15 +21,28 @@ class MyBiometricsAuthService {
 
       List<BiometricType> biometricsOptions = await auth.getAvailableBiometrics();
 
-      if (biometricsOptions.contains(BiometricType.weak)) {
+      if (biometricsOptions.contains(BiometricType.strong)) {
 
-        throw MyCustomException("the biometric types are to weak", "weak");
+        try {
+
+          isAuthenticate = await auth.authenticate(
+              localizedReason: 'Please authenticate to show account balance',
+              options: const AuthenticationOptions(biometricOnly: true));
+        } catch (e) {
+
+          throw MyCustomException("the authentiation failed: $e", "authentication-failed");
+        }
+      } else {
+
+        throw MyCustomException("the authentication types are to weak", "weak");
       }
     } else {
 
-      throw Exception("the authentification is not available!");
+      throw MyCustomException("the authentification is not available!", "not-available");
     }
 
-    return true;
+    return isAuthenticate;
   }
+
+  
 }

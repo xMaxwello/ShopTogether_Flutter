@@ -1,7 +1,7 @@
 class MyCustomException implements Exception {
 
   final String message;
-  final String keywords;
+  final String keyword;
 
-  MyCustomException(this.message, this.keywords);
+  MyCustomException(this.message, this.keyword);
 }
