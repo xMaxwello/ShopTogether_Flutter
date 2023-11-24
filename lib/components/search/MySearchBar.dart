@@ -45,27 +45,14 @@ class _MySearchBarState extends State<MySearchBar> {
                     ),
                     trailing: <Widget> [
                       IconButton(
-                        onPressed: () {
-                          setState(() {
-
-                            ///TODO: add function
-
-                            showBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return MyDraggableScrollableWidget(
-                                      widgets: MyBottomSheetTestItem.generateBottomSheet(context)
-                                  );
-                                }
-                            );
-
-                            /*MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
-                            myFoodService.getProductByBarcode('3017620422003').then((product) {
-                              if (product != null) {
-                                print(product.brands);
+                        onPressed: () async {
+                          List<Widget> bottomSheetWidgets = await MyBottomSheetTestItem.generateBottomSheet(context, '5060337500401');
+                          showBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
                               }
-                            });*/
-                          });
+                          );
                         },
                         icon: Icon(
                           Icons.qr_code,
