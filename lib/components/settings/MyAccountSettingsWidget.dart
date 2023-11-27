@@ -15,7 +15,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var service = Provider.of<MyAccountSettingsService>(context, listen: false);
+    MyAccountSettingsService service = MyAccountSettingsService();
 
     List<String> titles = [
       'Name ändern',
