@@ -21,10 +21,6 @@ class MyBiometricsAuthService {
     if (isAuthenticateAvailable) {
 
       List<BiometricType> biometricsOptions = await auth.getAvailableBiometrics();
-      for (var i in biometricsOptions) {
-
-        print(i);
-      }
 
       if (biometricsOptions.contains(BiometricType.strong)) {
 
@@ -40,7 +36,8 @@ class MyBiometricsAuthService {
               ],
               options: const AuthenticationOptions(
                   biometricOnly: true,
-                  useErrorDialogs: true
+                  useErrorDialogs: true,
+                  stickyAuth: true
               ));
 
           ///TODO: kommt gar nicht hier rein
@@ -59,5 +56,19 @@ class MyBiometricsAuthService {
     }
 
     return isAuthenticate;
+  }
+
+  static Future<bool> isBiometricsAvailableOnDevice() async {
+
+    LocalAuthentication auth = LocalAuthentication();
+    bool isBiometricsAvailable = await auth.canCheckBiometrics;
+
+    late List<BiometricType> biometricsOptions;
+    if (isBiometricsAvailable) {
+
+      biometricsOptions = await auth.getAvailableBiometrics();
+    }
+
+    return isBiometricsAvailable && await auth.isDeviceSupported() && biometricsOptions != null && biometricsOptions.contains(BiometricType.strong);
   }
 }

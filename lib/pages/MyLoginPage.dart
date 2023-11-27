@@ -101,7 +101,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                           mySettingsProvider.isBiometricLock ?
                           FloatingActionButton.extended(
                             onPressed: () async {
-                              MyBiometricsLogin.loginWithBiometrics();
+                              MyBiometricsLogin.loginWithBiometrics(context);
                             },
                             backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
                             foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
