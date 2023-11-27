@@ -118,13 +118,28 @@ class MyAccountSettingsService with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAccountFromCurrentUser(BuildContext context) async {
+  Future<void> deleteAccountFromCurrentUser(BuildContext context, String password) async {
+    if (password.isEmpty) {
+      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
+    }
+
     User? user = _auth.currentUser;
+    if (user == null) {
+      MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+    }
+
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: user!.email!,
+      password: password,
+    );
     try {
-      await user?.delete();
+      await user.reauthenticateWithCredential(credential);
+      await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'network-request-failed') {
+      if (e.code == 'wrong-password') {
+        MySnackBarService.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
+      } else if (e.code == 'network-request-failed') {
         MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
       } else {
         MySnackBarService.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
