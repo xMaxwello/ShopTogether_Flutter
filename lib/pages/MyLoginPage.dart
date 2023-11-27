@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/others/MyLoginFunctions.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
+import 'package:shopping_app/functions/services/biometricsLogin/MyBiometricsLogin.dart';
 
 import '../functions/providers/settings/MySettingsProvider.dart';
+import '../functions/services/storage/MyStorageKeys.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -92,7 +95,24 @@ class _MyLoginPageState extends State<MyLoginPage> {
                                 );
                               }),
 
-                          const SizedBox(height: 60,)
+                          const SizedBox(height: 60,),
+
+                          ///TODO: Gucken
+                          mySettingsProvider.isBiometricLock ?
+                          FloatingActionButton.extended(
+                            onPressed: () async {
+                              MyBiometricsLogin.loginWithBiometrics();
+                            },
+                            backgroundColor: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+                            label: Icon(
+                              Icons.fingerprint,
+                              color: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+                              size: Theme.of(context).floatingActionButtonTheme.iconSize,
+                            ),
+                          )
+                          :
+                          const SizedBox(),
 
                         ],
                       ),

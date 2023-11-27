@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../snackbars/MySnackBarService.dart';
 
-class MyAccountSettingsService with ChangeNotifier {
+class MyAccountSettingsService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {

@@ -27,7 +27,6 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => MyItemsProvider()),
           ChangeNotifierProvider(create: (context) => MyLoginProvider()),
           ChangeNotifierProvider(create: (context) => MySettingsProvider()),
-          ChangeNotifierProvider(create: (context) => MyAccountSettingsService()), ///TODO: Ich glaube das soll nicht so sein, da kein Provider
         ],
         child: const MyApp(),
       )

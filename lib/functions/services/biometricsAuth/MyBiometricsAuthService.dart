@@ -1,5 +1,6 @@
 import 'package:local_auth/local_auth.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 
 class MyBiometricsAuthService {
 
@@ -20,6 +21,10 @@ class MyBiometricsAuthService {
     if (isAuthenticateAvailable) {
 
       List<BiometricType> biometricsOptions = await auth.getAvailableBiometrics();
+      for (var i in biometricsOptions) {
+
+        print(i);
+      }
 
       if (biometricsOptions.contains(BiometricType.strong)) {
 
@@ -27,9 +32,21 @@ class MyBiometricsAuthService {
 
           isAuthenticate = await auth.authenticate(
               localizedReason: 'Please authenticate to show account balance',
-              options: const AuthenticationOptions(biometricOnly: true));
+              authMessages: const <AuthMessages>[
+                AndroidAuthMessages(
+                  signInTitle: 'Oops! Biometric authentication required!',
+                  cancelButton: 'No thanks',
+                ),
+              ],
+              options: const AuthenticationOptions(
+                  biometricOnly: true,
+                  useErrorDialogs: true
+              ));
+
+          ///TODO: kommt gar nicht hier rein
         } catch (e) {
 
+          print(e);
           throw MyCustomException("the authentiation failed: $e", "authentication-failed");
         }
       } else {
@@ -43,6 +60,4 @@ class MyBiometricsAuthService {
 
     return isAuthenticate;
   }
-
-  
 }

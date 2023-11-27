@@ -55,11 +55,11 @@ class MySecureStorageService {
       encryptedSharedPreferences: true,
     );
     final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-    String? emailAdress = await storage.read(key: MyStorageKeys.emailAdress);
+    String? emailAddress = await storage.read(key: MyStorageKeys.emailAdress);
     String? password = await storage.read(key: MyStorageKeys.password);
 
     return MyDefaultUserStructure(
-        email: emailAdress,
+        email: emailAddress,
         password: password
     );
   }
@@ -71,5 +71,30 @@ class MySecureStorageService {
     );
     final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
     await storage.deleteAll();
+  }
+
+  void updateIsBiometricActive(String value) async {
+
+    AndroidOptions getAndroidOptions() => const AndroidOptions(
+      encryptedSharedPreferences: true,
+    );
+    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+    await storage.write(
+        key: 'isBiometricsActive',
+        value: value
+    );
+  }
+
+  Future<String?> isBiometricActive() async {
+
+    AndroidOptions getAndroidOptions() => const AndroidOptions(
+      encryptedSharedPreferences: true,
+    );
+    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+    String? isBiometricActive = await storage.read(
+        key: 'isBiometricsActive',
+    );
+
+    return isBiometricActive;
   }
 }

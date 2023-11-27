@@ -23,18 +23,22 @@ class MyBiometricsLogin {
 
           case "authentication-failed":
 
+            print("Authentication Failed!");
             break;
           case "weak":
 
+            print("Authentication Weak");
             break;
           case "not-available":
 
+            print("Authentication not available");
             break;
         }
       }
     }
 
     MySecureStorageService mySecureStorageService = MySecureStorageService();
+    ///TODO: Hier gibts probleme, als wurde kein Biometrics stattfinden
     if (isAuthenticate) {
 
       return mySecureStorageService.getUserFromStorage();
@@ -52,7 +56,14 @@ class MyBiometricsLogin {
   /// - email-password-null: email or password are null!
   /// - email-password-empty: email or password are empty!
   static void loginWithBiometrics() async {
+
+    MySecureStorageService mySecureStorageService = MySecureStorageService();
+    if (mySecureStorageService.isBiometricActive() != null || mySecureStorageService.isBiometricActive() as bool) {
+
+    }
+
     MyDefaultUserStructure myUser = await getUserDataFromBiometrics();
+    print(myUser.email! + " " + myUser.password!);
 
     if (myUser.email == null || myUser.password == null) {
 
@@ -67,6 +78,7 @@ class MyBiometricsLogin {
     try {
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: myUser.email!, password: myUser.password!);
+      ///TODO: gucken ob das passt
     } catch (e) {
 
       if (e is FirebaseException) {
