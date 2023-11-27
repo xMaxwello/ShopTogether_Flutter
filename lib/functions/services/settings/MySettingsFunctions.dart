@@ -31,6 +31,10 @@ class MySettingsFunctions {
       }
     } else {
 
+      bool isAvailable = await MyBiometricsAuthService.isBiometricsAvailableOnDevice();
+      if (!isAvailable) {
+        settingsProvider.updateIsBiometricLock(switchState);
+      }
       mySecureStorageService.deleteUsers();
     }
   }
