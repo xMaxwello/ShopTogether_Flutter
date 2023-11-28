@@ -47,8 +47,17 @@ class MyBiometricsLogin {
   static void loginWithBiometrics(BuildContext context) async {
 
     MySecureStorageService mySecureStorageService = MySecureStorageService();
-    if (mySecureStorageService.isBiometricActive() == null || !(mySecureStorageService.isBiometricActive() as bool)) {
-      ///TODO: hier
+    String? biometricActiveString = await mySecureStorageService.isBiometricActive();
+
+    if (biometricActiveString != null) {
+
+      bool? biometricActive = bool.tryParse(biometricActiveString);
+
+      if (biometricActive == null || !biometricActive) {
+        throw MyCustomException("The biometric is not active or not available", "not-active");
+      }
+    } else {
+
       throw MyCustomException("The biometric is not active or not available", "not-active");
     }
 
@@ -56,7 +65,6 @@ class MyBiometricsLogin {
     try {
 
       myUser = await getUserDataFromBiometrics();
-      print(myUser.email! + " " + myUser.password!);
 
       if (myUser.email == null || myUser.password == null) {
 
@@ -75,8 +83,7 @@ class MyBiometricsLogin {
 
         case "authentication-failed":
 
-          print("Authentication Failed!");
-          print(e.message);
+          MySnackBarService.showMySnackBar(context, "Die Authentifizierung ist fehlgeschlagen!");
           break;
         case "weak":
 
@@ -84,7 +91,7 @@ class MyBiometricsLogin {
           break;
         case "not-available":
 
-          print("Authentication not available");
+          MySnackBarService.showMySnackBar(context, "Ihr Gerät besitzt keine FaceId/Fingerprint!");
           break;
       }
     } on FirebaseException catch (firebaseEx) {
