@@ -103,7 +103,7 @@ class _MyProductItemState extends State<MyProductItem> {
                         _timer = Timer.periodic(
                             const Duration(milliseconds: 100),
                                 (timer) {
-                              
+
                                   if (widget.myProduct.productCount > 1) {
 
                                     MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, -1);
