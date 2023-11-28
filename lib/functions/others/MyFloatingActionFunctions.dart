@@ -4,7 +4,7 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 import '../../objects/groups/MyGroup.dart';
 import '../services/firestore/MyFirestoreService.dart';
 
-class MyFunctions {
+class MyFloatingActionFunctions {
 
   static void addGroup() {
 

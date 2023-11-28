@@ -1,14 +1,15 @@
-import 'package:barcode_scan2/gen/protos/protos.pb.dart';
-import 'package:barcode_scan2/model/model.dart';
-import 'package:barcode_scan2/platform_wrapper.dart';
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/bottomSheetTest/MyBottomSheetTestItem.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
-import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
+import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
+import '../../functions/services/snackbars/MySnackBarService.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar({super.key});
@@ -65,6 +66,15 @@ class _MySearchBarState extends State<MySearchBar> {
                         onPressed: () {
                           setState(() {
                             _scan();
+
+                            /*showBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyDraggableScrollableWidget(
+                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
+                                  );
+                                }
+                            );*/
                           });
                         },
                         icon: Icon(

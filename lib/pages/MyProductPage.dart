@@ -8,7 +8,7 @@ import '../components/appBar/MyAppBar.dart';
 import '../components/home/MyFloatingButton.dart';
 import '../components/home/MyHomeList.dart';
 import '../components/home/MyHomeNavigationBar.dart';
-import '../functions/others/MyFunctions.dart';
+import '../functions/others/MyFloatingActionFunctions.dart';
 import '../functions/providers/items/MyItemsProvider.dart';
 
 class MyProductPage extends StatefulWidget {
@@ -99,7 +99,7 @@ class _MyProductPageState extends State<MyProductPage> {
         floatingActionButton: const MyFloatingButton(
           buttonTitle: 'Mitglied',
           iconData: Icons.person_add,
-          function: MyFunctions.addUserToGroup,
+          function: MyFloatingActionFunctions.addUserToGroup,
           isChangeByScroll: true,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
