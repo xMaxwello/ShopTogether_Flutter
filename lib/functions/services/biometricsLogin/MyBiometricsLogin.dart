@@ -27,7 +27,6 @@ class MyBiometricsLogin {
     }
 
     MySecureStorageService mySecureStorageService = MySecureStorageService();
-    ///TODO: Hier gibts probleme, als wurde kein Biometrics stattfinden
     if (isAuthenticate) {
 
       return mySecureStorageService.getUserFromStorage();
@@ -44,11 +43,13 @@ class MyBiometricsLogin {
   /// [MyCustomException] Keys:
   /// - email-password-null: email or password are null!
   /// - email-password-empty: email or password are empty!
+  /// - not-active: The biometric is not active or not available
   static void loginWithBiometrics(BuildContext context) async {
 
     MySecureStorageService mySecureStorageService = MySecureStorageService();
-    if (mySecureStorageService.isBiometricActive() != null || mySecureStorageService.isBiometricActive() as bool) {
+    if (mySecureStorageService.isBiometricActive() == null || !(mySecureStorageService.isBiometricActive() as bool)) {
       ///TODO: hier
+      throw MyCustomException("The biometric is not active or not available", "not-active");
     }
 
     MyDefaultUserStructure myUser;
