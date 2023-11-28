@@ -75,6 +75,10 @@ class LightTheme {
         color: Colors.grey[800]
       ),
 
+      dividerTheme: const DividerThemeData(
+        color: Colors.black54
+      ),
+
       textTheme: TextTheme(
         labelMedium: GoogleFonts.tiltNeon(
           fontSize: 19,

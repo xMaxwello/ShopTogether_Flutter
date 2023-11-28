@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvider.dart';
+import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 
 
-void changeEmailDialog(BuildContext context, MyAccountSettingsProvider provider) {
+void changeEmailDialog(BuildContext context, MyAccountSettingsService service) {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -52,7 +52,7 @@ void changeEmailDialog(BuildContext context, MyAccountSettingsProvider provider)
               final String password = passwordController.text;
 
               Navigator.of(dialogContext).pop();
-              await provider.updateEmail(context, newEmail, password);
+              await service.updateEmailFromCurrentUser(context, newEmail, password);
             },
           ),
         ],

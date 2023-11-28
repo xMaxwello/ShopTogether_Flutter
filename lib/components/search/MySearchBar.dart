@@ -1,9 +1,10 @@
+import 'package:barcode_scan2/gen/protos/protos.pb.dart';
+import 'package:barcode_scan2/model/model.dart';
+import 'package:barcode_scan2/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/bottomSheetTest/MyBottomSheetTestItem.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
-import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
+import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
@@ -30,6 +31,22 @@ class _MySearchBarState extends State<MySearchBar> {
             child: SearchAnchor(
                 builder: (BuildContext context, SearchController controller) {
 
+                  Future<void> _scan() async {
+                    final result = await BarcodeScanner.scan();
+
+                    if (result.type == ResultType.Barcode) {
+
+                      controller.text = result.rawContent;
+                      controller.openView();
+                    } else if (result.type == ResultType.Cancelled) {
+
+                      MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
+                    } else if (result.type == ResultType.Error) {
+
+                      MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
+                    }
+                  }
+
                   return SearchBar(
                     surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                     controller: controller,
@@ -47,24 +64,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-
-                            ///TODO: add function
-
-                            showBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return MyDraggableScrollableWidget(
-                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
-                                  );
-                                }
-                            );
-
-                            /*MyOpenFoodFactsService myFoodService = MyOpenFoodFactsService();
-                            myFoodService.getProductByBarcode('3017620422003').then((product) {
-                              if (product != null) {
-                                print(product.brands);
-                              }
-                            });*/
+                            _scan();
                           });
                         },
                         icon: Icon(

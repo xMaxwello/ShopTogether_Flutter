@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopping_app/functions/providers/settings/MyAccountSettingsProvider.dart';
+import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 
-void changePasswordDialog(BuildContext context, MyAccountSettingsProvider provider) {
+void changePasswordDialog(BuildContext context, MyAccountSettingsService service) {
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController repeatNewPasswordController = TextEditingController();
@@ -62,7 +62,7 @@ void changePasswordDialog(BuildContext context, MyAccountSettingsProvider provid
               final String repeatNewPassword = repeatNewPasswordController.text;
 
               Navigator.of(dialogContext).pop();
-              await provider.updatePassword(context, oldPassword, newPassword, repeatNewPassword);
+              await service.updatePasswordFromCurrentUser(context, oldPassword, newPassword, repeatNewPassword);
             },
           ),
         ],
