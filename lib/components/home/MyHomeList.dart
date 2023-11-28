@@ -175,9 +175,9 @@ class _MyHomeListState extends State<MyHomeList> {
 
                                     ///remove group or product if the item is swiped
                                     if (widget.isGroup) {
-                                      MyFirestoreService.removeGroup(groupsFromUser[index].groupUUID);
+                                      MyFirestoreService.groupService.removeGroup(groupsFromUser[index].groupUUID);
                                     } else {
-                                      MyFirestoreService.removeProduct(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
+                                      MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[index].productID);
                                     }
                                   });
                                 },

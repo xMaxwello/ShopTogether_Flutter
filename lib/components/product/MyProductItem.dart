@@ -82,7 +82,7 @@ class _MyProductItemState extends State<MyProductItem> {
                         ///the amount of the product shouldn`t be under 1
                         if (widget.myProduct.productCount > 1) {
 
-                          MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, -1);
+                          MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, -1);
                         } else {
 
                           ///if amount of the product is 1 and the user want to reduce the amount this message will show up
@@ -94,7 +94,7 @@ class _MyProductItemState extends State<MyProductItem> {
                             actionLabel: "Löschen",
                             actionFunction: () {
 
-                              MyFirestoreService.removeProduct(widget.selectedGroupUUID, widget.myProduct.productID);
+                              MyFirestoreService.productService.removeProductFromGroup(widget.selectedGroupUUID, widget.myProduct.productID);
                             },
                           );
                         }
@@ -106,7 +106,7 @@ class _MyProductItemState extends State<MyProductItem> {
 
                                   if (widget.myProduct.productCount > 1) {
 
-                                    MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, -1);
+                                    MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, -1);
                                   }
                             }
                         );
@@ -126,13 +126,13 @@ class _MyProductItemState extends State<MyProductItem> {
                       onTap: () {
 
                         ///add amount to the product
-                        MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, 1);
+                        MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, 1);
                       },
                       onLongPress: () {
                         _timer = Timer.periodic(
                             const Duration(milliseconds: 100),
                                 (timer) {
-                                  MyFirestoreService.updateProductCount(widget.selectedGroupUUID, widget.myProduct.productID, 1);
+                                  MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, 1);
                                 }
                         );
                       },

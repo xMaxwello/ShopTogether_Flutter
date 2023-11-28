@@ -27,11 +27,11 @@ class MyBiometricsAuthService {
         try {
 
           isAuthenticate = await auth.authenticate(
-              localizedReason: 'Please authenticate to show account balance',
+              localizedReason: 'Bitte authentifizieren Sie sich, um sich anzumelden!',
               authMessages: const <AuthMessages>[
                 AndroidAuthMessages(
-                  signInTitle: 'Oops! Biometric authentication required!',
-                  cancelButton: 'No thanks',
+                  signInTitle: 'Biometrische Authentifzierung erforderlich!',
+                  cancelButton: 'Nein danke!',
                 ),
               ],
               options: const AuthenticationOptions(
@@ -40,7 +40,6 @@ class MyBiometricsAuthService {
                   stickyAuth: true
               ));
 
-          ///TODO: kommt gar nicht hier rein
         } catch (e) {
 
           print(e);

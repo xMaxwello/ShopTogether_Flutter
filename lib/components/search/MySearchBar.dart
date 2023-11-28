@@ -94,12 +94,11 @@ class _MySearchBarState extends State<MySearchBar> {
                       myProduct: myProduct,
                       addProductFunction: () {
 
-                        MyFirestoreService.addProduct(itemsValue.selectedGroupUUID, myProduct);
+                        MyFirestoreService.productService.addProductToGroup(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
                       },
                       showProductInfoFunction: () {
                         ///TODO: show Product info
-                        print("Product info");
                       },
                     );
                   });

@@ -158,7 +158,7 @@ class MyLoginFunctions {
             surname: _nameController.text,
             groupUUIDs: []
         );
-        MyFirestoreService.addUser(user);
+        MyFirestoreService.userService.addUser(user);
 
         ///Send the email-verification
         userCredential.user!.sendEmailVerification();
