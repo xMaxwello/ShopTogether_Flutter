@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 typedef DialogContentBuilder = List<Widget> Function(BuildContext context);
 typedef DialogOnConfirm = Future<void> Function();
 
+///TODO: Okay wenn du das so machen möchtest dann erstelle eine Klasse um die Funktion, damit man die Funktion aktiv mit der Klasse identifiziert im Code woanders und dort am besten eine static methode
 void showCustomDialog({
   required BuildContext context,
   required String title,

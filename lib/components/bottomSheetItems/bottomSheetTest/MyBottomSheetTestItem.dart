@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 
-
+///TODO: Klasse umbennen ist keine Test mehr
 class MyBottomSheetTestItem {
+
   static Future<List<Widget>> generateBottomSheet(BuildContext context, String barcode) async {
     MyOpenFoodFactsService service = MyOpenFoodFactsService();
     String placeholderBarcode = '5060337500401';
 
+    ///TODO: Denk hier wieder: so wenig Code wie möglich => for schleifen + Listen
     try {
       Product? product = await service.getProductByBarcode(placeholderBarcode);
       if (product == null) {

@@ -5,6 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService {
+  ///TODO: Also, eigentlich alle Funktionen wie du Sie hier beschreibst bzw. fast programmiert hast, sind MyFireStoreSerivce Funktionen. Die einzige Ausnahme ist, das in MyFirestoreService Funktionen kein BuildContext rein gehört.
+  ///TODO: Um das jetzt einheitlich zu machen, guck erstens in MyFirestoreService, ob diese Funktion schon vorhanden sind 2) ergänze diese, allerdings überall wo ein Fehler oder wo du ein MySnackBar ausgeben würden packst du ein throw MyCustomException raus. Diese Exceptions bearbeitest du dann in diesen Funktionen hier mit der Ausgabe von den MySnackBars
+  ///TODO: Falls du dir das nicht zu traust oder nicht weiß was ich mein, dann kann ich das machen. Allerdings müsste das sauber im Backend (MyFirestoreService) stehen
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {

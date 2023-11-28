@@ -3,13 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/appBar/MyAppBar.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableSheet.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
-import '../functions/others/MyFunctions.dart';
+import '../functions/others/MyFloatingActionFunctions.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -75,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 10,),
 
                 ElevatedButton(
-                  onPressed: MyFunctions.addGroup,
+                  onPressed: MyFloatingActionFunctions.addGroup,
                   style: Theme.of(context).elevatedButtonTheme.style,
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -112,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         floatingActionButton: const MyFloatingButton(
           buttonTitle: 'Gruppe',
           iconData: Icons.group_add,
-          function: MyFunctions.addGroup,
+          function: MyFloatingActionFunctions.addGroup,
           isChangeByScroll: true,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

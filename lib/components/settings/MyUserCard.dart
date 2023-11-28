@@ -14,7 +14,7 @@ class MyUserCard extends StatelessWidget {
     final uid = user?.uid ?? '';
 
     return FutureBuilder<String>(
-      future: MyUserCardService.getUserName(uid),
+      future: MyUserCardService.getUserName(uid), ///TODO: Verstehe was du hier machen möchstest, ist kein schlechter Ansatz. Du musst nur aufpassen, das bei sowas die Art und Weise wie man Sachen programmiert Konstant bleibt und man nicht bei einem das so und bei dem anderen das anders macht
       builder: (context, snapshot) {
 
         String displayName = snapshot.data ?? "";
@@ -23,6 +23,7 @@ class MyUserCard extends StatelessWidget {
     );
   }
 
+  ///TODO: Kann man machen, wenn es dir hilft kannst du das lassen. Allerdings lagerst du dieses Widget nicht wirklich aus oder verwendest es irgendwo wieder, deswegen kannst du es auch rein schreiben. Könnte aber wie gesagt für die Übersichtlichkeit für jemanden besser sein. Also deine Entscheidung
   Widget _buildUserCard(BuildContext context, String displayName) {
     return Padding(
       padding: const EdgeInsets.all(10),
