@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/settings/MyUserCard.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/functions/services/settings/MySettingsFunctions.dart';
+import 'package:shopping_app/functions/services/storage/MySecureStorageService.dart';
 import 'package:shopping_app/pages/MyAccountSettingsPage.dart';
-
-///TODO: Es wird in der NavigationBar unten nicht die Task (Gruppen) auf Blau geswitcht. Gilt auch wenn man auf den 'back' button in android klickt um zur Hauptseite zu kommen.
-
 
 class MySettingsWidget extends StatefulWidget {
   const MySettingsWidget({super.key});
@@ -29,7 +28,8 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
       "Dark Theme"
     ];
 
-    List<bool> settingValues = [
+    ///variables for the provider
+    List<bool> settingProviderValues = [
       settingsProvider.isBiometricLock,
       settingsProvider.isNotificationsEnabled,
       settingsProvider.isVibrationEnabled,
@@ -37,12 +37,14 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
       settingsProvider.isDarkThemeEnabled
     ];
 
-    List<ValueChanged<bool>> settingFunctions = [
-      settingsProvider.updateIsBiometricLock,
-      settingsProvider.updateIsNotificationsEnabled,
-      settingsProvider.updateIsVibrationEnabled,
-      settingsProvider.updateIsSoundEnabled,
-      settingsProvider.updateIsDarkThemeEnabled,
+    ///functions for the switchs
+    MySettingsFunctions mySettingsFunctions = MySettingsFunctions(context);
+    List<ValueChanged<bool>> settingsFunctions = [
+      mySettingsFunctions.biometricFunction,
+      mySettingsFunctions.notificationFunction,
+      mySettingsFunctions.vibrationFunction,
+      mySettingsFunctions.soundFunction,
+      mySettingsFunctions.darkThemeFunction,
     ];
 
     List<Widget> listTiles = [];
@@ -55,9 +57,9 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
           ),
           trailing: Switch(
             activeColor: Theme.of(context).colorScheme.primary,
-            value: settingValues[i],
+            value: settingProviderValues[i],
             onChanged: (bool value) {
-              settingFunctions[i](value);
+              settingsFunctions[i](value);
             },
           ),
         ),

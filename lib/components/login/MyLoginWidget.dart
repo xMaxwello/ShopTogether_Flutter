@@ -54,6 +54,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                         decoration: InputDecoration(
                           labelStyle: Theme.of(context).textTheme.displaySmall,
                           labelText: widget.inputLabels[i],
+                          hintStyle: Theme.of(context).textTheme.displaySmall,
                           suffixIcon: IconButton(
                             onPressed: () {
 
@@ -69,7 +70,8 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                             },
                             icon: Icon(
                               widget.isInputPassword[i] ? (value.showPasswords![i] ? Icons.remove_red_eye : Icons.visibility_off) : Icons.clear,
-                              size: 20,
+                              size: Theme.of(context).iconTheme.size,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                           ),
                         ),

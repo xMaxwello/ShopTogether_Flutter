@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../snackbars/MySnackBarService.dart';
 
-class MyAccountSettingsService with ChangeNotifier {
+class MyAccountSettingsService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {

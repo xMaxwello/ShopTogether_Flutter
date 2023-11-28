@@ -1,3 +1,4 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
@@ -8,6 +9,7 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
+import '../../functions/services/snackbars/MySnackBarService.dart';
 
 class MySearchBar extends StatefulWidget {
   const MySearchBar({super.key});
@@ -30,6 +32,22 @@ class _MySearchBarState extends State<MySearchBar> {
             child: SearchAnchor(
                 builder: (BuildContext context, SearchController controller) {
 
+                  Future<void> _scan() async {
+                    final result = await BarcodeScanner.scan();
+
+                    if (result.type == ResultType.Barcode) {
+
+                      controller.text = result.rawContent;
+                      controller.openView();
+                    } else if (result.type == ResultType.Cancelled) {
+
+                      MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
+                    } else if (result.type == ResultType.Error) {
+
+                      MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
+                    }
+                  }
+
                   return SearchBar(
                     surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                     controller: controller,
@@ -45,14 +63,19 @@ class _MySearchBarState extends State<MySearchBar> {
                     ),
                     trailing: <Widget> [
                       IconButton(
-                        onPressed: () async {
-                          List<Widget> bottomSheetWidgets = await MyBottomSheetTestItem.generateBottomSheet(context, '5060337500401');
-                          showBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-                              }
-                          );
+                        onPressed: () {
+                          setState(() {
+                            _scan();
+
+                            /*showBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return MyDraggableScrollableWidget(
+                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
+                                  );
+                                }
+                            );*/
+                          });
                         },
                         icon: Icon(
                           Icons.qr_code,
