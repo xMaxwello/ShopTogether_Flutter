@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyBottomSheetItem.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
 
@@ -23,8 +25,17 @@ class _MyProductItemState extends State<MyProductItem> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Container(
+    return GestureDetector( ///TODO: Bottomsheet wird nur angezeigt wenn man auf den Namen, Bild klickt.
+        onTap: () async {
+      List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
+      showBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+              },
+          );
+    },
+    child: Container(
         margin: const EdgeInsets.only(left: 6, right: 6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -151,6 +162,7 @@ class _MyProductItemState extends State<MyProductItem> {
             const SizedBox(height: 4,),
           ],
         )
+    ),
     );
   }
 }

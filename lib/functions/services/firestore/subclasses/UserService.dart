@@ -109,4 +109,14 @@ class UserService {
       }
     }
   }
+
+  Stream<MyUser> getUserName(String uid) {
+    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        return MyUser.fromMap(snapshot.data()!);
+      } else {
+        throw Exception("Benutzer nicht gefunden");
+      }
+    });
+  }
 }

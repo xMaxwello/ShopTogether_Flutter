@@ -1,10 +1,7 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/bottomSheetTest/MyBottomSheetTestItem.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
-import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';

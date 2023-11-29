@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shopping_app/functions/services/settings/MyUserCardService.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
+import 'package:shopping_app/objects/users/MyUsers.dart';
 
-
-///TODO: Der Name braucht etwas bis der aktualisiert wird, evnt. fixen falls möglich
 
 class MyUserCard extends StatelessWidget {
   const MyUserCard({super.key});
@@ -13,11 +12,13 @@ class MyUserCard extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid ?? '';
 
-    return FutureBuilder<String>(
-      future: MyUserCardService.getUserName(uid), ///TODO: Verstehe was du hier machen möchstest, ist kein schlechter Ansatz. Du musst nur aufpassen, das bei sowas die Art und Weise wie man Sachen programmiert Konstant bleibt und man nicht bei einem das so und bei dem anderen das anders macht
+    return StreamBuilder<MyUser>(
+      stream: MyFirestoreService.userService.getUserName(uid),
       builder: (context, snapshot) {
 
-        String displayName = snapshot.data ?? "";
+        final userData = snapshot.data!;
+        final displayName = "${userData.prename} ${userData.surname}";
+
         return _buildUserCard(context, displayName);
       },
     );

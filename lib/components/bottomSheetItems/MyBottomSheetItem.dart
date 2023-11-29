@@ -2,38 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 
-///TODO: Klasse umbennen ist keine Test mehr
-class MyBottomSheetTestItem {
+class MyBottomSheetItem {
+
+  ///TODO: Nutriscore als Bild lokal abrufen? Da Bild nicht abrufbar über API
+  ///TODO: Nährwertliste erstellen und Werte aus API einfügen
+  ///TODO: Funktionen auslagern
 
   static Future<List<Widget>> generateBottomSheet(BuildContext context, String barcode) async {
     MyOpenFoodFactsService service = MyOpenFoodFactsService();
     String placeholderBarcode = '5060337500401';
 
-    ///TODO: Denk hier wieder: so wenig Code wie möglich => for schleifen + Listen
     try {
       Product? product = await service.getProductByBarcode(placeholderBarcode);
       if (product == null) {
         return [const Center(child: Text('Produkt nicht gefunden.'))];
       }
-      String imageUrl = product.imageFrontUrl ?? '';
-      String ingredients = product.ingredientsText ?? 'Zutaten nicht verfügbar';
-      String barcode = product.barcode ?? '';
-      String brand = product.brands ?? '';
-      String quantity = product.quantity ?? '';
-      String labels = product.labels ?? '';
-      String category = product.categories ?? '';
-      String nutriScore = product.nutriscore ?? ''; ///TODO: Nutriscore als Bild lokal abrufen? Da Bild nicht abrufbar über API
 
-
-      ///TODO: Nährwertliste erstellen und Werte aus API einfügen
-
-
-      return [
-        const SizedBox(height: 40),
+      List<Widget> productInfoWidgets = [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
+              const SizedBox(height: 40),
               Center(
                 child: Text(
                   product.productName ?? 'Unbekannter Name',
@@ -41,37 +31,53 @@ class MyBottomSheetTestItem {
                 ),
               ),
               const SizedBox(height: 10),
-              Image.network(imageUrl, height: 200),
+              Image.network(product.imageFrontUrl ?? '', height: 200),
               const SizedBox(height: 20),
-              Text('Barcode: $barcode',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text('Marke: $brand',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text('Menge: $quantity',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text('Labels: $labels',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text('Kategorie: $category',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 10),
-              Center(
-                child: Text('Zutaten',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(ingredients,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
             ],
           ),
         ),
       ];
+
+      List<Map<String, String>> productDetails = [
+        {'Barcode': product.barcode ?? ''},
+        {'Marke': product.brands ?? ''},
+        {'Menge': product.quantity ?? ''},
+        {'Labels': product.labels ?? ''},
+        {'Kategorie': product.categories ?? ''},
+        {'Zutaten': product.ingredientsText ?? 'Zutaten nicht verfügbar'},
+      ];
+
+      productDetails.forEach((detail) {
+        detail.forEach((key, value) {
+          if (key == 'Zutaten') {
+            productInfoWidgets.add(
+              Center(
+                child: Text(
+                  key,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            );
+            productInfoWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(value, style: Theme.of(context).textTheme.bodySmall),
+              ),
+            );
+          } else {
+            productInfoWidgets.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text('$key: $value', style: Theme.of(context).textTheme.bodySmall),
+              ),
+            );
+          }
+        });
+        productInfoWidgets.add(const SizedBox(height: 10));
+      });
+
+      return productInfoWidgets;
+
     } catch (e) {
       print(e);
       return [Center(
