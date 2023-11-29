@@ -6,7 +6,6 @@ import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButton
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
-import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 import 'package:shopping_app/themes/DarkTheme.dart';

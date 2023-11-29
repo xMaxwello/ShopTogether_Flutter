@@ -6,6 +6,7 @@ import 'package:shopping_app/functions/services/firestore/subclasses/UserService
 import '../../../../exceptions/MyCustomException.dart';
 import '../../../../objects/groups/MyGroup.dart';
 import '../../../../objects/products/MyProduct.dart';
+import '../../../../objects/users/MyUsers.dart';
 
 class GroupService {
 
@@ -70,5 +71,38 @@ class GroupService {
 
   void updateGroup(String groupUuid, MyProduct myProduct) {
 
+  }
+
+  Future<bool> isGroupExists(String groupUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+    return snapshot.exists;
+  }
+
+  ///[MyCustomException] Keys:
+  ///- snapchot-not-exists: the snapchot doesn't exists of the userUuid
+  Future<void> addUserUUIDToGroup(String groupUUID, String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      MyGroup group = MyGroup.fromMap(snapshot.data() as Map<String, dynamic>);
+      List<String> userUUIDsFromGroup = group.userUUIDs;
+      userUUIDsFromGroup.add(userUUID);
+
+      FirebaseFirestore.instance
+          .collection("groups")
+          .doc(groupUUID)
+          .update({"userUUIDs": userUUIDsFromGroup});
+    } else {
+
+      throw MyCustomException("the snapchot doesn't exists of the $groupUUID", "snapchot-not-exists");
+    }
   }
 }
