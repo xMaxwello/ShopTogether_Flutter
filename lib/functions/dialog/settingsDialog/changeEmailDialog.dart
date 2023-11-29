@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 
-void changeEmailDialog(BuildContext context, MyAccountSettingsService service) {
+void changeEmailDialog(BuildContext context) {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final MyAccountSettingsService service = MyAccountSettingsService();
 
-  showCustomDialog(
+  MyDialog.showCustomDialog(
     context: context,
     title: 'E-Mail ändern',
     contentBuilder: (dialogContext) => [

@@ -10,10 +10,10 @@ class MyUserCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid ?? '';
+    final userUuid = user?.uid ?? '';
 
     return StreamBuilder<MyUser>(
-      stream: MyFirestoreService.userService.getUserName(uid),
+      stream: MyFirestoreService.userService.getUserName(userUuid),
       builder: (context, snapshot) {
 
         final userData = snapshot.data!;

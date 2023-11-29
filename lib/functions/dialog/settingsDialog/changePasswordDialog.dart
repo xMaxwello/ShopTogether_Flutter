@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 
-void changePasswordDialog(BuildContext context, MyAccountSettingsService service) {
+void changePasswordDialog(BuildContext context) {
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController repeatNewPasswordController = TextEditingController();
+  final MyAccountSettingsService service = MyAccountSettingsService();
 
-  showCustomDialog(
+  MyDialog.showCustomDialog(
     context: context,
     title: 'Passwort ändern',
     contentBuilder: (dialogContext) => [

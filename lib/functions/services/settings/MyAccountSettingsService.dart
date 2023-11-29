@@ -1,57 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shopping_app/exceptions/MyCustomException.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
+import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService {
-  ///TODO: Also, eigentlich alle Funktionen wie du Sie hier beschreibst bzw. fast programmiert hast, sind MyFireStoreSerivce Funktionen.
-  ///Die einzige Ausnahme ist, das in MyFirestoreService Funktionen kein BuildContext rein gehört.
-  ///Um das jetzt einheitlich zu machen, guck erstens in MyFirestoreService, ob diese Funktion schon vorhanden sind 2) ergänze diese,
-  ///allerdings überall wo ein Fehler oder wo du ein MySnackBar ausgeben würden packst du ein throw MyCustomException raus. Diese Exceptions
-  ///bearbeitest du dann in diesen Funktionen hier mit der Ausgabe von den MySnackBars
-  ///Falls du dir das nicht zu traust oder nicht weiß was ich mein, dann kann ich das machen. Allerdings müsste das sauber im
-  ///Backend (MyFirestoreService) stehen
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  /// Has the [MyCustomException] of [UserService.updateUserName]
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
-    if (newPrename.isEmpty || newSurname.isEmpty || password.isEmpty) {
-      MySnackBarService.showMySnackBar(
-          context, 'Bitte füllen Sie alle Felder aus.', isError: false);
-    }
-
-    User? user = _auth.currentUser;
-    if (user == null) {
-      MySnackBarService.showMySnackBar(
-          context, 'Sie sind nicht angemeldet.', isError: true);
-    }
-
     try {
-      AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
-        password: password,
-      );
-
-      await user.reauthenticateWithCredential(credential);
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update(
-          {
-            'prename': newPrename,
-            'surname': newSurname,
-          });
+      String userUuid = FirebaseAuth.instance.currentUser?.uid ?? '';
+      await MyFirestoreService.userService.updateUserName(userUuid, newPrename, newSurname, password);
       MySnackBarService.showMySnackBar(context, 'Name erfolgreich geändert', isError: false);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
-      } else if (e.code == 'too-many-requests') {
-        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
-      } else if (e.code == 'network-request-failed') {
-        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-      } else {
-        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.');
-        print("Firebase Error Code: ${e.code}");
-      }
+    } on MyCustomException catch (e) {
+      MySnackBarService.showMySnackBar(context, e.message, isError: true);
     }
   }
+
 
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
     if (newEmail.isEmpty || password.isEmpty) {

@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 
-
-///TODO: MyAccountSettingsService könntest du auch einfach in der Funktion deklarieren und dann aufrufen,
-///dann musst du hier nichts übergeben => bei den anderen Dialogs auch. Außer es ist äußerst notwendig, wusste aber nicht warum
-
-void changeUserNameDialog(BuildContext context, MyAccountSettingsService service) {
+void changeUserNameDialog(BuildContext context) {
   final TextEditingController newPrenameController = TextEditingController();
   final TextEditingController newSurnameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final MyAccountSettingsService service = MyAccountSettingsService();
 
-  showCustomDialog(
+  MyDialog.showCustomDialog(
     context: context,
     title: 'Name ändern',
     contentBuilder: (dialogContext) => [
@@ -38,7 +35,6 @@ void changeUserNameDialog(BuildContext context, MyAccountSettingsService service
         ),
       ),
     ],
-
     onConfirm: () async {
       final String newPrename = newPrenameController.text;
       final String newSurname = newSurnameController.text;

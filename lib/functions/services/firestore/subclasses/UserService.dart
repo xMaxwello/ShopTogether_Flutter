@@ -60,7 +60,7 @@ class UserService {
   }
 
   ///[MyCustomException] Keys:
-  ///- snapchot-not-exists: the snapchot doesn't exists of the userUuid
+  ///- snapshot-not-exists: the snapshot doesn't exists of the userUuid
   Future<void> addGroupUUIDsFromUser(String userUuid, String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
@@ -79,7 +79,7 @@ class UserService {
           .update({"groupUUIDs": groupUUIDsFromUser});
     } else {
 
-      throw MyCustomException("the snapchot doesn't exists of the $userUuid", "snapchot-not-exists");
+      throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-exists");
     }
   }
 
@@ -110,13 +110,49 @@ class UserService {
     }
   }
 
-  Stream<MyUser> getUserName(String uid) {
-    return FirebaseFirestore.instance.collection('users').doc(uid).snapshots().map((snapshot) {
+  ///[MyCustomException] Keys:
+  ///- snapshot-not-existent: the snapshot doesn't exists of the userUuid
+  Stream<MyUser> getUserName(String userUuid) {
+    return FirebaseFirestore.instance.collection('users').doc(userUuid).snapshots().map((snapshot) {
       if (snapshot.exists) {
         return MyUser.fromMap(snapshot.data()!);
       } else {
-        throw Exception("Benutzer nicht gefunden");
+        throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-existent");
       }
     });
   }
+
+  ///[MyCustomException] Keys:
+  ///- empty-fields: Textfelder sind leer
+  ///- not-logged-in: User ist nicht angemeldet
+  ///- wrong-password: Falsches Passwort eingegeben
+  Future<void> updateUserName(String userUuid, String newPrename, String newSurname, String password) async {
+    try {
+      if (newPrename.isEmpty || newSurname.isEmpty || password.isEmpty) {
+        throw MyCustomException('Bitte füllen Sie alle Felder aus.', 'empty-fields');
+      }
+
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw MyCustomException('Sie sind nicht angemeldet.', 'not-logged-in');
+      }
+
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!,
+        password: password,
+      );
+
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseFirestore.instance.collection('users').doc(userUuid).update({
+        'prename': newPrename,
+        'surname': newSurname,
+      });
+    } on MyCustomException catch (e) {
+        throw MyCustomException(e.message, e.keyword);
+
+    } catch (e) {
+      throw MyCustomException("Unbekannter Fehler: $e", "unknown-error");
+    }
+  }
+
 }

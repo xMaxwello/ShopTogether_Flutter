@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/changeEmailDialog.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/changePasswordDialog.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/deleteAccountDialog.dart';
@@ -14,7 +13,6 @@ class MyAccountSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MyAccountSettingsService service = MyAccountSettingsService();
 
     List<String> titles = [
       'Name ändern',
@@ -24,10 +22,10 @@ class MyAccountSettingsWidget extends StatelessWidget {
     ];
 
     List<Function()> actions = [
-          () => changeUserNameDialog(context, service),
-          () => changeEmailDialog(context, service),
-          () => changePasswordDialog(context, service),
-          () => deleteAccountDialog(context, service),
+          () => changeUserNameDialog(context),
+          () => changeEmailDialog(context),
+          () => changePasswordDialog(context),
+          () => deleteAccountDialog(context),
     ];
 
     List<Widget> listTiles = [];
