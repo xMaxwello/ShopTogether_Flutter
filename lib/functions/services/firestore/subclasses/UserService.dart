@@ -88,7 +88,7 @@ class UserService {
   void removeGroupUUIDsFromUser(String userUuid, String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
-    FirebaseFirestore.instance.collection("groups").doc(userUuid);
+    FirebaseFirestore.instance.collection("users").doc(userUuid);
 
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
@@ -108,5 +108,14 @@ class UserService {
         throw MyCustomException("GroupUUID was not in list of the user!", "not-found-groupuuid");
       }
     }
+  }
+
+  Future<bool> isUserExists(String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("users").doc(userUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+    return snapshot.exists;
   }
 }

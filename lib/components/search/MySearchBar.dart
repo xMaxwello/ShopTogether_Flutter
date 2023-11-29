@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
+import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
@@ -97,8 +98,10 @@ class _MySearchBarState extends State<MySearchBar> {
                         MyFirestoreService.productService.addProductToGroup(itemsValue.selectedGroupUUID, myProduct);
                         controller.closeView(myProduct.productID);
                       },
-                      showProductInfoFunction: () {
+                      showProductInfoFunction: () async {
                         ///TODO: show Product info
+                        print("Yesah");
+                        MyFirestoreService.requestService.addRequestForSession(MyRequestKey(userOwnerUUID: "fdsgds", requestCode: 0));
                       },
                     );
                   });
