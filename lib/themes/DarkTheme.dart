@@ -88,6 +88,10 @@ class DarkTheme {
             fontSize: 19,
             color: Colors.white
         ),
+        labelLarge: GoogleFonts.tiltNeon(
+            fontSize: 24,
+            color: Colors.white
+        ),
         labelSmall: GoogleFonts.tiltNeon(
             fontSize: 16,
             color: const Color(0xff959595)
