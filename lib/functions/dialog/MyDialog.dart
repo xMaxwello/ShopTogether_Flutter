@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 typedef DialogContentBuilder = List<Widget> Function(BuildContext context);
 typedef DialogOnConfirm = Future<void> Function();
@@ -29,7 +28,7 @@ class MyDialog {
             TextButton(
               child: Text(
                 cancelButtonText,
-                style: GoogleFonts.tiltNeon(),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
@@ -38,7 +37,7 @@ class MyDialog {
             TextButton(
               child: Text(
                 confirmButtonText,
-                style: GoogleFonts.tiltNeon(),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
               onPressed: () async {
                 await onConfirm();

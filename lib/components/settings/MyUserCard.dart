@@ -56,7 +56,7 @@ class MyUserCard extends StatelessWidget {
                     Icon(
                       Icons.arrow_forward,
                       size: Theme.of(context).iconTheme.size,
-                      color: Colors.black54,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                   ],
                 ),

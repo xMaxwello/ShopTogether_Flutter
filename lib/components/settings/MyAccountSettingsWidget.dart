@@ -73,18 +73,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-                Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.8)),
-            minimumSize: MaterialStateProperty.resolveWith<Size?>(
-                  (Set<MaterialState> states) {
-                if (states.contains(MaterialState.pressed)) {
-                  return const Size(200, 50);
-                }
-                return const Size(180, 40);
-              },
-            ),
-          ),
+          style: Theme.of(context).elevatedButtonTheme.style,
           child: Padding(
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Text(

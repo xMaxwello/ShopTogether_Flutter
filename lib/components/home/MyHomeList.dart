@@ -181,7 +181,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                     }
                                   });
                                 },
-                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements
+                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements ///TODO: Bottomsheet
                                   onTapFunction: () {
 
                                     if (widget.isGroup) {
