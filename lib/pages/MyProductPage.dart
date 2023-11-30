@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 
 import '../components/appBar/MyAppBar.dart';
 import '../components/home/MyFloatingButton.dart';
@@ -55,55 +56,65 @@ class _MyProductPageState extends State<MyProductPage> {
     return Consumer<MyItemsProvider>
       (builder: (context, MyItemsProvider myItemsProvider, child) {
 
-      return Scaffold(
-        body: Padding(
-          padding: EdgeInsets.only(top: height),
+      return FutureBuilder<bool>(
+          future: MyFirestoreService.groupService.isCurrentUserGroupOwner(myItemsProvider.selectedGroupUUID),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
-          ///set the padding = status bar height
-          child: MyHomeList(
-            isGroup: false,
-            isListEmptyWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            }
 
-                Text(
-                    "Die Liste ist leer!",
-                    style: Theme.of(context).textTheme.bodySmall
+            return Scaffold(
+                body: Padding(
+                  padding: EdgeInsets.only(top: height),
+
+                  ///set the padding = status bar height
+                  child: MyHomeList(
+                    isGroup: false,
+                    isListEmptyWidget: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+
+                        Text(
+                            "Die Liste ist leer!",
+                            style: Theme.of(context).textTheme.bodySmall
+                        ),
+                        const SizedBox(height: 10,),
+
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 10,),
+                bottomNavigationBar:  ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+                  child: BottomAppBar(
+                    color: Theme.of(context).bottomAppBarTheme.color,
+                    child: const MyHomeNavigationBar(),
+                  ),
+                ),
 
-              ],
-            ),
-          ),
-        ),
-        bottomNavigationBar:  ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomAppBar(
-            color: Theme.of(context).bottomAppBarTheme.color,
-            child: const MyHomeNavigationBar(),
-          ),
-        ),
+                appBar: const PreferredSize(
+                  preferredSize: Size.fromHeight(100),
+                  child: MyAppBar(
+                    isGroup: false,
+                  ),
+                ),
 
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(100),
-          child: MyAppBar(
-            isGroup: false,
-          ),
-        ),
-
-        ///TODO: FloatingButton nur anzeigen, wenn man Owner der Gruppe ist
-        floatingActionButton: const MyFloatingButton(
-          buttonTitle: 'Mitglied',
-          iconData: Icons.person_add,
-          function: MyFloatingActionFunctions.addUserToGroup,
-          isChangeByScroll: true,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+                floatingActionButton: snapshot.data ?
+                const MyFloatingButton(
+                buttonTitle: 'Mitglied',
+                iconData: Icons.person_add,
+                function: MyFloatingActionFunctions.addUserToGroup,
+                isChangeByScroll: true
+            ) : const SizedBox(),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+            );
+          }
       );
     });
   }

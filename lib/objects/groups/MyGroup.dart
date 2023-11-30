@@ -19,15 +19,15 @@ class MyGroup extends ChangeNotifier {
   });
 
   void updateGroupUUID(String newUUID) {
-    groupUUID = newUUID;
+    this.groupUUID = newUUID;
   }
 
   void updateUserOwnerUUID(String newUUID) {
-    userOwnerUUID = newUUID;
+    this.userOwnerUUID = newUUID;
   }
 
   void updateUserUUIDs(List<String> userUUIDs) {
-    userUUIDs = userUUIDs;
+    this.userUUIDs = userUUIDs;
   }
 
   Map<String, dynamic> toMap() {

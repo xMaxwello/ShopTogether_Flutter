@@ -163,5 +163,4 @@ class UserService {
       throw MyCustomException("Unbekannter Fehler: $e", "unknown-error");
     }
   }
-
 }

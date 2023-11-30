@@ -12,25 +12,29 @@ class GroupService {
 
   ///[MyCustomException] Keys:
   ///- error: returns extern errors
-  ///
+  ///- no-user: user is not logged in!
   /// Has the [MyCustomException] of [UserService.addGroupUUIDsFromUser]
   void addGroup(MyGroup myGroup) async {
 
     try {
 
-      String uuidFromCurrentUser = FirebaseAuth.instance.currentUser!.uid;
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        throw MyCustomException("user is not logged in!", "no-user");
+      }
 
       ///create a new group
       DocumentReference ref = FirebaseFirestore.instance.collection("groups").doc();
 
       ///update uuid from goup and add user who created the group
       myGroup.updateGroupUUID(ref.id);
-      myGroup.updateUserUUIDs([uuidFromCurrentUser]);
-      myGroup.updateUserOwnerUUID(uuidFromCurrentUser);
+      myGroup.updateUserUUIDs([user.uid]);
+      myGroup.updateUserOwnerUUID(user.uid);
       await ref.set(myGroup.toMap());
 
       ///add the uuid from group in the current user
-      await MyFirestoreService.userService.addGroupUUIDsToUser(uuidFromCurrentUser, ref.id);
+      await MyFirestoreService.userService.addGroupUUIDsToUser(user.uid, ref.id);
     } on MyCustomException catch(e) {
 
       throw MyCustomException("Group couldn't created: " + e.message, e.keyword);
@@ -121,5 +125,37 @@ class GroupService {
     }
 
     return -1;
+  }
+
+  /// [MyCustomException] Keys:
+  /// - no-user: no user is logged in!
+  /// - group-exists-not: the groupUUID doesn`t exists!
+  Future<bool> isCurrentUserGroupOwner(String groupUUID) async {
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw MyCustomException("no user is logged in!", "no-user");
+    }
+
+    if (await isGroupExists(groupUUID) == false) {
+      throw MyCustomException("the group doesn`t exists", "group-exists-not");
+    }
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists == false) {
+      throw MyCustomException("the group snapshot doesn`t exists!", "snapshot-exists-not");
+    }
+
+    String ownerUUID = snapshot.get("userOwnerUUID");
+
+    if (ownerUUID.compareTo(user.uid) == 0) {
+      return true;
+    }
+
+    return false;
   }
 }

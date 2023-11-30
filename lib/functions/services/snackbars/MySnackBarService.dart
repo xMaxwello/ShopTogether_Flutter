@@ -21,6 +21,6 @@ class MySnackBarService {
             onPressed: actionFunction,
             textColor: Theme.of(context).snackBarTheme.actionTextColor,
           ),
-        )); ///TODO: Snackbar Löschen button ist zu groß
+        ));
   }
 }

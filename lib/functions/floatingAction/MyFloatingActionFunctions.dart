@@ -27,6 +27,9 @@ class MyFloatingActionFunctions {
         case "error":
           print(e.message);
           break;
+        case "no-user":
+          print(e.message);
+          break;
       }
     }
   }

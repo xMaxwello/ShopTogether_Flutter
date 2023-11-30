@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/dialog/settingsDialog/changeBiometricsDialog.dart';
 import 'package:shopping_app/functions/services/biometricsAuth/MyBiometricsAuthService.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/functions/services/storage/MySecureStorageService.dart';
@@ -24,9 +25,7 @@ class MySettingsFunctions {
       if (await MyBiometricsAuthService.isBiometricsAvailableOnDevice()) {
 
         ///activate biometric
-        settingsProvider.updateIsBiometricLock(switchState);
-        mySecureStorageService.updateIsBiometricActive(switchState.toString());
-        mySecureStorageService.updateUserInStorage("dafobi3589@othao.com", "mo1234"); ///TODO: ändern
+        changeBiometricsDialog(_context, switchState);
       } else {
 
         MySnackBarService.showMySnackBar(_context, "Ihr Gerät unterstützt keine biometrischen Login!");
