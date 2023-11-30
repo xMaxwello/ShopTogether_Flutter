@@ -175,6 +175,9 @@ class _MyHomeListState extends State<MyHomeList> {
                                 onDismissed: (direction) {
                                   setState(() {
 
+                                    ///TODO: User darf nur Gruppe löschen, wenn dieser der Owner ist
+
+                                    ///TODO: Abfrage ob der User die Gruppe löschen möchte
                                     ///remove group or product if the item is swiped
                                     if (widget.isGroup) {
                                       MyFirestoreService.groupService.removeGroup(groupsFromUser[index].groupUUID);
