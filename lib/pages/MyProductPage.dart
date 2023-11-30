@@ -8,7 +8,7 @@ import '../components/appBar/MyAppBar.dart';
 import '../components/home/MyFloatingButton.dart';
 import '../components/home/MyHomeList.dart';
 import '../components/home/MyHomeNavigationBar.dart';
-import '../functions/others/MyFloatingActionFunctions.dart';
+import '../functions/floatingAction/MyFloatingActionFunctions.dart';
 import '../functions/providers/items/MyItemsProvider.dart';
 
 class MyProductPage extends StatefulWidget {

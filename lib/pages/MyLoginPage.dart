@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/others/MyLoginFunctions.dart';
+import 'package:shopping_app/functions/login/MyLoginFunctions.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/services/biometricsLogin/MyBiometricsLogin.dart';
 

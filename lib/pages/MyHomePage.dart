@@ -8,7 +8,7 @@ import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
-import '../functions/others/MyFloatingActionFunctions.dart';
+import '../functions/floatingAction/MyFloatingActionFunctions.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
