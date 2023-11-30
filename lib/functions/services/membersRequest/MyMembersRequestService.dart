@@ -15,6 +15,8 @@ class MyMembersRequestService {
   ///  and [MyFirestoreService.groupService.addUserUUIDToGroup]
   void addUserToGroupOverRequest(String userUUID, String groupUUID, int requestCode) async {
 
+    ///TODO: In einem Fenster anzeigen, wo man beitritt zu welcher Gruppe. Gruppen-Owner Namen ausgeben lassen von dem man eingeladen wurde (Gruppenmitglieder)
+
     bool existsUser = await MyFirestoreService.userService.isUserExists(userUUID);
     bool existsGroup = await MyFirestoreService.groupService.isGroupExists(groupUUID);
 

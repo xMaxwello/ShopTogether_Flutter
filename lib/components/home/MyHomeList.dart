@@ -25,6 +25,8 @@ class MyHomeList extends StatefulWidget {
   State<MyHomeList> createState() => _MyHomeListState();
 }
 
+///TODO: Datei auslagern => übersichtlicher machen
+
 class _MyHomeListState extends State<MyHomeList> {
 
   late ScrollController _controller;
