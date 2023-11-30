@@ -85,9 +85,10 @@ class LightTheme {
           color: Colors.white
         ),
         labelLarge: GoogleFonts.tiltNeon(
-            fontSize: 24,
+            fontSize: 14,
             color: Colors.white
         ),
+
         labelSmall: GoogleFonts.tiltNeon(
             fontSize: 16,
             color: Colors.black38

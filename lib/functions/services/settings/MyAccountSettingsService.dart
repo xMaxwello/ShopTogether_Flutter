@@ -21,7 +21,6 @@ class MyAccountSettingsService {
     }
   }
 
-
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
     if (newEmail.isEmpty || password.isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
@@ -123,5 +122,4 @@ class MyAccountSettingsService {
       }
     }
   }
-
 }

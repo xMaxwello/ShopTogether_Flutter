@@ -5,7 +5,10 @@ import '../firestore/MyFirestoreService.dart';
 
 class MyMembersRequestService {
 
-  ///[MyCustomException] Keys:
+  /// [userUUID] => user der hinzugefügt wird
+  /// [groupUUID] => wo der user hinzugefügt werden soll
+  ///
+  /// [MyCustomException] Keys:
   ///- group-user-not-exists: the groupUUID or the userUUID doesn't exist!
   ///- request-not-exists: the request code doesn't exist!
   ///- Has Keys from [MyFirestoreService.userService.addGroupUUIDsFromUser]
@@ -30,7 +33,7 @@ class MyMembersRequestService {
 
     try {
 
-      await MyFirestoreService.userService.addGroupUUIDsFromUser(userUUID, groupUUID);
+      await MyFirestoreService.userService.addGroupUUIDsToUser(userUUID, groupUUID);
       await MyFirestoreService.groupService.addUserUUIDToGroup(groupUUID, userUUID);
       MyFirestoreService.requestService.removeRequestWithCode(requestCode);
     } on MyCustomException catch(e) {

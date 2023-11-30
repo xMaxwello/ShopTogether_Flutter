@@ -7,5 +7,4 @@ class MyClipBoardService {
         .then((_) => print('Inhalt in Zwischenablage kopiert: $text'))
         .catchError((error) => print('Fehler beim Kopieren in die Zwischenablage: $error'));
   }
-
 }
