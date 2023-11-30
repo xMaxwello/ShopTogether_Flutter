@@ -49,3 +49,5 @@ Booleans in einer Liste einpacken im Provider (for Schleife) mit update funktion
 Entfernung von Email in der Anmeldungsseite per button
 Beim registrieren weiteres Feld "Passwort wiederholen"
 Produkte Leuten zu weisen
+
+Neues Theme für Anmeldeseite mit Weissem Hintergrund, Title theme für andere seiten transparent machen
