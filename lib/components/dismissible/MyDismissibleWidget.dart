@@ -19,7 +19,7 @@ class MyDismissibleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Dismissible(
-      key: isGroup ? Key(groupsFromUser[itemIndex].groupUUID) : Key(groupsFromUser[selectedGroupIndex].products[itemIndex].productID),
+      key: isGroup ? Key(groupsFromUser[itemIndex].groupUUID!) : Key(groupsFromUser[selectedGroupIndex].products[itemIndex].productID!),
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.red[300],
@@ -37,9 +37,9 @@ class MyDismissibleWidget extends StatelessWidget {
         ///TODO: Abfrage ob der User die Gruppe löschen möchte
         ///remove group or product if the item is swiped
         if (isGroup) {
-          MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID);
+          MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
         } else {
-          MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[itemIndex].productID);
+          MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[itemIndex].productID!);
         }
       },
       child: child,

@@ -62,7 +62,7 @@ class _MyHomeListState extends State<MyHomeList> {
                   return StreamBuilder(
                       stream: FirebaseFirestore.instance.collection("groups").snapshots(),
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
-                        
+
                         MyHomeErrorWidgetHandler myHomeErrorWidgetHandler = MyHomeErrorWidgetHandler();
 
                         ///data has no errors and can be used
@@ -103,7 +103,7 @@ class _MyHomeListState extends State<MyHomeList> {
 
                         ///get groups from current user
                         List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
-                        groupsFromUser.sort((a, b) => a.groupUUID.compareTo(b.groupUUID));
+                        groupsFromUser.sort((a, b) => a.groupUUID!.compareTo(b.groupUUID!));
 
                         List<String> groupUUIDs = currentUser.groupUUIDs;
                         groupUUIDs.sort((a, b) => a.compareTo(b));

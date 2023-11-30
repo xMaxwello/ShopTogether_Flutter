@@ -4,30 +4,37 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 
 class MyGroup extends ChangeNotifier {
 
-  String groupUUID;
+  String? groupUUID;
   String groupName;
-  List<String> userUUIDs;
+  String? userOwnerUUID;
+  List<String>? userUUIDs;
   List<MyProduct> products;
 
   MyGroup({
-    required this.groupUUID,
+    this.groupUUID,
     required this.groupName,
-    required this.userUUIDs,
+    this.userOwnerUUID,
+    this.userUUIDs,
     required this.products,
   });
 
-  void updateGroupUUID(MyGroup group, String newUUID) {
-    group.groupUUID = newUUID;
+  void updateGroupUUID(String newUUID) {
+    groupUUID = newUUID;
   }
 
-  void updateUserUUIDs(MyGroup group, List<String> userUUIDs) {
-    group.userUUIDs = userUUIDs;
+  void updateUserOwnerUUID(String newUUID) {
+    userOwnerUUID = newUUID;
+  }
+
+  void updateUserUUIDs(List<String> userUUIDs) {
+    userUUIDs = userUUIDs;
   }
 
   Map<String, dynamic> toMap() {
     return {
       'groupUUID': groupUUID,
       'groupName': groupName,
+      'userOwnerUUID': userOwnerUUID,
       'userUUIDs': userUUIDs,
       'products': products,
     };
@@ -37,6 +44,7 @@ class MyGroup extends ChangeNotifier {
     return MyGroup(
       groupUUID: map['groupUUID'] as String,
       groupName: map['groupName'] as String,
+      userOwnerUUID: map['userOwnerUUID'] as String?,
       userUUIDs: (map['userUUIDs'] as List<dynamic>).cast<String>(),
       products: (map['products'] as List<dynamic>).map((productMap) => MyProduct.fromMap(productMap)).toList(),
     );
@@ -52,6 +60,7 @@ class MyGroup extends ChangeNotifier {
     return MyGroup(
       groupUUID: data['groupUUID'] as String,
       groupName: data['groupName'] as String,
+      userOwnerUUID: data['userOwnerUUID'] as String,
       userUUIDs: userUUIDs,
       products: products,
     );

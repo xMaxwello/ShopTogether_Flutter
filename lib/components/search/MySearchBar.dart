@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
-import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
@@ -64,15 +63,6 @@ class _MySearchBarState extends State<MySearchBar> {
                         onPressed: () {
                           setState(() {
                             _scan();
-
-                            /*showBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return MyDraggableScrollableWidget(
-                                      widgets: MyBottomSheetTestItem.generateBottomSheet()
-                                  );
-                                }
-                            );*/
                           });
                         },
                         icon: Icon(
@@ -107,8 +97,6 @@ class _MySearchBarState extends State<MySearchBar> {
                       },
                       showProductInfoFunction: () async {
                         ///TODO: show Product info
-                        print("Yesah");
-                        MyFirestoreService.requestService.addRequestForSession(MyRequestKey(userOwnerUUID: "fdsgds", requestCode: 0));
                       },
                     );
                   });

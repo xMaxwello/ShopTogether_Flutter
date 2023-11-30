@@ -12,8 +12,6 @@ import '../services/snackbars/MySnackBarService.dart';
 ///Here are all functions which are contains in [MyLoginPage]
 class MyLoginFunctions {
 
-  ///TODO: Datei in einem Login Ordner => besser übersicht
-
   late BuildContext _context;
   late TextEditingController _prenameController;
   late TextEditingController _nameController;

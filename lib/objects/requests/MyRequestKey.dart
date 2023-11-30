@@ -4,19 +4,25 @@ import 'package:flutter/cupertino.dart';
 class MyRequestKey extends ChangeNotifier {
 
   String userOwnerUUID;
-  int requestCode;
+  String groupUUID;
+  int? requestCode;
 
   MyRequestKey({
     required this.userOwnerUUID,
-    required this.requestCode,
+    required this.groupUUID,
+    this.requestCode,
   });
 
-  void updateRequestCode(MyRequestKey requestKey, int requestCode) {
-    requestKey.requestCode = requestCode;
+  void updateRequestCode(int requestCode) {
+    this.requestCode = requestCode;
   }
 
-  void updateUserOwner(MyRequestKey requestKey, String userOwnerUUID) {
-    requestKey.userOwnerUUID = userOwnerUUID;
+  void updateGroupUUID(String groupUUID) {
+    this.groupUUID = groupUUID;
+  }
+
+  void updateUserOwner(String userOwnerUUID) {
+    this.userOwnerUUID = userOwnerUUID;
   }
 
   Map<String, dynamic> toMap() {
@@ -30,6 +36,7 @@ class MyRequestKey extends ChangeNotifier {
     return MyRequestKey(
       requestCode: map['requestCode'] as int,
       userOwnerUUID: map['userOwnerUUID'] as String,
+      groupUUID: map['groupUUID'] as String,
     );
   }
 
@@ -39,6 +46,7 @@ class MyRequestKey extends ChangeNotifier {
     return MyRequestKey(
       requestCode: data['requestCode'] as int,
       userOwnerUUID: data['userOwnerUUID'] as String,
+      groupUUID: data['groupUUID'] as String,
     );
   }
 }

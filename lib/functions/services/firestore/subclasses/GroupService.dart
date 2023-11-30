@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
+import 'package:shopping_app/objects/users/MyUsers.dart';
 
 import '../../../../exceptions/MyCustomException.dart';
 import '../../../../objects/groups/MyGroup.dart';
 import '../../../../objects/products/MyProduct.dart';
-import '../../../../objects/users/MyUsers.dart';
 
 class GroupService {
 
@@ -24,8 +24,9 @@ class GroupService {
       DocumentReference ref = FirebaseFirestore.instance.collection("groups").doc();
 
       ///update uuid from goup and add user who created the group
-      myGroup.updateGroupUUID(myGroup, ref.id);
-      myGroup.updateUserUUIDs(myGroup, [uuidFromCurrentUser]);
+      myGroup.updateGroupUUID(ref.id);
+      myGroup.updateUserUUIDs([uuidFromCurrentUser]);
+      myGroup.updateUserOwnerUUID(uuidFromCurrentUser);
       await ref.set(myGroup.toMap());
 
       ///add the uuid from group in the current user
@@ -93,8 +94,8 @@ class GroupService {
 
     if (snapshot.exists) {
       MyGroup group = MyGroup.fromMap(snapshot.data() as Map<String, dynamic>);
-      List<String> userUUIDsFromGroup = group.userUUIDs;
-      userUUIDsFromGroup.add(userUUID);
+      List<String>? userUUIDsFromGroup = group.userUUIDs;
+      userUUIDsFromGroup!.add(userUUID);
 
       FirebaseFirestore.instance
           .collection("groups")
@@ -104,5 +105,21 @@ class GroupService {
 
       throw MyCustomException("the snapchot doesn't exists of the $groupUUID", "snapchot-not-exists");
     }
+  }
+
+  Future<int> getSizeOfMembers(String groupUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+
+      int userLength = List<MyUser>.from(snapshot.get("userUUIDs")).length;
+      return userLength;
+    }
+
+    return -1;
   }
 }

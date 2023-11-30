@@ -10,7 +10,7 @@ class MyGroupItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    int usersLength = myGroup.userUUIDs.length;
+    int usersLength = myGroup.userUUIDs!.length;
     int shoppingListLength = myGroup.products.length;
 
     return Padding(

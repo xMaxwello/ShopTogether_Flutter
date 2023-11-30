@@ -1,12 +1,14 @@
 
 import 'package:shopping_app/exceptions/MyCustomException.dart';
+import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 
+import '../../../objects/requests/MyRequestGroup.dart';
 import '../firestore/MyFirestoreService.dart';
 
 class MyMembersRequestService {
 
-  /// [userUUID] => user der hinzugefügt wird
-  /// [groupUUID] => wo der user hinzugefügt werden soll
+  /// [userUUID] => the user uuid who want to add
+  /// [groupUUID] => the group uuid where the user uuid want to add
   ///
   /// [MyCustomException] Keys:
   ///- group-user-not-exists: the groupUUID or the userUUID doesn't exist!

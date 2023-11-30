@@ -14,9 +14,7 @@ class MyFloatingActionFunctions {
 
       MyFirestoreService.groupService.addGroup(
           MyGroup(
-              groupUUID: "",
               groupName: "Hallo",
-              userUUIDs: [],
               products: []
           )
       );
