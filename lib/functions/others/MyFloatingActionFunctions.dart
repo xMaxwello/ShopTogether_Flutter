@@ -1,9 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
-import 'package:shopping_app/functions/services/membersRequest/MyMembersRequestService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
-import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 
+import '../../objects/groups/MyGroup.dart';
 import '../services/firestore/MyFirestoreService.dart';
 
 class MyFloatingActionFunctions {
@@ -12,7 +10,7 @@ class MyFloatingActionFunctions {
 
     ///TODO: function
 
-    /*try {
+    try {
 
       MyFirestoreService.groupService.addGroup(
           MyGroup(
@@ -32,9 +30,7 @@ class MyFloatingActionFunctions {
           print(e.message);
           break;
       }
-    }*/
-
-    MyFirestoreService.requestService.addRequestForSession(MyRequestKey(userOwnerUUID: FirebaseAuth.instance.currentUser!.uid, requestCode: 000000));
+    }
   }
 
   static void addProduct() async {
@@ -55,13 +51,13 @@ class MyFloatingActionFunctions {
 
   static void addUserToGroup() {
 
-    try {
+    /*try {
 
       MyMembersRequestService myMembersRequestService = MyMembersRequestService();
       myMembersRequestService.addUserToGroupOverRequest("NVNIiFSCH8cEXnvOZTtvNWy8eo23", "h3tKwlXaRBkBflA8Mg9g", 275542);
     } on MyCustomException catch(e) {
       print(e.keyword);
-    }
+    } */
 
     ///TODO: function
   }
