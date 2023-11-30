@@ -16,6 +16,10 @@ class MyUserCard extends StatelessWidget {
       stream: MyFirestoreService.userService.getUserName(userUuid),
       builder: (context, snapshot) {
 
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
+
         final userData = snapshot.data!;
         final displayName = "${userData.prename} ${userData.surname}";
 
