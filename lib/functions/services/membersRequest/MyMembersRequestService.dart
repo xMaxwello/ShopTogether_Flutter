@@ -5,12 +5,17 @@ import '../firestore/MyFirestoreService.dart';
 
 class MyMembersRequestService {
 
-  ///[MyCustomException] Keys:
+  /// [userUUID] => user der hinzugefügt wird
+  /// [groupUUID] => wo der user hinzugefügt werden soll
+  ///
+  /// [MyCustomException] Keys:
   ///- group-user-not-exists: the groupUUID or the userUUID doesn't exist!
   ///- request-not-exists: the request code doesn't exist!
   ///- Has Keys from [MyFirestoreService.userService.addGroupUUIDsFromUser]
   ///  and [MyFirestoreService.groupService.addUserUUIDToGroup]
   void addUserToGroupOverRequest(String userUUID, String groupUUID, int requestCode) async {
+
+    ///TODO: In einem Fenster anzeigen, wo man beitritt zu welcher Gruppe. Gruppen-Owner Namen ausgeben lassen von dem man eingeladen wurde (Gruppenmitglieder)
 
     bool existsUser = await MyFirestoreService.userService.isUserExists(userUUID);
     bool existsGroup = await MyFirestoreService.groupService.isGroupExists(groupUUID);
@@ -30,7 +35,7 @@ class MyMembersRequestService {
 
     try {
 
-      await MyFirestoreService.userService.addGroupUUIDsFromUser(userUUID, groupUUID);
+      await MyFirestoreService.userService.addGroupUUIDsToUser(userUUID, groupUUID);
       await MyFirestoreService.groupService.addUserUUIDToGroup(groupUUID, userUUID);
       MyFirestoreService.requestService.removeRequestWithCode(requestCode);
     } on MyCustomException catch(e) {

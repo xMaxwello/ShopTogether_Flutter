@@ -61,7 +61,7 @@ class UserService {
 
   ///[MyCustomException] Keys:
   ///- snapshot-not-exists: the snapshot doesn't exists of the userUuid
-  Future<void> addGroupUUIDsFromUser(String userUuid, String groupUUID) async {
+  Future<void> addGroupUUIDsToUser(String userUuid, String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("users").doc(userUuid);

@@ -29,7 +29,7 @@ class GroupService {
       await ref.set(myGroup.toMap());
 
       ///add the uuid from group in the current user
-      await MyFirestoreService.userService.addGroupUUIDsFromUser(uuidFromCurrentUser, ref.id);
+      await MyFirestoreService.userService.addGroupUUIDsToUser(uuidFromCurrentUser, ref.id);
     } on MyCustomException catch(e) {
 
       throw MyCustomException("Group couldn't created: " + e.message, e.keyword);

@@ -96,6 +96,7 @@ class _MyProductPageState extends State<MyProductPage> {
           ),
         ),
 
+        ///TODO: FloatingButton nur anzeigen, wenn man Owner der Gruppe ist
         floatingActionButton: const MyFloatingButton(
           buttonTitle: 'Mitglied',
           iconData: Icons.person_add,

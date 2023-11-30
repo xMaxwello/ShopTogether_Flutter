@@ -12,6 +12,8 @@ import '../services/snackbars/MySnackBarService.dart';
 ///Here are all functions which are contains in [MyLoginPage]
 class MyLoginFunctions {
 
+  ///TODO: Datei in einem Login Ordner => besser übersicht
+
   late BuildContext _context;
   late TextEditingController _prenameController;
   late TextEditingController _nameController;
@@ -61,7 +63,7 @@ class MyLoginFunctions {
           MySnackBarService.showMySnackBar(_context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
         } else if (e.code == 'invalid-email') {
           MySnackBarService.showMySnackBar(_context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
-        } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        } else if (e.code == 'INVALID_LOGIN_CREDENTIALS' || e.code == 'invalid-credential') {
           MySnackBarService.showMySnackBar(_context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
         } else {
           MySnackBarService.showMySnackBar(_context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');

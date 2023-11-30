@@ -25,17 +25,7 @@ class _MyProductItemState extends State<MyProductItem> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector( ///TODO: Bottomsheet wird nur angezeigt wenn man auf den Namen, Bild klickt.
-        onTap: () async {
-      List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
-      showBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-              },
-          );
-    },
-    child: Container(
+    return Container(
         margin: const EdgeInsets.only(left: 6, right: 6),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,10 +105,10 @@ class _MyProductItemState extends State<MyProductItem> {
                             const Duration(milliseconds: 100),
                                 (timer) {
 
-                                  if (widget.myProduct.productCount > 1) {
+                              if (widget.myProduct.productCount > 1) {
 
-                                    MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, -1);
-                                  }
+                                MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, -1);
+                              }
                             }
                         );
                       },
@@ -143,8 +133,8 @@ class _MyProductItemState extends State<MyProductItem> {
                         _timer = Timer.periodic(
                             const Duration(milliseconds: 100),
                                 (timer) {
-                                  MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, 1);
-                                }
+                              MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID, 1);
+                            }
                         );
                       },
                       onLongPressEnd: (_) {
@@ -162,7 +152,6 @@ class _MyProductItemState extends State<MyProductItem> {
             const SizedBox(height: 4,),
           ],
         )
-    ),
     );
   }
 }

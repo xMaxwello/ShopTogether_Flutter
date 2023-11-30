@@ -61,7 +61,10 @@ class MyOutMemberRequestWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           child: Text(
                             requestCodeList.elementAt(i).toString(),
-                            style: Theme.of(context).textTheme.labelLarge,
+                            style: TextStyle(
+                              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+                              color: Colors.white
+                            ),
                           ),
                         )
                     ),

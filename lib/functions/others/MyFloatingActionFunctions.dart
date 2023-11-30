@@ -51,6 +51,14 @@ class MyFloatingActionFunctions {
 
   static void addUserToGroup() {
 
+    /*try {
+
+      MyMembersRequestService myMembersRequestService = MyMembersRequestService();
+      myMembersRequestService.addUserToGroupOverRequest("NVNIiFSCH8cEXnvOZTtvNWy8eo23", "h3tKwlXaRBkBflA8Mg9g", 275542);
+    } on MyCustomException catch(e) {
+      print(e.keyword);
+    } */
+
     ///TODO: function
   }
 }
