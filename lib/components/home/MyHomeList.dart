@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyBottomSheetItem.dart';
 import 'package:shopping_app/components/dismissible/MyDismissibleWidget.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
 import 'package:shopping_app/components/group/MyGroupItem.dart';
@@ -141,11 +143,20 @@ class _MyHomeListState extends State<MyHomeList> {
                                 selectedGroupIndex: selectedGroupIndex,
                                 itemsValue: itemsValue,
                                 child: MyBasicStructItem(///the basic struct of the group, product, ... elements ///TODO: Bottomsheet
-                                  onTapFunction: () {
+                                  onTapFunction: () async {
 
                                     if (widget.isGroup) {
 
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
+                                    } else {
+                                      List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
+                                      if (!mounted) return;
+                                      showBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+                                        },
+                                      );
                                     }
                                     Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(widget.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID);
                                     Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);

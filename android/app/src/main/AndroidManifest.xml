@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.CAMERA"></uses-permission>
     <uses-permission android:name="android.permission.USE_BIOMETRIC"></uses-permission>
     <application
-        android:label="shopping_app"
+        android:label="ShopTogether"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyBottomSheetItem.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
 
