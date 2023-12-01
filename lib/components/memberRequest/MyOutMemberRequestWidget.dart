@@ -56,7 +56,7 @@ class MyOutMemberRequestWidget extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
-                        color: Theme.of(context).primaryColor,
+                        color: Color.lerp(Colors.white, Theme.of(context).primaryColor, 0.5),
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/memberRequest/MyInMemberRequestWidget.dart';
+import 'package:shopping_app/components/memberRequest/MyOutMemberRequestWidget.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';

@@ -40,16 +40,22 @@ class MyInMemberRequestWidget extends StatelessWidget {
                       (index) => Padding(
                     padding: const EdgeInsets.all(3.0),
                     child: SizedBox(
-                      width: 35,
+                      width: 40,
                       child: TextField(
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.titleLarge,
                         maxLength: 1,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
+                        decoration:  InputDecoration(
                           counterText: '',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                          contentPadding: const EdgeInsets.all(12),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(width: 2),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: const BorderSide(width: 2),
                           ),
                         ),
                         onChanged: (value) {
