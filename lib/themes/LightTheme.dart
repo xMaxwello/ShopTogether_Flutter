@@ -116,7 +116,6 @@ class LightTheme {
         displayLarge: GoogleFonts.tiltNeon(
           fontSize: 40,
           color: Colors.grey[900],
-          backgroundColor: Colors.white
         ),
         headlineLarge: GoogleFonts.tiltNeon(
             fontSize: 34,

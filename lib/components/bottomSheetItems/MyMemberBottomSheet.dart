@@ -1,7 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_app/components/memberRequest/MyOutMemberRequestWidget.dart';
 import 'package:shopping_app/components/users/MyUserWidget.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
+import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
+
+import '../../functions/providers/member/MyMemberProvider.dart';
 
 class MyMemberBottomSheet {
 
@@ -13,11 +19,11 @@ class MyMemberBottomSheet {
       Center(
         child: Text(
             "Mitglieder",
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
 
-      const SizedBox(height: 15,),
+      const SizedBox(height: 20,),
 
       FutureBuilder<Stream<List<MyUser>>>(
           future: MyFirestoreService.groupService.getMembersAsStream(selectedGroupUUID),
@@ -81,15 +87,50 @@ class MyMemberBottomSheet {
           }
       ),
 
-      Center(
-        child: IconButton(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            
-          },
-        ),
-      )
-      
+      const SizedBox(height: 10,),
+
+      Consumer<MyMemberProvider>(
+          builder: (BuildContext context, MyMemberProvider myMemberProvider, Widget? widget) {
+
+            if (myMemberProvider.isShowToken) {
+              return Center(
+                child: MyOutMemberRequestWidget(
+                  requestCode: myMemberProvider.token,
+                  title: 'Session Code',
+                ),
+              );
+            }
+
+            return Center(
+              child: FloatingActionButton.extended(
+                icon: const Icon(Icons.add),
+                label: Text(
+                  'Mitglied',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                onPressed: () async {
+
+                  User? user = FirebaseAuth.instance.currentUser;
+
+                  if (user != null) {
+
+                    int requestCode = await MyFirestoreService.requestService.addRequestForSession(
+                        MyRequestKey(
+                            userOwnerUUID: user.uid,
+                            groupUUID: selectedGroupUUID
+                        )
+                    );
+
+                    Provider.of<MyMemberProvider>(context, listen: false).updateToken(requestCode.toString());
+                    Provider.of<MyMemberProvider>(context, listen: false).updateIsShowToken(true);
+                  }
+                },
+              ),
+            );
+          }
+      ),
+
+
     ];
   }
 }

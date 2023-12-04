@@ -11,7 +11,9 @@ class RequestService {
 
   /// [MyCustomException] Keys:
   /// - user-not-logged-in: the user is not logged in!
-  void addRequestForSession(MyRequestKey myRequestKey) async {
+  ///
+  /// return => Request-Code
+  Future<int> addRequestForSession(MyRequestKey myRequestKey) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("requestKeys").doc();
@@ -26,6 +28,8 @@ class RequestService {
     myRequestKey.updateGroupUUID(currentUser.uid);
     
     await ref.set(myRequestKey.toMap());
+
+    return generatedRequestCode;
   }
 
   void removeRequestFromSession(String requestUUID) async {
