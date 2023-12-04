@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
-import 'package:shopping_app/functions/services/settings/MyAccountSettingsService.dart';
+import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/functions/services/storage/MySecureStorageService.dart';
 
 void changeBiometricsDialog(BuildContext context, bool switchState) {
@@ -46,13 +46,13 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
 
         switch (e.keyword) {
           case "login-wrong":
-            print(e.message);
+            MySnackBarService.showMySnackBar(context, "E-Mail oder Passwort ist falsch!");
             break;
           case "email-not-verified":
-            print(e.message);
+            MySnackBarService.showMySnackBar(context, "Die E-Mail wurde noch nicht verifiziert!");
             break;
           case "not-logged-in":
-            print(e.message);
+            MySnackBarService.showMySnackBar(context, "Sie sind nicht eingeloggt!");
             break;
         }
       } catch (e) {
