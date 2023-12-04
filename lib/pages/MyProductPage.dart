@@ -56,6 +56,8 @@ class _MyProductPageState extends State<MyProductPage> {
     return Consumer<MyItemsProvider>
       (builder: (context, MyItemsProvider myItemsProvider, child) {
 
+      MyFloatingActionFunctions myFloatingActionFunctions = MyFloatingActionFunctions(context, myItemsProvider.selectedGroupUUID);
+
       return FutureBuilder<bool>(
           future: MyFirestoreService.groupService.isCurrentUserGroupOwner(myItemsProvider.selectedGroupUUID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -106,10 +108,10 @@ class _MyProductPageState extends State<MyProductPage> {
                 ),
 
                 floatingActionButton: snapshot.data ?
-                const MyFloatingButton(
+                MyFloatingButton(
                 buttonTitle: 'Mitglied',
                 iconData: Icons.person_add,
-                function: MyFloatingActionFunctions.addUserToGroup,
+                function: myFloatingActionFunctions.addUserToGroup,
                 isChangeByScroll: true
             ) : const SizedBox(),
             floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

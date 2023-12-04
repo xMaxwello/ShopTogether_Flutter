@@ -121,7 +121,7 @@ class UserService {
 
   ///[MyCustomException] Keys:
   ///- snapshot-not-existent: the snapshot doesn't exists of the userUuid
-  Stream<MyUser> getUserName(String userUuid) {
+  Stream<MyUser> getUserAsStream(String userUuid) {
     return FirebaseFirestore.instance.collection('users').doc(userUuid).snapshots().map((snapshot) {
       if (snapshot.exists) {
         return MyUser.fromMap(snapshot.data()!);
@@ -129,6 +129,22 @@ class UserService {
         throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-existent");
       }
     });
+  }
+
+  ///[MyCustomException] Keys:
+  ///- snapshot-not-existent: the snapshot doesn't exists of the userUuid
+  Future<MyUser> getUserAsObject(String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("users").doc(userUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+    if (snapshot.exists) {
+
+      return MyUser.fromMap(snapshot.data()!);
+    } else {
+      throw MyCustomException("the snapshot doesn't exists of the $userUUID", "snapshot-not-existent");
+    }
   }
 
   ///[MyCustomException] Keys:

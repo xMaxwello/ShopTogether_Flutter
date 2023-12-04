@@ -111,6 +111,30 @@ class GroupService {
     }
   }
 
+  ///[MyCustomException] Keys:
+  ///- snapchot-not-exists: the snapchot doesn't exists of the userUuid
+  Future<void> removeUserUUIDToGroup(String groupUUID, String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      MyGroup group = MyGroup.fromMap(snapshot.data() as Map<String, dynamic>);
+      List<String>? userUUIDsFromGroup = group.userUUIDs;
+      userUUIDsFromGroup!.remove(userUUID);
+
+      FirebaseFirestore.instance
+          .collection("groups")
+          .doc(groupUUID)
+          .update({"userUUIDs": userUUIDsFromGroup});
+    } else {
+
+      throw MyCustomException("the snapchot doesn't exists of the $groupUUID", "snapchot-not-exists");
+    }
+  }
+
   Future<int> getSizeOfMembers(String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
@@ -125,6 +149,38 @@ class GroupService {
     }
 
     return -1;
+  }
+
+  ///[MyCustomException] Keys:
+  ///- snapshot-not-existent: snapshot doesn`t exists
+  Future<Stream<List<MyUser>>> getMembersAsStream(String groupUUID) async {
+
+    Stream<List<MyUser>> userStream = FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupUUID)
+        .snapshots()
+        .asyncMap((snapshot) {
+
+      if (snapshot.exists) {
+        MyGroup myGroup = MyGroup.fromMap(snapshot.data()!);
+        List<String>? userUUIDs = myGroup.userUUIDs;
+
+        if (userUUIDs != null && userUUIDs.isNotEmpty) {
+
+          List<Future<MyUser>> userFutures = userUUIDs.map((String userUUID) =>
+              MyFirestoreService.userService.getUserAsObject(userUUID)).toList();
+
+          return Future.wait(userFutures);
+        } else {
+          return [];
+        }
+      } else {
+        throw MyCustomException(
+            "the snapshot doesn't exist for $groupUUID", "snapshot-not-existent");
+      }
+    });
+
+    return userStream;
   }
 
   /// [MyCustomException] Keys:

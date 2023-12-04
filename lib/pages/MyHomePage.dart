@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     ///get status bar height
     double height = MediaQuery.of(context).padding.top;
+    MyFloatingActionFunctions myFloatingActionFunctions = MyFloatingActionFunctions(context, "");
 
     return Consumer<MyItemsProvider>
       (builder: (context, MyItemsProvider myItemsProvider, child) {
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 const SizedBox(height: 10,),
 
                 ElevatedButton(
-                  onPressed: MyFloatingActionFunctions.addGroup,
+                  onPressed: myFloatingActionFunctions.addGroup,
                   style: Theme.of(context).elevatedButtonTheme.style,
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -109,10 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
 
         ///TODO: Hier soll eine Fenster sich öffnen, wo man einmal Code (Gruppe hinzufügen) und eigene Gruppe hinzufügen
-        floatingActionButton: const MyFloatingButton(
+        floatingActionButton: MyFloatingButton(
           buttonTitle: 'Gruppe',
           iconData: Icons.group_add,
-          function: MyFloatingActionFunctions.addGroup,
+          function: myFloatingActionFunctions.addGroup,
           isChangeByScroll: true,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

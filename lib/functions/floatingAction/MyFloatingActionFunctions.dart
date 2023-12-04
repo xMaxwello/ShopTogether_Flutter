@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyMemberBottomSheet.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
@@ -6,7 +9,15 @@ import '../services/firestore/MyFirestoreService.dart';
 
 class MyFloatingActionFunctions {
 
-  static void addGroup() {
+  late BuildContext _context;
+  late String _selectedGroupUUID;
+
+  MyFloatingActionFunctions(BuildContext context, String selectedGroupUUID) {
+    _context = context;
+    _selectedGroupUUID = selectedGroupUUID;
+  }
+
+  void addGroup() {
 
     ///TODO: function
 
@@ -34,7 +45,7 @@ class MyFloatingActionFunctions {
     }
   }
 
-  static void addProduct() async {
+  void addProduct() async {
     ///TODO: function
     MyFirestoreService.productService.addProductToGroup(
       "",
@@ -50,7 +61,18 @@ class MyFloatingActionFunctions {
     );
   }
 
-  static void addUserToGroup() {
+  void addUserToGroup() {
+
+
+    showModalBottomSheet(
+      context: _context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return MyDraggableScrollableWidget(
+            widgets: MyMemberBottomSheet.generateBottomSheet(context, _selectedGroupUUID)
+        );
+      },
+    );
 
     /*try {
 
@@ -59,7 +81,5 @@ class MyFloatingActionFunctions {
     } on MyCustomException catch(e) {
       print(e.keyword);
     } */
-
-    ///TODO: function
   }
 }

@@ -13,7 +13,7 @@ class MyUserCard extends StatelessWidget {
     final userUuid = user?.uid ?? '';
 
     return StreamBuilder<MyUser>(
-      stream: MyFirestoreService.userService.getUserName(userUuid),
+      stream: MyFirestoreService.userService.getUserAsStream(userUuid),
       builder: (context, snapshot) {
 
         if (!snapshot.hasData) {
