@@ -27,9 +27,11 @@ class _MySearchBarState extends State<MySearchBar> {
           return Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
             child: SearchAnchor(
+              viewSurfaceTintColor: Theme.of(context).searchViewTheme.surfaceTintColor,
+              viewBackgroundColor: Theme.of(context).searchViewTheme.backgroundColor,
                 builder: (BuildContext context, SearchController controller) {
 
-                  Future<void> _scan() async {
+                  Future<void> scan() async {
                     final result = await BarcodeScanner.scan();
 
                     if (result.type == ResultType.Barcode) {
@@ -47,6 +49,7 @@ class _MySearchBarState extends State<MySearchBar> {
 
                   return SearchBar(
                     surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
+                    backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
                     controller: controller,
                     onTap: () {
                       controller.openView();
@@ -62,7 +65,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       IconButton(
                         onPressed: () {
                           setState(() {
-                            _scan();
+                            scan();
                           });
                         },
                         icon: Icon(

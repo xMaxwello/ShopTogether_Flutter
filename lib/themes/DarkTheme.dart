@@ -74,8 +74,14 @@ class DarkTheme {
           color: Colors.white60
       ),
 
-      searchBarTheme: SearchBarThemeData( ///TODO: Würde ich etwas dunkler machen, damit das mit den ProductAddItem etwas besser passt
-        surfaceTintColor: MaterialStateProperty.all(const Color(0xff555555)),
+      searchBarTheme: SearchBarThemeData(
+        backgroundColor: MaterialStateProperty.all(Colors.grey.shade800),
+        surfaceTintColor: MaterialStateProperty.all(Colors.grey.shade600)
+      ),
+
+      searchViewTheme: SearchViewThemeData(
+        backgroundColor: Colors.grey.shade800,
+        surfaceTintColor: Colors.grey.shade800
       ),
 
       iconTheme: const IconThemeData(
