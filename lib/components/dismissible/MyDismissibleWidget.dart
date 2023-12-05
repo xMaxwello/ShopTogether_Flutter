@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
@@ -30,14 +32,41 @@ class MyDismissibleWidget extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      onDismissed: (direction) {
+      onDismissed: (direction) async {
 
-        ///TODO: User darf nur Gruppe löschen, wenn dieser der Owner ist
-
-        ///TODO: Abfrage ob der User die Gruppe löschen möchte
         ///remove group or product if the item is swiped
         if (isGroup) {
-          MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
+
+          ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
+          User? currentUser = FirebaseAuth.instance.currentUser;
+
+          if (currentUser != null) {
+
+            String groupUUID = groupsFromUser[itemIndex].groupUUID!;
+
+            if (await MyFirestoreService.groupService.isCurrentUserGroupOwner(groupUUID) == false) {
+
+              MyDialog.showCustomDialog(
+                  context: context,
+                  title: "Wollen Sie die Gruppe wirklich verlassen?",
+                  contentBuilder: (dialogContext) => [],
+                  onConfirm: () async {
+
+                    await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, currentUser.uid);
+                    MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
+                  });
+            } else {
+
+              MyDialog.showCustomDialog(
+                  context: context,
+                  title: "Wollen Sie die Gruppe wirklich löschen?",
+                  contentBuilder: (dialogContext) => [],
+                  onConfirm: () async {
+
+                    MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
+              });
+            }
+          }
         } else {
           MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[itemIndex].productID!);
         }
