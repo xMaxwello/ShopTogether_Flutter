@@ -15,37 +15,40 @@ class _MyDraggableScrollableWidgetState extends State<MyDraggableScrollableWidge
   Widget build(BuildContext context) {
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints boxConstraints) {
-          return DraggableScrollableSheet(
-              initialChildSize: 0.95,
-              maxChildSize: 1.0,
-              minChildSize: 0.0,
-              builder: (BuildContext context, ScrollController scrollController) {
+          return Container(
+            color: Theme.of(context).colorScheme.background,
+            child: DraggableScrollableSheet(
+                initialChildSize: 0.95,
+                maxChildSize: 1.0,
+                minChildSize: 0.0,
+                builder: (BuildContext context, ScrollController scrollController) {
 
-                return Column(
-                  children: [
+                  return Column(
+                    children: [
 
-                    Divider(
-                      color: Theme.of(context).dividerTheme.color,
-                      indent: MediaQuery.of(context).size.width * 0.4,
-                      endIndent: MediaQuery.of(context).size.width * 0.4,
-                      thickness: 5,
-                    ),
+                      Divider(
+                        color: Theme.of(context).dividerTheme.color,
+                        indent: MediaQuery.of(context).size.width * 0.4,
+                        endIndent: MediaQuery.of(context).size.width * 0.4,
+                        thickness: 5,
+                      ),
 
-                    Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: [
+                      Expanded(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
 
-                            for (int i = 0; i<widget.widgets.length;i++)
-                              widget.widgets.elementAt(i)
+                              for (int i = 0; i<widget.widgets.length;i++)
+                                widget.widgets.elementAt(i)
 
-                          ],
-                        )
-                    ),
+                            ],
+                          )
+                      ),
 
-                  ],
-                );
-              }
+                    ],
+                  );
+                }
+            ),
           );
         }
     );
