@@ -1,4 +1,3 @@
-
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class MyOpenFoodFactsService {
@@ -34,22 +33,20 @@ class MyOpenFoodFactsService {
 
   Future<SearchResult?> getProductByName(List<String> terms) async {
 
-    ///TODO: Hier
+    var parameters = <Parameter>[
+      const PageSize(size: 10),
+      const SortBy(option: SortOption.POPULARITY),
+      SearchTerms(terms: terms),
+    ];
 
-    final ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
-        parametersList: [
-          StatesTagsParameter(
-              map: {}
-          ),
-        ],
+    ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
+        parametersList: parameters,
+        language: OpenFoodFactsLanguage.GERMAN,
         version: ProductQueryVersion.v3
     );
 
-    User user = const User(
-        userId: "mopa",
-        password: ""
-    );
-    final SearchResult result = await OpenFoodAPIClient.searchProducts(user, configuration);
+    SearchResult result =
+    await OpenFoodAPIClient.searchProducts(null, configuration);
 
     return result;
   }

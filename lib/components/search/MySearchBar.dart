@@ -1,7 +1,9 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
+import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/providers/items/MyItemsProvider.dart';
@@ -100,6 +102,15 @@ class _MySearchBarState extends State<MySearchBar> {
                       },
                       showProductInfoFunction: () async {
                         ///TODO: show Product info
+
+                        /*MyOpenFoodFactsService myOpenFoodFactsService = MyOpenFoodFactsService();
+                        SearchResult? result = await myOpenFoodFactsService.getProductByName(['apple']);
+                        if (result != null) {
+
+                          for (int i = 0;i < result.products!.length;i++) {
+                            print(result.products!.elementAt(i).labels);
+                          }
+                        }*/
                       },
                     );
                   });
