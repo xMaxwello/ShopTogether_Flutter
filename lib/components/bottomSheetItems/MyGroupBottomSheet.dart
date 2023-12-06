@@ -9,7 +9,8 @@ class MyGroupBottomSheet {
 
     List<String> titles = ["Gruppe erstellen", "Gruppe beitreten"];
     List<String> subtitles = ["Hier können Sie Ihre eigene \n Gruppe erstellen!", "Treten Sie hier einer \nanderen Gruppe per Code bei!"];
-    List<Function()> functions = [() => newGroupDialog, () => {}];
+
+    List<Function()> functions = [() => newGroupDialog(context), () => print("Test")];
 
     return [
 
