@@ -26,23 +26,29 @@ class MyDialog {
           ),
           actions: <Widget>[
             TextButton(
-              child: Text(
-                cancelButtonText,
-                style: Theme.of(context).textTheme.titleSmall,
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.indigoAccent,
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
+              child: Text(
+                cancelButtonText,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ),
             TextButton(
-              child: Text(
-                confirmButtonText,
-                style: Theme.of(context).textTheme.titleSmall,
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.indigoAccent,
               ),
               onPressed: () async {
                 await onConfirm();
                 Navigator.of(dialogContext).pop();
               },
+              child: Text(
+                confirmButtonText,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ),
           ],
         );

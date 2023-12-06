@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyGroupBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyMemberBottomSheet.dart';
-import 'package:shopping_app/exceptions/MyCustomException.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
-import '../../objects/groups/MyGroup.dart';
 import '../services/firestore/MyFirestoreService.dart';
 
 class MyFloatingActionFunctions {
@@ -19,30 +18,16 @@ class MyFloatingActionFunctions {
 
   void addGroup() {
 
-    ///TODO: function
+    showModalBottomSheet(
+      context: _context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return MyDraggableScrollableWidget(
+            widgets: MyGroupBottomSheet.generateBottomSheet(context)
+        );
+      },
+    );
 
-    try {
-
-      MyFirestoreService.groupService.addGroup(
-          MyGroup(
-              groupName: "Hallo",
-              products: []
-          )
-      );
-    } on MyCustomException catch(e) {
-
-      switch(e.keyword) {
-        case "snapchot-not-exists":
-          //print(e.message);
-          break;
-        case "error":
-          print(e.message);
-          break;
-        case "no-user":
-          print(e.message);
-          break;
-      }
-    }
   }
 
   void addProduct() async {
