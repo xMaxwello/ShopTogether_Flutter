@@ -70,7 +70,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                         children: [
 
                           Text(
-                            "Einkaufsapp",
+                            "ShopTogether",
                             style: Theme.of(context).textTheme.displayLarge
                           ),
                           const SizedBox(height: 60,),

@@ -26,7 +26,7 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
 
               Text(
-                  "Einkaufsapp",
+                  "ShopTogether",
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineLarge
               ),

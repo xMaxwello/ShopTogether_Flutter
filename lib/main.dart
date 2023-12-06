@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
     return Consumer<MySettingsProvider>(
         builder: (context, settingsProvider, child) {
           return MaterialApp(
-            title: 'Shoppinglist',
+            title: 'ShopTogether',
             theme: LightTheme.getLightTheme(),
 
             ///theme class
