@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/users/MyUserWidget.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
@@ -9,7 +10,17 @@ import '../memberRequest/MyOutMemberRequestWidget.dart';
 class MyMemberBottomSheet {
 
   static List<Widget> generateBottomSheet(BuildContext context, String selectedGroupUUID) {
-    
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return const [
+        Center(
+          child: CircularProgressIndicator(),
+        )
+      ];
+    }
+
     return [
       
       const SizedBox(height: 10,),
@@ -86,41 +97,63 @@ class MyMemberBottomSheet {
 
       const SizedBox(height: 10,),
 
-      StreamBuilder(
-          stream: MyFirestoreService.requestService.getRequestWithGroupUUIDAsStream(selectedGroupUUID),
-          builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
+      FutureBuilder<bool>(
+          future: MyFirestoreService.groupService.isUserGroupOwner(selectedGroupUUID, user.uid),
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshotIsCurrentUserOwner) {
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
+            if (snapshotIsCurrentUserOwner.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
 
-            if (!snapshot.hasData) {
-              return Center(
-                child: FloatingActionButton.extended(
-                  icon: const Icon(Icons.add),
-                  label: Text(
-                    'Mitglied',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  onPressed: () async {
-
-                    await MyFirestoreService.requestService.addRequestForSession(
-                        MyRequestKey(
-                            groupUUID: selectedGroupUUID
-                        )
-                    );
-                  },
-                ),
+            if (!snapshotIsCurrentUserOwner.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
 
-            return Center(
-              child: MyOutMemberRequestWidget(
-                requestCode: snapshot.data!.requestCode.toString(),
-                title: 'Session Code',
-              ),
+            return StreamBuilder(
+                stream: MyFirestoreService.requestService.getRequestWithGroupUUIDAsStream(selectedGroupUUID),
+                builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (!snapshotIsCurrentUserOwner.data!) {
+                    return const SizedBox();
+                  }
+
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: FloatingActionButton.extended(
+                        icon: const Icon(Icons.add),
+                        label: Text(
+                          'Mitglied',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                        onPressed: () async {
+
+                          await MyFirestoreService.requestService.addRequestForSession(
+                              MyRequestKey(
+                                  groupUUID: selectedGroupUUID
+                              )
+                          );
+                        },
+                      ),
+                    );
+                  }
+
+                  return Center(
+                    child: MyOutMemberRequestWidget(
+                      requestCode: snapshot.data!.requestCode.toString(),
+                      title: 'Session Code',
+                    ),
+                  );
+                }
             );
           }
       )

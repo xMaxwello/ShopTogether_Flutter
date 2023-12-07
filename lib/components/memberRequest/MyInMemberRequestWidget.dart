@@ -16,6 +16,9 @@ class MyInMemberRequestWidget extends StatelessWidget {
     return controllers.map((controller) => controller.text).toList();
   }
 
+  ///TODO: Wenn man in der Tastatur ist und dann unten links die Tastatur schließt löschen sich alle Zahlen in den Textfields
+  ///TODO: Der Focus bei den Textfields ist nicht flüssig, vorallem wenn man auf ein Textfield klickt
+
   @override
   Widget build(BuildContext context) {
     // Erstelle eine Liste von Controllern für die Textfelder

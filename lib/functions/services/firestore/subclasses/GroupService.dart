@@ -228,12 +228,7 @@ class GroupService {
   /// [MyCustomException] Keys:
   /// - no-user: no user is logged in!
   /// - group-exists-not: the groupUUID doesn`t exists!
-  Future<bool> isCurrentUserGroupOwner(String groupUUID) async {
-
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw MyCustomException("no user is logged in!", "no-user");
-    }
+  Future<bool> isUserGroupOwner(String groupUUID, String userUUID) async {
 
     if (await isGroupExists(groupUUID) == false) {
       throw MyCustomException("the group doesn`t exists", "group-exists-not");
@@ -250,7 +245,7 @@ class GroupService {
 
     String ownerUUID = snapshot.get("userOwnerUUID");
 
-    if (ownerUUID.compareTo(user.uid) == 0) {
+    if (ownerUUID.compareTo(userUUID) == 0) {
       return true;
     }
 

@@ -79,6 +79,7 @@ class MyGroupBottomSheet {
                                     MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
                                     MySnackBarService.showMySnackBar(context, "Sie wurden zur Gruppe hinzugefügt!", isError: false);
                                     Navigator.pop(context);
+                                    Navigator.pop(context);
                                   }
                                 }
                             );
@@ -93,7 +94,8 @@ class MyGroupBottomSheet {
 
                           switch(e.keyword) {
                             case "no-requestCode":
-                              print(e.message);
+                              MySnackBarService.showMySnackBar(context, "Der eingegebene Code existiert nicht!");
+                              Navigator.pop(context);
                               break;
 
                             case "request-not-exists":

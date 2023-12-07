@@ -44,7 +44,7 @@ class MyDismissibleWidget extends StatelessWidget {
 
             String groupUUID = groupsFromUser[itemIndex].groupUUID!;
 
-            if (await MyFirestoreService.groupService.isCurrentUserGroupOwner(groupUUID) == false) {
+            if (await MyFirestoreService.groupService.isUserGroupOwner(groupUUID, currentUser.uid) == false) {
 
               MyDialog.showCustomDialog(
                   context: context,

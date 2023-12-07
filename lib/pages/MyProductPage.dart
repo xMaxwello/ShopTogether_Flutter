@@ -21,6 +21,8 @@ class MyProductPage extends StatefulWidget {
 
 class _MyProductPageState extends State<MyProductPage> {
 
+  ///TODO: Wenn User gelöscht wird aus Gruppe, dann kann er trotzdem wenn er in der Gruppe währenddessen ist Produkte hinzufügen
+
   late Timer _timer;
 
   @override
@@ -57,9 +59,16 @@ class _MyProductPageState extends State<MyProductPage> {
       (builder: (context, MyItemsProvider myItemsProvider, child) {
 
       MyFloatingActionFunctions myFloatingActionFunctions = MyFloatingActionFunctions(context, myItemsProvider.selectedGroupUUID);
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user == null) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
 
       return FutureBuilder<bool>(
-          future: MyFirestoreService.groupService.isCurrentUserGroupOwner(myItemsProvider.selectedGroupUUID),
+          future: MyFirestoreService.groupService.isUserGroupOwner(myItemsProvider.selectedGroupUUID, user.uid),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
             if (!snapshot.hasData) {
@@ -109,13 +118,12 @@ class _MyProductPageState extends State<MyProductPage> {
                   ),
                 ),
 
-                floatingActionButton: snapshot.data ?
-                MyFloatingButton(
-                buttonTitle: 'Mitglied',
-                iconData: Icons.person_add,
-                function: myFloatingActionFunctions.addUserToGroup,
-                isChangeByScroll: true
-            ) : const SizedBox(),
+                floatingActionButton: MyFloatingButton(
+                    buttonTitle: 'Mitglied',
+                    iconData: snapshot.data ? Icons.person_add : Icons.person,
+                    function: myFloatingActionFunctions.addUserToGroup,
+                    isChangeByScroll: true
+                ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
             );
           }
