@@ -68,23 +68,23 @@ class UserService {
 
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
-    if (snapshot.exists) {
-      MyUser user = MyUser.fromMap(snapshot.data() as Map<String, dynamic>);
-      List<String> groupUUIDsFromUser = user.groupUUIDs;
-      groupUUIDsFromUser.add(groupUUID);
-
-      FirebaseFirestore.instance
-          .collection("users")
-          .doc(userUuid)
-          .update({"groupUUIDs": groupUUIDsFromUser});
-    } else {
-
+    if (!snapshot.exists) {
       throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-exists");
     }
+
+    MyUser user = MyUser.fromMap(snapshot.data() as Map<String, dynamic>);
+    List<String> groupUUIDsFromUser = user.groupUUIDs;
+    groupUUIDsFromUser.add(groupUUID);
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUuid)
+        .update({"groupUUIDs": groupUUIDsFromUser});
   }
 
   ///[MyCustomException] Keys:
   ///- not-found-groupuuid: GroupUUID was not in list of the user!
+  ///- snapshot-not-existent: the snapshot doesn't exists of the $userUuid
   void removeGroupUUIDsFromUser(String userUuid, String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
@@ -92,21 +92,23 @@ class UserService {
 
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
-    if (snapshot.exists) {
-      MyUser user = MyUser.fromMap(snapshot.data() as Map<String, dynamic>);
-      List<String> groupUUIDsFromUser = user.groupUUIDs;
-      bool isExecuted = groupUUIDsFromUser.remove(groupUUID);
+    if (!snapshot.exists) {
+      throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-existent");
+    }
 
-      if (isExecuted) {
+    MyUser user = MyUser.fromMap(snapshot.data() as Map<String, dynamic>);
+    List<String> groupUUIDsFromUser = user.groupUUIDs;
+    bool isExecuted = groupUUIDsFromUser.remove(groupUUID);
 
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(userUuid)
-            .update({"groupUUIDs": groupUUIDsFromUser});
-      } else {
+    if (isExecuted) {
 
-        throw MyCustomException("GroupUUID was not in list of the user!", "not-found-groupuuid");
-      }
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(userUuid)
+          .update({"groupUUIDs": groupUUIDsFromUser});
+    } else {
+
+      throw MyCustomException("GroupUUID was not in list of the user!", "not-found-groupuuid");
     }
   }
 
@@ -123,11 +125,10 @@ class UserService {
   ///- snapshot-not-existent: the snapshot doesn't exists of the userUuid
   Stream<MyUser> getUserAsStream(String userUuid) {
     return FirebaseFirestore.instance.collection('users').doc(userUuid).snapshots().map((snapshot) {
-      if (snapshot.exists) {
-        return MyUser.fromMap(snapshot.data()!);
-      } else {
+      if (!snapshot.exists) {
         throw MyCustomException("the snapshot doesn't exists of the $userUuid", "snapshot-not-existent");
       }
+      return MyUser.fromMap(snapshot.data()!);
     });
   }
 
@@ -139,12 +140,11 @@ class UserService {
     FirebaseFirestore.instance.collection("users").doc(userUUID);
 
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
-    if (snapshot.exists) {
-
-      return MyUser.fromMap(snapshot.data()!);
-    } else {
+    if (!snapshot.exists) {
       throw MyCustomException("the snapshot doesn't exists of the $userUUID", "snapshot-not-existent");
     }
+
+    return MyUser.fromMap(snapshot.data()!);
   }
 
   ///[MyCustomException] Keys:
@@ -178,5 +178,23 @@ class UserService {
     } catch (e) {
       throw MyCustomException("Unbekannter Fehler: $e", "unknown-error");
     }
+  }
+
+  /// [MyCustomException] Keys:
+  /// - snapshot-not-exists: the snapshot of the getNameOfGroup(String userUUID) doesn`t exists!
+  Future<List<String>> getNameOfUser(String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("users").doc(userUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (!snapshot.exists) {
+      throw MyCustomException("the snapshot of the $getNameOfUser(String userUUID) doesn`t exists!", "snapshot-not-exists");
+    }
+
+    String prename = snapshot.get("prename");
+    String surname = snapshot.get("surname");
+    return [prename, surname];
   }
 }

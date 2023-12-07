@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 
 class MyInMemberRequestWidget extends StatelessWidget {
   final String title;
   final Function(List<String>) onNumbersEntered;
-  final Function() executeFunction;
 
   const MyInMemberRequestWidget({
     Key? key,
     required this.title,
-    required this.onNumbersEntered, required this.executeFunction,
+    required this.onNumbersEntered,
   }) : super(key: key);
 
   List<String> getEnteredNumbers(List<TextEditingController> controllers) {
@@ -22,6 +23,9 @@ class MyInMemberRequestWidget extends StatelessWidget {
       6,
           (index) => TextEditingController(),
     );
+
+    List<IconData> icons = [Icons.check, Icons.close];
+    List<Function()> functions = [() => onNumbersEntered(getEnteredNumbers(textControllers)), () => Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false)];
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -87,23 +91,28 @@ class MyInMemberRequestWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
 
-                    executeFunction();
-                    onNumbersEntered(getEnteredNumbers(textControllers));
-                  },
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
-                  label: Icon(
-                    Icons.check,
-                    size: Theme.of(context).floatingActionButtonTheme.iconSize! * 0.8,
-                  ),
-                ),
-              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+
+                  for (int i = 0;i < icons.length;i++)
+                    Container(
+                      padding: const EdgeInsets.only(right: 10),
+                      height: 50,
+                      width: 50,
+                      child: FloatingActionButton.extended(
+                        onPressed: functions.elementAt(i),
+                        backgroundColor: Theme.of(context).primaryColor,
+                        foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+                        label: Icon(
+                          icons.elementAt(i),
+                          size: Theme.of(context).floatingActionButtonTheme.iconSize! * 0.8,
+                        ),
+                      ),
+                    ),
+                ],
+              )
             ],
           ),
         ),

@@ -78,15 +78,21 @@ class RequestService {
     return requestCode;
   }
 
-  Future<MyRequestKey> getRequestKeyByCode(String requestCode) async {
+  ///[MyCustomException] Keys:
+  /// - no-requestCode: no requestCode is there
+  Future<MyRequestKey> getRequestKeyByCode(int requestCode) async {
 
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection("requestKeys").get();
 
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docsData = snapshot.docs;
 
-    QueryDocumentSnapshot<Map<String, dynamic>> element =
-    docsData.firstWhere((element) => element.get("requestCode") == requestCode);
+    QueryDocumentSnapshot<Map<String, dynamic>> element;
+    try {
+      element = docsData.firstWhere((element) => requestCode.compareTo(element.get("requestCode")) == 0);
+    } catch(e) {
+      throw MyCustomException(e.toString(), "no-requestCode");
+    }
 
     MyRequestKey requestKey = MyRequestKey.fromQuery(element);
 
@@ -95,6 +101,8 @@ class RequestService {
 
   /// [MyCustomException] Keys:
   ///- request-not-exists: the request code doesn't exist!
+  ///
+  /// Exceptions from [MyFirestoreService.requestService.getRequestKeyByCode()]
   Future<MyRequestGroup> getInfosAboutSession(int requestCode) async {
 
     bool existsRequest = await MyFirestoreService.requestService.isRequestCodeExists(requestCode);
@@ -103,14 +111,20 @@ class RequestService {
           "request-not-exists");
     }
 
-    MyRequestKey myRequestKey = await MyFirestoreService.requestService.getRequestKeyByCode(requestCode.toString());
-    String groupUUID = myRequestKey.groupUUID;
+    MyRequestKey myRequestKey;
+    try {
+      myRequestKey = await MyFirestoreService.requestService.getRequestKeyByCode(requestCode);
+    } on MyCustomException catch(e) {
+      throw MyCustomException(e.message, e.keyword);
+    }
 
+    String groupUUID = myRequestKey.groupUUID;
     int sizeOfMembers = await MyFirestoreService.groupService.getSizeOfMembers(groupUUID);
 
     return MyRequestGroup(
-    userOwnerUUID: myRequestKey.userOwnerUUID!,
-    sizeOfMembers: sizeOfMembers
+        groupUUID: groupUUID,
+        userOwnerUUID: myRequestKey.userOwnerUUID!,
+        sizeOfMembers: sizeOfMembers
     );
   }
 

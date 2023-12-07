@@ -1,11 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/group/MyAddGroupWidget.dart';
 import 'package:shopping_app/components/memberRequest/MyInMemberRequestWidget.dart';
+import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/dialog/groupDialog/newGroupDialog.dart';
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
+import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/requests/MyRequestGroup.dart';
-import 'package:shopping_app/objects/requests/MyRequestKey.dart';
+
+import '../../exceptions/MyCustomException.dart';
 
 class MyGroupBottomSheet {
 
@@ -26,40 +31,81 @@ class MyGroupBottomSheet {
       Consumer<MyGroupProvider>(
           builder: (BuildContext context, MyGroupProvider myGroupProvider, Widget? child) {
 
-            List<String> _enteredNumbers = [];
-
             return Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
 
-                groupItem(
-                    context, () => newGroupDialog(context),
-                    "Gruppe erstellen",
-                    "Hier können Sie Ihre eigene \n Gruppe erstellen!"
+                MyAddGroupWidget(
+                  title: "Gruppe erstellen",
+                  subtitle: "Hier können Sie Ihre eigene \n Gruppe erstellen!",
+                  function: () => newGroupDialog(context),
                 ),
                 if (myGroupProvider.isShowWidget)
                   MyInMemberRequestWidget(
                       title: "Gruppe beitreten",
-                      onNumbersEntered: (List<String> enteredNumbers) {
-                        _enteredNumbers = enteredNumbers;
-                      },
-                      executeFunction: () async {
+                      onNumbersEntered: (List<String> enteredNumbers) async {
 
-                        String joinedNumbers = _enteredNumbers.join('');
-                        print(joinedNumbers);
+                        String joinedNumbers = enteredNumbers.join('');
                         int joinedNumbersAsInt = int.parse(joinedNumbers);
-                        MyRequestGroup myRequestGroup = await MyFirestoreService.requestService.getInfosAboutSession(joinedNumbersAsInt);
-                        print(myRequestGroup.sizeOfMembers);
-                        ///TODO: Dialog
-                        Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false);
+
+                        try {
+
+                          MyRequestGroup myRequestGroup = await MyFirestoreService.requestService.getInfosAboutSession(joinedNumbersAsInt);
+                          bool isUserAleadyInGroup = await MyFirestoreService.groupService.isCurrentUserAlreadyInGroup(myRequestGroup.groupUUID);
+                          
+                          if (!isUserAleadyInGroup) {
+
+                            String groupName = await MyFirestoreService.groupService.getNameOfGroup(myRequestGroup.groupUUID);
+                            int membersSize = await MyFirestoreService.groupService.getSizeOfMembers(myRequestGroup.groupUUID);
+                            List<String> names = await MyFirestoreService.userService.getNameOfUser(myRequestGroup.userOwnerUUID);
+                            String fullName = names.join('');
+
+                            MyDialog.showCustomDialog(
+                                context: context, 
+                                title: "Möchtest du dieser Gruppe beitreten?", 
+                                contentBuilder: (dialogContext) => [
+                                  Text("Gruppennamen: $groupName"),
+                                  Text("Anzahl an Mitglieder: $membersSize"),
+                                  Text("Name des Owners: $fullName"),
+                                ], 
+                                onConfirm: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+
+                                  if (user != null) {
+
+                                    await MyFirestoreService.userService.addGroupUUIDsToUser(user.uid, myRequestGroup.groupUUID);
+                                    await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
+                                    MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
+                                    MySnackBarService.showMySnackBar(context, "Sie wurden zur Gruppe hinzugefügt!", isError: false);
+                                  }
+                                }
+                            );
+                          } else {
+                            
+                            MySnackBarService.showMySnackBar(context, "Sie sind bereits in dieser Gruppe!");
+                          }
+                          
+                          Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false);
+                        } on MyCustomException catch(e) {
+
+                          switch(e.keyword) {
+                            case "no-requestCode":
+                              print(e.message);
+                              break;
+
+                            case "request-not-exists":
+                              print(e.message);
+                              break;
+                          }
+                        }
                       },
                   )
                 else
-                  groupItem(
-                      context, () => Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(true),
-                      "Gruppe beitreten",
-                      "Treten Sie hier einer \nanderen Gruppe per Code bei!"
+                  MyAddGroupWidget(
+                    title: "Gruppe beitreten",
+                    subtitle: "Treten Sie hier einer \nanderen Gruppe per Code bei!",
+                    function: () => Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(true),
                   ),
 
               ],
@@ -69,40 +115,4 @@ class MyGroupBottomSheet {
 
     ];
   }
-}
-
-Widget groupItem(BuildContext context, Function() function, String title, String subtitle) {
-
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
-    child: GestureDetector(
-      onTap: function,
-      child: Card(
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 30, right: 10, top: 15, bottom: 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-
-              Text(
-                title,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-
-              Text(
-                subtitle,
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
 }
