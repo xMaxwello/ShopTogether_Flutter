@@ -63,6 +63,7 @@ class MyInMemberRequestWidget extends StatelessWidget {
                         textAlign: TextAlign.center,
                         maxLength: 1,
                         keyboardType: TextInputType.number,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         decoration: InputDecoration(
                           counterText: '',
                           contentPadding: const EdgeInsets.all(12),

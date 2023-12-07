@@ -59,15 +59,24 @@ class MyGroupBottomSheet {
                             String groupName = await MyFirestoreService.groupService.getNameOfGroup(myRequestGroup.groupUUID);
                             int membersSize = await MyFirestoreService.groupService.getSizeOfMembers(myRequestGroup.groupUUID);
                             List<String> names = await MyFirestoreService.userService.getNameOfUser(myRequestGroup.userOwnerUUID);
-                            String fullName = names.join('');
+                            String fullName = names.join(' ');
 
                             MyDialog.showCustomDialog(
                                 context: context, 
                                 title: "Möchtest du dieser Gruppe beitreten?", 
                                 contentBuilder: (dialogContext) => [
-                                  Text("Gruppennamen: $groupName"),
-                                  Text("Anzahl an Mitglieder: $membersSize"),
-                                  Text("Name des Owners: $fullName"),
+                                  Text(
+                                    "Gruppenname: $groupName",
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    "Anzahl der Mitglieder: $membersSize",
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  Text(
+                                    "Besitzer: $fullName",
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
                                 ], 
                                 onConfirm: () async {
                                   User? user = FirebaseAuth.instance.currentUser;
@@ -78,7 +87,6 @@ class MyGroupBottomSheet {
                                     await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
                                     MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
                                     MySnackBarService.showMySnackBar(context, "Sie wurden zur Gruppe hinzugefügt!", isError: false);
-                                    Navigator.pop(context);
                                     Navigator.pop(context);
                                   }
                                 }
