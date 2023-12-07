@@ -35,6 +35,7 @@ class MyUserWidget extends StatelessWidget {
 
             ///TODO: Die Snackbar wird von dem BottomSheet überdeckt
             MySnackBarService.showMySnackBar(context, "Als Gruppen-Owner dürfen Sie sich nicht löschen!");
+            Navigator.pop(context);
           }
         },
       ),

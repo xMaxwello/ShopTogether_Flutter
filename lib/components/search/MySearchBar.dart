@@ -29,6 +29,7 @@ class _MySearchBarState extends State<MySearchBar> {
           return Padding(
             padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
             child: SearchAnchor(
+              headerTextStyle: Theme.of(context).textTheme.bodyMedium,
               viewSurfaceTintColor: Theme.of(context).searchViewTheme.surfaceTintColor,
               viewBackgroundColor: Theme.of(context).searchViewTheme.backgroundColor,
                 builder: (BuildContext context, SearchController controller) {
@@ -52,6 +53,7 @@ class _MySearchBarState extends State<MySearchBar> {
                   return SearchBar(
                     surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                     backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
+                    textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodySmall),
                     controller: controller,
                     onTap: () {
                       controller.openView();
@@ -81,6 +83,9 @@ class _MySearchBarState extends State<MySearchBar> {
                   );
                 },
                 suggestionsBuilder: (BuildContext context, SearchController controller) {
+
+                  MyOpenFoodFactsService myOpenFoodFactsService = MyOpenFoodFactsService();
+
                   return List<ListTile>.generate(10, (int index) {
 
                     MyProduct myProduct = MyProduct(
@@ -102,15 +107,6 @@ class _MySearchBarState extends State<MySearchBar> {
                       },
                       showProductInfoFunction: () async {
                         ///TODO: show Product info
-
-                        /*MyOpenFoodFactsService myOpenFoodFactsService = MyOpenFoodFactsService();
-                        SearchResult? result = await myOpenFoodFactsService.getProductByName(['apple']);
-                        if (result != null) {
-
-                          for (int i = 0;i < result.products!.length;i++) {
-                            print(result.products!.elementAt(i).labels);
-                          }
-                        }*/
                       },
                     );
                   });

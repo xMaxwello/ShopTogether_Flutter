@@ -21,7 +21,7 @@ class MyGroupBottomSheet {
       const SizedBox(height: 10,),
       Center(
         child: Text(
-          "Gruppe",
+          "Gruppe hinzufügen",
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),
@@ -78,12 +78,14 @@ class MyGroupBottomSheet {
                                     await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
                                     MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
                                     MySnackBarService.showMySnackBar(context, "Sie wurden zur Gruppe hinzugefügt!", isError: false);
+                                    Navigator.pop(context);
                                   }
                                 }
                             );
                           } else {
                             
                             MySnackBarService.showMySnackBar(context, "Sie sind bereits in dieser Gruppe!");
+                            Navigator.pop(context);
                           }
                           
                           Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false);
