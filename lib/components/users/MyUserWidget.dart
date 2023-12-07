@@ -19,7 +19,10 @@ class MyUserWidget extends StatelessWidget {
         "${myUser.prename} ${myUser.surname}",
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      leading: const Icon(Icons.person),
+      leading: Icon(
+        Icons.person,
+        color: Theme.of(context).iconTheme.color,
+      ),
       trailing: IconButton(
         icon: const Icon(Icons.remove_circle),
         color: Colors.red[700],

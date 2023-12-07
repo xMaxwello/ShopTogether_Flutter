@@ -63,7 +63,9 @@ class _MyProductPageState extends State<MyProductPage> {
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
             if (!snapshot.hasData) {
-              return const CircularProgressIndicator();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             return Scaffold(

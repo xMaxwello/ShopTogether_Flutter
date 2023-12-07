@@ -2,11 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/memberRequest/MyInMemberRequestWidget.dart';
-import 'package:shopping_app/components/memberRequest/MyOutMemberRequestWidget.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
-import 'package:shopping_app/functions/providers/member/MyMemberProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
@@ -31,7 +28,6 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => MyItemsProvider()),
           ChangeNotifierProvider(create: (context) => MyLoginProvider()),
           ChangeNotifierProvider(create: (context) => MySettingsProvider()),
-          ChangeNotifierProvider(create: (context) => MyMemberProvider()),
         ],
         child: const MyApp(),
       )

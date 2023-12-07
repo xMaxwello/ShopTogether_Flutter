@@ -1,13 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shopping_app/components/memberRequest/MyOutMemberRequestWidget.dart';
 import 'package:shopping_app/components/users/MyUserWidget.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/requests/MyRequestKey.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
 
-import '../../functions/providers/member/MyMemberProvider.dart';
+import '../memberRequest/MyOutMemberRequestWidget.dart';
 
 class MyMemberBottomSheet {
 
@@ -89,47 +88,44 @@ class MyMemberBottomSheet {
 
       const SizedBox(height: 10,),
 
-      Consumer<MyMemberProvider>(
-          builder: (BuildContext context, MyMemberProvider myMemberProvider, Widget? widget) {
+      FutureBuilder(
+          future: MyFirestoreService.requestService.getRequestWithGroupUUID(selectedGroupUUID),
+          builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
 
-            if (myMemberProvider.isShowToken) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (!snapshot.hasData) {
               return Center(
-                child: MyOutMemberRequestWidget(
-                  requestCode: myMemberProvider.token,
-                  title: 'Session Code',
+                child: FloatingActionButton.extended(
+                  icon: const Icon(Icons.add),
+                  label: Text(
+                    'Mitglied',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  onPressed: () async {
+
+                    await MyFirestoreService.requestService.addRequestForSession(
+                        MyRequestKey(
+                            groupUUID: selectedGroupUUID
+                        )
+                    );
+                  },
                 ),
               );
             }
 
             return Center(
-              child: FloatingActionButton.extended(
-                icon: const Icon(Icons.add),
-                label: Text(
-                  'Mitglied',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                onPressed: () async {
-
-                  User? user = FirebaseAuth.instance.currentUser;
-
-                  if (user != null) {
-
-                    int requestCode = await MyFirestoreService.requestService.addRequestForSession(
-                        MyRequestKey(
-                            userOwnerUUID: user.uid,
-                            groupUUID: selectedGroupUUID
-                        )
-                    );
-
-                    Provider.of<MyMemberProvider>(context, listen: false).updateToken(requestCode.toString());
-                    Provider.of<MyMemberProvider>(context, listen: false).updateIsShowToken(true);
-                  }
-                },
+              child: MyOutMemberRequestWidget(
+                requestCode: snapshot.data!.requestCode.toString(),
+                title: 'Session Code',
               ),
             );
           }
-      ),
-
+      )
 
     ];
   }

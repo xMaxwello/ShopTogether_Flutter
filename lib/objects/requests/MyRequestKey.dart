@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 
 class MyRequestKey extends ChangeNotifier {
 
-  String userOwnerUUID;
+  String? userOwnerUUID;
   String groupUUID;
   int? requestCode;
 
   MyRequestKey({
-    required this.userOwnerUUID,
+    this.userOwnerUUID,
     required this.groupUUID,
     this.requestCode,
   });
@@ -29,6 +29,7 @@ class MyRequestKey extends ChangeNotifier {
     return {
       'requestCode': requestCode,
       'userOwnerUUID': userOwnerUUID,
+      'groupUUID': groupUUID
     };
   }
 

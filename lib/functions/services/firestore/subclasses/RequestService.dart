@@ -25,7 +25,7 @@ class RequestService {
     if (currentUser == null) {
       throw MyCustomException("the user is not logged in!", "user-not-logged-in");
     }
-    myRequestKey.updateGroupUUID(currentUser.uid);
+    myRequestKey.updateUserOwner(currentUser.uid);
     
     await ref.set(myRequestKey.toMap());
 
@@ -109,8 +109,23 @@ class RequestService {
     int sizeOfMembers = await MyFirestoreService.groupService.getSizeOfMembers(groupUUID);
 
     return MyRequestGroup(
-    userOwnerUUID: myRequestKey.userOwnerUUID,
+    userOwnerUUID: myRequestKey.userOwnerUUID!,
     sizeOfMembers: sizeOfMembers
     );
+  }
+
+  Future<MyRequestKey> getRequestWithGroupUUID(String groupUUID) async {
+
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection("requestKeys").get();
+
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docsData = snapshot.docs;
+
+    QueryDocumentSnapshot<Map<String, dynamic>> element =
+    docsData.firstWhere((element) => element.get("groupUUID") == groupUUID);
+
+    MyRequestKey requestKey = MyRequestKey.fromQuery(element);
+
+    return requestKey;
   }
 }
