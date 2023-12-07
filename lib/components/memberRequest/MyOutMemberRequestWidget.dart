@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/services/clipBoard/MyClipBoardService.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 
 class MyOutMemberRequestWidget extends StatelessWidget {
 
@@ -23,6 +24,14 @@ class MyOutMemberRequestWidget extends StatelessWidget {
     for (var s in requestCode.characters) {
       requestCodeList.add(int.parse(s));
     }
+
+    List<IconData> icons = [Icons.copy, Icons.close];
+    List<Function()> functions = [
+      () => MyClipBoardService.copyToClipboard(requestCode),
+      () {
+        MyFirestoreService.requestService.removeRequestWithCode(int.parse(requestCode));
+      }
+    ];
 
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -74,21 +83,33 @@ class MyOutMemberRequestWidget extends StatelessWidget {
 
               const SizedBox(height: 15,),
 
-              SizedBox(
-                height: 50,
-                width: 50,
-                child: FloatingActionButton.extended(
-                    onPressed: () {
-                      MyClipBoardService.copyToClipboard(requestCode);
-                    },
-                    backgroundColor: Theme.of(context).primaryColor,
-                    foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
-                    label: Icon(
-                      Icons.copy,
-                      size: Theme.of(context).floatingActionButtonTheme.iconSize! * 0.8,
-                    )
-                ),
-              ),
+
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+
+                  for (int i = 0;i < icons.length;i++)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: FloatingActionButton.extended(
+                            onPressed: functions.elementAt(i),
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+                            label: Icon(
+                              icons.elementAt(i),
+                              size: Theme.of(context).floatingActionButtonTheme.iconSize! * 0.8,
+                            )
+                        ),
+                      ),
+                    ),
+
+                ],
+              )
 
             ],
           )

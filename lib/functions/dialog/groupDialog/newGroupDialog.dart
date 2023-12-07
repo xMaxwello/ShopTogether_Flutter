@@ -17,7 +17,9 @@ void newGroupDialog(BuildContext context) {
         decoration: InputDecoration(
           hintText: 'Gruppenname',
           hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          labelStyle: Theme.of(dialogContext).textTheme.labelSmall,
         ),
+        style: Theme.of(dialogContext).textTheme.labelSmall,
       ),
     ],
 

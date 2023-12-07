@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         left: 15, right: 15, top: 5, bottom: 5),
                     child: Text(
                         "Gruppe Hinzufügen",
-                        style: Theme.of(context).textTheme.labelSmall
+                        style: Theme.of(context).textTheme.displaySmall
                     ),
                   ),
                 )

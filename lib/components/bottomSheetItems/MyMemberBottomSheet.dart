@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/users/MyUserWidget.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
@@ -118,8 +116,6 @@ class MyMemberBottomSheet {
               );
             }
 
-            print(snapshot.data!.requestCode.toString());
-
             return Center(
               child: MyOutMemberRequestWidget(
                 requestCode: snapshot.data!.requestCode.toString(),
@@ -128,45 +124,6 @@ class MyMemberBottomSheet {
             );
           }
       )
-
-      /*FutureBuilder(
-          future: MyFirestoreService.requestService.getRequestWithGroupUUID(selectedGroupUUID),
-          builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            if (!snapshot.hasData) {
-              return Center(
-                child: FloatingActionButton.extended(
-                  icon: const Icon(Icons.add),
-                  label: Text(
-                    'Mitglied',
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  onPressed: () async {
-
-                    await MyFirestoreService.requestService.addRequestForSession(
-                        MyRequestKey(
-                            groupUUID: selectedGroupUUID
-                        )
-                    );
-                  },
-                ),
-              );
-            }
-
-            return Center(
-              child: MyOutMemberRequestWidget(
-                requestCode: snapshot.data!.requestCode.toString(),
-                title: 'Session Code',
-              ),
-            );
-          }
-      )*/
 
     ];
   }

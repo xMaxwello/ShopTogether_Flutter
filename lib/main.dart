@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
+import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => MyItemsProvider()),
           ChangeNotifierProvider(create: (context) => MyLoginProvider()),
           ChangeNotifierProvider(create: (context) => MySettingsProvider()),
+          ChangeNotifierProvider(create: (context) => MyGroupProvider()),
         ],
         child: const MyApp(),
       )
