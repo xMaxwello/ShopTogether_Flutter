@@ -72,7 +72,7 @@ class RequestService {
 
     do {
 
-      requestCode = Random().nextInt(999999) + 100000;
+      requestCode = 100000 + Random().nextInt(900000);
     } while (productsData.any((element) => (element.get("requestCode") as int) == requestCode));
 
     return requestCode;
@@ -127,5 +127,25 @@ class RequestService {
     MyRequestKey requestKey = MyRequestKey.fromQuery(element);
 
     return requestKey;
+  }
+
+  Stream<MyRequestKey> getRequestWithGroupUUIDAsStream(String groupUUID) {
+
+    Stream<MyRequestKey> userStream = FirebaseFirestore.instance
+        .collection("requestKeys")
+        .snapshots()
+        .asyncMap((snapshot) {
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> docsData = snapshot.docs;
+
+      QueryDocumentSnapshot<Map<String, dynamic>> element =
+      docsData.firstWhere((element) => element.get("groupUUID") == groupUUID);
+
+      MyRequestKey requestKey = MyRequestKey.fromQuery(element);
+
+      return requestKey;
+    });
+
+    return userStream;
   }
 }

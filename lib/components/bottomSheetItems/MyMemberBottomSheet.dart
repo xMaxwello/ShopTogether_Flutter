@@ -88,7 +88,48 @@ class MyMemberBottomSheet {
 
       const SizedBox(height: 10,),
 
-      FutureBuilder(
+      StreamBuilder(
+          stream: MyFirestoreService.requestService.getRequestWithGroupUUIDAsStream(selectedGroupUUID),
+          builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (!snapshot.hasData) {
+              return Center(
+                child: FloatingActionButton.extended(
+                  icon: const Icon(Icons.add),
+                  label: Text(
+                    'Mitglied',
+                    style: Theme.of(context).textTheme.labelMedium,
+                  ),
+                  onPressed: () async {
+
+                    await MyFirestoreService.requestService.addRequestForSession(
+                        MyRequestKey(
+                            groupUUID: selectedGroupUUID
+                        )
+                    );
+                  },
+                ),
+              );
+            }
+
+            print(snapshot.data!.requestCode.toString());
+
+            return Center(
+              child: MyOutMemberRequestWidget(
+                requestCode: snapshot.data!.requestCode.toString(),
+                title: 'Session Code',
+              ),
+            );
+          }
+      )
+
+      /*FutureBuilder(
           future: MyFirestoreService.requestService.getRequestWithGroupUUID(selectedGroupUUID),
           builder: (BuildContext context, AsyncSnapshot<MyRequestKey> snapshot) {
 
@@ -125,7 +166,7 @@ class MyMemberBottomSheet {
               ),
             );
           }
-      )
+      )*/
 
     ];
   }
