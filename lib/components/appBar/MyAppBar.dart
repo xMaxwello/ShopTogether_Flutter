@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/components/search/MySearchBarTest.dart';
 import '../search/MySearchBar.dart';
 
 class MyAppBar extends StatefulWidget {
@@ -47,7 +46,7 @@ class _MyAppBarState extends State<MyAppBar> {
           ),
 
           ///the search bar for the products
-          MySearchBarTest(),
+          MySearchBar(),
 
         ],
       ),
