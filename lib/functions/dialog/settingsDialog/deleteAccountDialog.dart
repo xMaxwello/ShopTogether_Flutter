@@ -11,15 +11,16 @@ void deleteAccountDialog(BuildContext context) {
     title: 'Account löschen',
     contentBuilder: (dialogContext) => [
       Text('Sind Sie sicher, dass Sie Ihren Account löschen möchten? Dies kann nicht rückgängig gemacht werden.',
-        style: Theme.of(context).textTheme.bodySmall,
+        style: Theme.of(context).textTheme.labelSmall,
       ),
       TextField(
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Passwort',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
     ],
 

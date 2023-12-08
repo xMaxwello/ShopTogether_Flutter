@@ -58,7 +58,7 @@ class _MyProductItemState extends State<MyProductItem> {
 
                           Text(
                             widget.myProduct.productName, ///shows the product name
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
 
                           widget.myProduct.productVolumen == 0 && widget.myProduct.productVolumenType == "" ?
@@ -66,7 +66,7 @@ class _MyProductItemState extends State<MyProductItem> {
                               :
                           Text( /// shows product volumen
                             widget.myProduct.productVolumen.toString() + widget.myProduct.productVolumenType,
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
 
                         ],
@@ -118,7 +118,7 @@ class _MyProductItemState extends State<MyProductItem> {
                   const SizedBox(width: 5,),
                   Text(
                     widget.myProduct.productCount.toString(),
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(width: 5,),
                   GestureDetector(

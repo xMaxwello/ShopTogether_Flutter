@@ -18,7 +18,7 @@ class MyDialog {
         return AlertDialog(
           title: Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -34,7 +34,7 @@ class MyDialog {
               },
               child: Text(
                 cancelButtonText,
-                style: Theme.of(context).textTheme.labelLarge,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ),
             TextButton(
@@ -47,7 +47,7 @@ class MyDialog {
               },
               child: Text(
                 confirmButtonText,
-                style: Theme.of(context).textTheme.labelLarge,
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ),
           ],

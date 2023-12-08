@@ -22,6 +22,8 @@ class MyAccountSettingsService {
     }
   }
 
+  ///TODO: Entweder die re-verification für die neue email implementieren oder Funktion löschen
+
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
     if (newEmail.isEmpty || password.isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/components/settings/MyUserCard.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/functions/services/settings/MySettingsFunctions.dart';
-import 'package:shopping_app/functions/services/storage/MySecureStorageService.dart';
 import 'package:shopping_app/pages/MyAccountSettingsPage.dart';
 
 class MySettingsWidget extends StatefulWidget {
@@ -53,7 +52,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
         ListTile(
           title: Text(
             settingTitles[i],
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.labelSmall,
           ),
           trailing: Switch(
             activeColor: Theme.of(context).colorScheme.primary,
@@ -81,7 +80,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                         alignment: Alignment.center,
                         child: Text(
                             "Einstellungen",
-                            style: Theme.of(context).textTheme.headlineLarge
+                            style: Theme.of(context).textTheme.titleLarge
                         ),
                       ),
                     ),
@@ -110,7 +109,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: Text(
                         "Abmelden",
-                        style: Theme.of(context).textTheme.labelMedium
+                        style: Theme.of(context).textTheme.displaySmall
                     ),
                   ),
                 ),

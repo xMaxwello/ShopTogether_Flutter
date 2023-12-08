@@ -46,7 +46,7 @@ class MyUserWidget extends StatelessWidget {
                   tileColor: Colors.transparent,
                   title: Text(
                     "${myUser.prename} ${myUser.surname}",
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   leading: Icon(
                     Icons.person,

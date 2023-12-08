@@ -54,7 +54,7 @@ class MyBottomSheetItem {
               Center(
                 child: Text(
                   key,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
             );

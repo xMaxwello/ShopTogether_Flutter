@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/login/MyLoginFunctions.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/services/biometricsLogin/MyBiometricsLogin.dart';
 
 import '../functions/providers/settings/MySettingsProvider.dart';
-import '../functions/services/storage/MyStorageKeys.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({super.key});
@@ -71,7 +69,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
                           Text(
                             "ShopTogether",
-                            style: Theme.of(context).textTheme.displayLarge
+                            style: Theme.of(context).textTheme.headlineLarge
                           ),
                           const SizedBox(height: 60,),
 

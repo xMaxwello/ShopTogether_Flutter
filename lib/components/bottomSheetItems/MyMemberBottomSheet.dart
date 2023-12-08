@@ -27,7 +27,7 @@ class MyMemberBottomSheet {
       Center(
         child: Text(
             "Mitglieder",
-          style: Theme.of(context).textTheme.displayLarge,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
 
@@ -133,7 +133,7 @@ class MyMemberBottomSheet {
                         icon: const Icon(Icons.add),
                         label: Text(
                           'Mitglied',
-                          style: Theme.of(context).textTheme.labelMedium,
+                          style: Theme.of(context).textTheme.displaySmall,
                         ),
                         onPressed: () async {
 

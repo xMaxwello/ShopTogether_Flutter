@@ -70,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 Text(
                     "Die Liste ist leer!",
-                    style: Theme.of(context).textTheme.bodySmall
+                    style: Theme.of(context).textTheme.labelSmall
                 ),
                 const SizedBox(height: 10,),
 

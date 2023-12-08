@@ -16,10 +16,10 @@ void newGroupDialog(BuildContext context) {
         controller: groupNameController,
         decoration: InputDecoration(
           hintText: 'Gruppenname',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
-          labelStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
+          labelStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
-        style: Theme.of(dialogContext).textTheme.labelSmall,
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
     ],
 

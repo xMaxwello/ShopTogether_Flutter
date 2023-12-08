@@ -79,7 +79,7 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                               ),
                               Text(
                                 titles[iconView],
-                                style: Theme.of(context).textTheme.titleSmall,
+                                style: Theme.of(context).textTheme.bodySmall,
                               )
 
                             ],
@@ -97,7 +97,7 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
                               ),
                               Text(
                                 titles[iconView],
-                                style: Theme.of(context).textTheme.titleSmall,
+                                style: Theme.of(context).textTheme.bodySmall,
                               )
 
                             ],

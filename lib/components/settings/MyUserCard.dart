@@ -46,7 +46,7 @@ class MyUserCard extends StatelessWidget {
               children: <Widget>[
                 Text(
                   displayName,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8.0),
                 Row(
@@ -54,7 +54,7 @@ class MyUserCard extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       "Accounteinstellungen",
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                     Icon(
                       Icons.arrow_forward,

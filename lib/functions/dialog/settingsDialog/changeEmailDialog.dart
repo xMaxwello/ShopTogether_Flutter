@@ -15,16 +15,18 @@ void changeEmailDialog(BuildContext context) {
         controller: emailController,
         decoration: InputDecoration(
           hintText: 'Neue E-Mail',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
       TextField(
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Aktuelles Passwort',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
     ],
     onConfirm: () async {

@@ -16,23 +16,26 @@ void changeUserNameDialog(BuildContext context) {
         controller: newPrenameController,
         decoration: InputDecoration(
           hintText: 'Vorname',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
       TextField(
         controller: newSurnameController,
         decoration: InputDecoration(
           hintText: 'Nachname',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
       TextField(
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Passwort',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
     ],
     onConfirm: () async {

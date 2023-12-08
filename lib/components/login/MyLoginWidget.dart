@@ -34,6 +34,14 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
               color: Theme.of(context).cardTheme.color,
               elevation: Theme.of(context).cardTheme.elevation,
               clipBehavior: Clip.antiAlias,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                    topLeft: Radius.circular(20.0),
+                    bottomLeft: Radius.circular(20.0)
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(25),
                 child: Column(
@@ -50,11 +58,11 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                     for (int i = 0; i < widget.controllers.length;i++)
                       TextFormField(
                         controller: widget.controllers[i],
-                        style: Theme.of(context).textTheme.displaySmall,
+                        style: Theme.of(context).textTheme.bodyMedium,
                         decoration: InputDecoration(
-                          labelStyle: Theme.of(context).textTheme.displaySmall,
+                          labelStyle: Theme.of(context).textTheme.bodyMedium,
                           labelText: widget.inputLabels[i],
-                          hintStyle: Theme.of(context).textTheme.displaySmall,
+                          hintStyle: Theme.of(context).textTheme.bodyMedium,
                           suffixIcon: IconButton(
                             onPressed: () {
 

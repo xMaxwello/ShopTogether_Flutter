@@ -28,7 +28,7 @@ class MyAddGroupWidget extends StatelessWidget {
 
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.labelMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
 
                 Text(

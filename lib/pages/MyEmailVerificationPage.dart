@@ -66,9 +66,17 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
 
                 Center(
                   child: Card(
-                    color: Color.lerp(Colors.white, Theme.of(context).colorScheme.primary, 0.08),
+                    color: Theme.of(context).cardTheme.color,
                     elevation: 20,
                     clipBehavior: Clip.antiAlias,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0),
+                          topLeft: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0)
+                      ),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(25),
                       child: Column(
@@ -79,13 +87,13 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
 
                           Text(
                             "E-Mail Adresse verifizieren",
-                            style: Theme.of(context).textTheme.titleLarge,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
 
                           const SizedBox(height: 30,),
                           Text(
                             "Bevor Sie die App benutzen können, müssen\n Sie Ihre E-Mail Adresse verifizieren!",
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.bodyMedium,
                             softWrap: true,
                             textAlign: TextAlign.center,
                           ),
@@ -107,7 +115,7 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
                             },
                             child: Text(
                                 "E-Mail erneut senden",
-                                style: Theme.of(context).textTheme.labelMedium
+                                style: Theme.of(context).textTheme.displaySmall
                             ),
                           ),
 
@@ -117,7 +125,7 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
                             },
                             child: Text(
                                 "Abbruch",
-                                style: Theme.of(context).textTheme.labelMedium
+                                style: Theme.of(context).textTheme.displaySmall
                             ),
                           ),
 

@@ -22,7 +22,7 @@ class MyGroupBottomSheet {
       Center(
         child: Text(
           "Gruppe hinzufügen",
-          style: Theme.of(context).textTheme.displayLarge,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
 

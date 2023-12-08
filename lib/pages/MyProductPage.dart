@@ -92,7 +92,7 @@ class _MyProductPageState extends State<MyProductPage> {
 
                         Text(
                             "Die Liste ist leer!",
-                            style: Theme.of(context).textTheme.bodySmall
+                            style: Theme.of(context).textTheme.labelSmall
                         ),
                         const SizedBox(height: 10,),
 

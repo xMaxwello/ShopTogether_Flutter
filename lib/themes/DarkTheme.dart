@@ -48,7 +48,7 @@ class DarkTheme {
       ),
 
       listTileTheme: const ListTileThemeData(
-          iconColor: Colors.black,
+          iconColor: Color(0xff959595),
           tileColor: Color(0xff2b2b2b)
       ),
 
@@ -90,49 +90,60 @@ class DarkTheme {
       ),
 
       textTheme: TextTheme(
-        labelMedium: GoogleFonts.tiltNeon(
-            fontSize: 19,
-            color: Colors.white
-        ),
-        labelLarge: GoogleFonts.tiltNeon(
-            fontSize: 14,
-            color: Colors.white
-        ),
+
+        //Text für leere Pages, Settingsparameter, Dialogtext
         labelSmall: GoogleFonts.tiltNeon(
+            fontSize: 14,
+            color: const Color(0xff959595)
+        ),
+
+        //Font für Hinttext im Eingabefeld
+        labelMedium: GoogleFonts.tiltNeon(
             fontSize: 16,
             color: const Color(0xff959595)
         ),
+
+        //Textabschnitte allgemein (ItemBottomSheet)
         bodySmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
-            color: const Color(0xff959595)
-        ),
-        bodyMedium: GoogleFonts.tiltNeon(
-          fontSize: 20,
-          color: const Color(0xff959595)
-        ),
-        titleSmall: GoogleFonts.tiltNeon(
             fontSize: 14,
             color: Colors.white
         ),
-        titleMedium: GoogleFonts.tiltNeon(
+
+        //Font für Eingaben in Textfelder, Text in Verification Card
+        bodyMedium: GoogleFonts.tiltNeon(
+          fontSize: 16,
+          color: Colors.white
+        ),
+
+        //Überschrift der Produkt-/Gruppen-/User Tiles
+        titleSmall: GoogleFonts.tiltNeon(
             fontSize: 19,
             color: Colors.white
         ),
-        titleLarge: GoogleFonts.tiltNeon(
+
+        //Überschrift der Cards, Dialogtitel
+        titleMedium: GoogleFonts.tiltNeon(
             fontSize: 24,
             color: Colors.white
         ),
-        displaySmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
+
+        //Überschrift der Pages, Login/Registration Cards
+        titleLarge: GoogleFonts.tiltNeon(
+            fontSize: 34,
             color: Colors.white
         ),
-        displayLarge: GoogleFonts.tiltNeon(
-            fontSize: 40,
-            color: Colors.white,
+
+        //Buttonfont
+        displaySmall: GoogleFonts.tiltNeon(
+            fontSize: 14,
+            color: Colors.white
         ),
+
+        //Überschrift der Anmeldeseite
         headlineLarge: GoogleFonts.tiltNeon(
-            fontSize: 34,
-            color: Colors.white,
+          fontSize: 40,
+          color: Colors.white,
+          backgroundColor: Colors.black,
         ),
       ),
 

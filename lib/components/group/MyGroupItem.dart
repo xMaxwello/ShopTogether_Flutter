@@ -21,7 +21,7 @@ class MyGroupItem extends StatelessWidget {
 
             Text(
               myGroup.groupName,
-              style: Theme.of(context).textTheme.titleMedium
+              style: Theme.of(context).textTheme.titleSmall
             ),
 
             Padding(
@@ -39,7 +39,7 @@ class MyGroupItem extends StatelessWidget {
                   const SizedBox(width: 3,),
                   Text(
                     usersLength.toString(),
-                    style: Theme.of(context).textTheme.titleMedium
+                    style: Theme.of(context).textTheme.titleSmall
                   ),
 
                   const SizedBox(width: 20,),
@@ -52,7 +52,7 @@ class MyGroupItem extends StatelessWidget {
                   const SizedBox(width: 3,),
                   Text(
                     shoppingListLength.toString(),
-                    style: Theme.of(context).textTheme.titleMedium
+                    style: Theme.of(context).textTheme.titleSmall
                   )
 
                 ],

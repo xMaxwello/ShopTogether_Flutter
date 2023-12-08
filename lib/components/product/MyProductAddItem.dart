@@ -41,7 +41,7 @@ class MyProductAddItem extends ListTile {
                 const SizedBox(width: 10),
                 Text(
                   myProduct.productName,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ],
             ),

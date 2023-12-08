@@ -80,46 +80,60 @@ class LightTheme {
       ),
 
       textTheme: TextTheme(
-        labelMedium: GoogleFonts.tiltNeon(
-          fontSize: 19,
-          color: Colors.white
+
+        //Text für leere Pages, Settingsparameter, Dialogtext
+        labelSmall: GoogleFonts.tiltNeon(
+            fontSize: 14,
+            color: Colors.grey[600]
         ),
-        labelLarge: GoogleFonts.tiltNeon(
+
+        //Font für Hinttext im Eingabefeld
+        labelMedium: GoogleFonts.tiltNeon(
+          fontSize: 16,
+          color: Colors.grey[600]
+        ),
+
+        //Textabschnitte allgemein (ItemBottomSheet)
+        bodySmall: GoogleFonts.tiltNeon(
+            fontSize: 14,
+            color: Colors.black
+
+        ),
+        //Font für Eingaben in Textfelder, Text in Verification Card
+        bodyMedium: GoogleFonts.tiltNeon(
+          fontSize: 16,
+          color: Colors.black
+        ),
+
+        //Überschrift der Produkt-/Gruppen-/User Tiles
+        titleSmall: GoogleFonts.tiltNeon(
+            fontSize: 19,
+            color: Colors.black
+        ),
+
+        //Überschrift der Cards, Dialogtitel
+        titleMedium: GoogleFonts.tiltNeon(
+            fontSize: 24,
+            color: Colors.black
+        ),
+
+        //Überschrift der Pages, Login/Registration Cards
+        titleLarge: GoogleFonts.tiltNeon(
+            fontSize: 34,
+            color: Colors.black
+        ),
+
+        //Buttonfont
+        displaySmall: GoogleFonts.tiltNeon(
             fontSize: 14,
             color: Colors.white
         ),
 
-        labelSmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
-            color: Colors.black38
-        ),
-        bodySmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
-            color: Colors.grey[600]
-        ),
-        titleSmall: GoogleFonts.tiltNeon(
-            fontSize: 14,
-            color: Colors.grey[900]
-        ),
-        titleMedium: GoogleFonts.tiltNeon(
-            fontSize: 19,
-            color: Colors.grey[900]
-        ),
-        titleLarge: GoogleFonts.tiltNeon(
-            fontSize: 24,
-            color: Colors.grey[900]
-        ),
-        displaySmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
-            color: Colors.black
-        ),
-        displayLarge: GoogleFonts.tiltNeon(
-          fontSize: 40,
-          color: Colors.grey[900],
-        ),
+        //Überschrift der Anmeldeseite
         headlineLarge: GoogleFonts.tiltNeon(
-            fontSize: 34,
-            color: Colors.black,
+          fontSize: 40,
+          color: Colors.black,
+          backgroundColor: Colors.white,
         ),
       ),
 

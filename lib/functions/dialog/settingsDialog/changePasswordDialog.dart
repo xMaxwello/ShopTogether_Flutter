@@ -17,24 +17,27 @@ void changePasswordDialog(BuildContext context) {
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Altes Passwort',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
       TextField(
         controller: newPasswordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Neues Passwort',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
       TextField(
         controller: repeatNewPasswordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Neues Passwort wiederholen',
-          hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
+          hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
+        style: Theme.of(dialogContext).textTheme.bodyMedium,
       ),
     ],
 

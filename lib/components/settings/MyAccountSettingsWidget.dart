@@ -36,8 +36,8 @@ class MyAccountSettingsWidget extends StatelessWidget {
           title: Text(
             titles[i],
             style: i == titles.length - 1 ? GoogleFonts.tiltNeon(
-              textStyle: const TextStyle(color: Colors.red),
-            ) : Theme.of(context).textTheme.bodySmall,
+              textStyle: const TextStyle(color: Colors.red, fontSize: 14),
+            ) : Theme.of(context).textTheme.labelSmall,
           ),
           trailing: Icon(
             isDeleteAccount ? Icons.delete_forever : Icons.edit,
@@ -59,7 +59,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
                 style: Theme
                     .of(context)
                     .textTheme
-                    .headlineLarge
+                    .titleLarge
             ),
           ),
         ),
@@ -78,10 +78,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Text(
                 "Zurück",
-                style: GoogleFonts.tiltNeon(
-                    fontSize: 19,
-                    color: Colors.white
-                )
+                style: Theme.of(context).textTheme.displaySmall
             ),
           ),
         ),
