@@ -123,6 +123,7 @@ class MyAccountSettingsService {
         }
       }
 
+      MyFirestoreService.userService.removeUser(user.uid);
       await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
