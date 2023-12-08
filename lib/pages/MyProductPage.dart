@@ -71,6 +71,12 @@ class _MyProductPageState extends State<MyProductPage> {
           future: MyFirestoreService.groupService.isUserGroupOwner(myItemsProvider.selectedGroupUUID, user.uid),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
             if (!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(),

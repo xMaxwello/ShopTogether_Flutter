@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/home/MyBasicStructItem.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 class MyProductAddItem extends ListTile {
@@ -40,7 +41,7 @@ class MyProductAddItem extends ListTile {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  myProduct.productName,
+                  MyStringHandler.truncateText(myProduct.productName, 20),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],

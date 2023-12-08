@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class MyOpenFoodFactsService {
@@ -50,4 +52,36 @@ class MyOpenFoodFactsService {
 
     return result;
   }
+
+  final StreamController<SearchResult?> _searchResultController = StreamController<SearchResult?>();
+
+  Stream<SearchResult?> getProductByNameAsStream(List<String> terms) {
+    var parameters = <Parameter>[
+      const PageSize(size: 15),
+      const SortBy(option: SortOption.POPULARITY),
+      SearchTerms(terms: terms),
+    ];
+
+    ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
+      parametersList: parameters,
+      language: OpenFoodFactsLanguage.GERMAN,
+      version: ProductQueryVersion.v3,
+    );
+
+    _startSearch(configuration);
+
+    return _searchResultController.stream;
+  }
+
+  void _startSearch(ProductSearchQueryConfiguration configuration) async {
+    try {
+      SearchResult result = await OpenFoodAPIClient.searchProducts(null, configuration);
+      _searchResultController.add(result);
+      _searchResultController.close();
+    } catch (e) {
+      _searchResultController.addError(e);
+      _searchResultController.close();
+    }
+  }
+
 }
