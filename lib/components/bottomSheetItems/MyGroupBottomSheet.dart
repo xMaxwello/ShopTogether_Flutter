@@ -106,7 +106,7 @@ class MyGroupBottomSheet {
                               Navigator.pop(context);
                               break;
 
-                            case "request-not-exists":
+                            case "snapshot-not-exists":
                               print(e.message);
                               break;
                           }

@@ -100,7 +100,7 @@ class RequestService {
   }
 
   /// [MyCustomException] Keys:
-  ///- request-not-exists: the request code doesn't exist!
+  ///- no-requestCode: the request code doesn't exist!
   ///
   /// Exceptions from [MyFirestoreService.requestService.getRequestKeyByCode()]
   Future<MyRequestGroup> getInfosAboutSession(int requestCode) async {
@@ -108,7 +108,7 @@ class RequestService {
     bool existsRequest = await MyFirestoreService.requestService.isRequestCodeExists(requestCode);
     if (!existsRequest) {
       throw MyCustomException("the request code doesn't exist!",
-          "request-not-exists");
+          "no-requestCode");
     }
 
     MyRequestKey myRequestKey;
