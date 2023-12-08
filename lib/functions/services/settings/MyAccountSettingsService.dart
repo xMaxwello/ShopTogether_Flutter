@@ -4,6 +4,7 @@ import 'package:shopping_app/exceptions/MyCustomException.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
+import '../../../objects/users/MyUsers.dart';
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService {
@@ -109,9 +110,23 @@ class MyAccountSettingsService {
     );
     try {
       await user.reauthenticateWithCredential(credential);
+
+      MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
+      for (String groupUUID in userData.groupUUIDs) {
+
+        if (await MyFirestoreService.groupService.isUserGroupOwner(groupUUID, user.uid)) {
+
+          MyFirestoreService.groupService.removeGroup(groupUUID);
+        } else {
+
+          MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, user.uid);
+        }
+      }
+
       await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
+
       if (e.code == 'wrong-password') {
         MySnackBarService.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
       } else if (e.code == 'network-request-failed') {
@@ -120,6 +135,15 @@ class MyAccountSettingsService {
         MySnackBarService.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
         print("Firebase Error Code: ${e.code}");
       }
+    } on MyCustomException catch(e) {
+
+      switch(e.keyword) {
+        case "snapshot-not-existent":
+          print(e.message);
+          break;
+      }
+    } catch(e) {
+      print(e);
     }
   }
 }

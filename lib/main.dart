@@ -15,6 +15,7 @@ import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
 ///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
+///TODO: Notification Service einbauen
 
 Future<void> main() async {
 
