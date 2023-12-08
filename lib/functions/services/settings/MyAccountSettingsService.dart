@@ -109,7 +109,6 @@ class MyAccountSettingsService {
       password: password,
     );
     try {
-      await user.reauthenticateWithCredential(credential);
 
       MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
       for (String groupUUID in userData.groupUUIDs) {
@@ -124,6 +123,8 @@ class MyAccountSettingsService {
       }
 
       MyFirestoreService.userService.removeUser(user.uid);
+
+      await user.reauthenticateWithCredential(credential);
       await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
