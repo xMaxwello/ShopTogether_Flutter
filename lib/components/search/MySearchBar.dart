@@ -1,8 +1,8 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
-import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/product/MyProductAddItem.dart';
+import 'package:shopping_app/exceptions/MyCustomException.dart';
 import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
@@ -100,10 +100,29 @@ class _MySearchBarState extends State<MySearchBar> {
 
                     return MyProductAddItem(
                       myProduct: myProduct,
-                      addProductFunction: () {
+                      addProductFunction: () async {
 
-                        MyFirestoreService.productService.addProductToGroup(itemsValue.selectedGroupUUID, myProduct);
-                        controller.closeView(myProduct.productID);
+                        try {
+
+                          if (await MyFirestoreService.groupService.isCurrentUserInGroup(itemsValue.selectedGroupUUID)) {
+
+                            MyFirestoreService.productService.addProductToGroup(itemsValue.selectedGroupUUID, myProduct);
+                            controller.closeView(myProduct.productID);
+                          } else {
+
+                            MySnackBarService.showMySnackBar(context, "Sie haben keine Berechtigung dafür!");
+                          }
+                        } on MyCustomException catch(e) {
+
+                          switch (e.keyword) {
+                            case "snapshot-not-exists":
+                              print(e.message);
+                              break;
+                            case "not-logged-in":
+                              print(e.message);
+                              break;
+                          }
+                        }
                       },
                       showProductInfoFunction: () async {
                         ///TODO: show Product info

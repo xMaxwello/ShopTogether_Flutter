@@ -28,7 +28,6 @@ class MyUserCard extends StatelessWidget {
     );
   }
 
-  ///TODO: Kann man machen, wenn es dir hilft kannst du das lassen. Allerdings lagerst du dieses Widget nicht wirklich aus oder verwendest es irgendwo wieder, deswegen kannst du es auch rein schreiben. Könnte aber wie gesagt für die Übersichtlichkeit für jemanden besser sein. Also deine Entscheidung
   Widget _buildUserCard(BuildContext context, String displayName) {
     return Padding(
       padding: const EdgeInsets.all(10),

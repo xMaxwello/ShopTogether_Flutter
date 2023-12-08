@@ -142,7 +142,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                 itemIndex: index,
                                 selectedGroupIndex: selectedGroupIndex,
                                 itemsValue: itemsValue,
-                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements ///TODO: Bottomsheet
+                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements
                                   onTapFunction: () async {
 
                                     if (widget.isGroup) {

@@ -109,7 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
 
-        ///TODO: Hier soll eine Fenster sich öffnen, wo man einmal Code (Gruppe hinzufügen) und eigene Gruppe hinzufügen
         floatingActionButton: MyFloatingButton(
           buttonTitle: 'Gruppe',
           iconData: Icons.group_add,

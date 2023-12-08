@@ -52,7 +52,7 @@ class MyGroupBottomSheet {
                         try {
 
                           MyRequestGroup myRequestGroup = await MyFirestoreService.requestService.getInfosAboutSession(joinedNumbersAsInt);
-                          bool isUserAleadyInGroup = await MyFirestoreService.groupService.isCurrentUserAlreadyInGroup(myRequestGroup.groupUUID);
+                          bool isUserAleadyInGroup = await MyFirestoreService.groupService.isCurrentUserInGroup(myRequestGroup.groupUUID);
                           
                           if (!isUserAleadyInGroup) {
 

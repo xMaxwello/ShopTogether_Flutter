@@ -145,7 +145,7 @@ class GroupService {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
     if (!snapshot.exists) {
-      throw MyCustomException("the snapshot of the $isCurrentUserAlreadyInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
+      throw MyCustomException("the snapshot of the $isCurrentUserInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
     }
 
     int userLength = List<String>.from(snapshot.get("userUUIDs")).length;
@@ -162,7 +162,7 @@ class GroupService {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
     if (!snapshot.exists) {
-      throw MyCustomException("the snapshot of the $isCurrentUserAlreadyInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
+      throw MyCustomException("the snapshot of the $isCurrentUserInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
     }
 
     String userLength = snapshot.get("groupName");
@@ -172,7 +172,7 @@ class GroupService {
   /// [MyCustomException] Keys:
   /// - snapshot-not-exists: the snapshot of the isCurrentUserAlreadyInGroup(groupUUID) doesn`t exists!
   /// - not-logged-in: the current user is not logged in!
-  Future<bool> isCurrentUserAlreadyInGroup(String groupUUID) async {
+  Future<bool> isCurrentUserInGroup(String groupUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
@@ -180,7 +180,7 @@ class GroupService {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
 
     if (!snapshot.exists) {
-      throw MyCustomException("the snapshot of the $isCurrentUserAlreadyInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
+      throw MyCustomException("the snapshot of the $isCurrentUserInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
     }
 
     User? user = FirebaseAuth.instance.currentUser;
