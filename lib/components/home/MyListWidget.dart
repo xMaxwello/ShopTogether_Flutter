@@ -32,7 +32,7 @@ class MyListWidget extends StatelessWidget {
 
         return SizedBox(
           child: isSearch && !isGroup ?
-          MySearchItem(s: searchSnapshot!.data!.elementAt(index).productName ?? "Unknow")
+          MySearchItem(product: searchSnapshot!.data!.elementAt(index))
               :
           MyDismissibleWidget(
             isGroup: isGroup,

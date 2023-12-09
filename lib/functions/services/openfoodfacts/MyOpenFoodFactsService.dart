@@ -36,7 +36,7 @@ class MyOpenFoodFactsService {
   Future<SearchResult?> getProductByName(List<String> terms) async {
 
     var parameters = <Parameter>[
-      const PageSize(size: 15),
+      const PageSize(size: 25),
       const SortBy(option: SortOption.POPULARITY),
       SearchTerms(terms: terms),
     ];
