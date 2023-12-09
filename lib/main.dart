@@ -6,6 +6,7 @@ import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButton
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
+import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
@@ -31,6 +32,7 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => MyLoginProvider()),
           ChangeNotifierProvider(create: (context) => MySettingsProvider()),
           ChangeNotifierProvider(create: (context) => MyGroupProvider()),
+          ChangeNotifierProvider(create: (context) => MySearchProvider()),
         ],
         child: const MyApp(),
       )

@@ -1,29 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as FireAuth;
+import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyBottomSheetItem.dart';
-import 'package:shopping_app/components/dismissible/MyDismissibleWidget.dart';
-import 'package:shopping_app/components/home/MyBasicStructItem.dart';
-import 'package:shopping_app/components/group/MyGroupItem.dart';
-import 'package:shopping_app/components/product/MyProductItem.dart';
+import 'package:shopping_app/components/home/MyListWidget.dart';
 import 'package:shopping_app/functions/animations/MyScrollAnimation.dart';
 import 'package:shopping_app/functions/home/MyHomeErrorWidgetHandler.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
+import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
+import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
-import 'package:shopping_app/objects/products/MyProduct.dart';
-import 'package:shopping_app/pages/MyProductPage.dart';
-
-import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import '../../objects/users/MyUsers.dart';
 
 class MyHomeList extends StatefulWidget {
 
   final Widget isListEmptyWidget;
-  final bool isGroup;
 
-  const MyHomeList({super.key, required this.isListEmptyWidget, required this.isGroup});
+  const MyHomeList({super.key, required this.isListEmptyWidget});
 
   @override
   State<MyHomeList> createState() => _MyHomeListState();
@@ -57,126 +50,132 @@ class _MyHomeListState extends State<MyHomeList> {
             MyItemsProvider itemsValue,
             Widget? child) {
 
-            return StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("users").snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotUsers) {
+            return Consumer<MySearchProvider>(
+                builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
 
                   return StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection("groups").snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
+                      stream: FirebaseFirestore.instance.collection("users").snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotUsers) {
 
-                        MyHomeErrorWidgetHandler myHomeErrorWidgetHandler = MyHomeErrorWidgetHandler();
+                        return StreamBuilder(
+                            stream: FirebaseFirestore.instance.collection("groups").snapshots(),
+                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotGroups) {
 
-                        ///data has no errors and can be used
-                        final userData = snapshotUsers.data;
-                        final groupsData = snapshotGroups.data;
+                              MyHomeErrorWidgetHandler myHomeErrorWidgetHandler = MyHomeErrorWidgetHandler();
 
-                        ///Error Handling for null variables
-                        Widget? streamErrorWidget = myHomeErrorWidgetHandler.getStreamErrorWidget(
-                            snapshotUsers,
-                            snapshotGroups,
-                            userData,
-                            groupsData,
-                            widget.isListEmptyWidget
-                        );
+                              ///data has no errors and can be used
+                              final userData = snapshotUsers.data;
+                              final groupsData = snapshotGroups.data;
 
-                        if (streamErrorWidget != null) {
-                          return streamErrorWidget;
-                        }
+                              ///Error Handling for null variables
+                              Widget? streamErrorWidget = myHomeErrorWidgetHandler.getStreamErrorWidget(
+                                  snapshotUsers,
+                                  snapshotGroups,
+                                  userData,
+                                  groupsData,
+                                  widget.isListEmptyWidget
+                              );
 
-                        ///get users
-                        List<MyUser> users = userData!.docs.map(
-                                (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
+                              if (streamErrorWidget != null) {
+                                return streamErrorWidget;
+                              }
 
-                        ///get current user
-                        User? fireUser = FirebaseAuth.instance.currentUser;
-                        if (fireUser == null) {
-                          return const CircularProgressIndicator();
-                        }
+                              ///get users
+                              List<MyUser> users = userData!.docs.map(
+                                      (userDoc) => MyUser.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-                        MyUser? currentUser = users.where((MyUser user) => user.uuid == fireUser.uid).firstOrNull;
-                        if (currentUser == null) {
-                          return const CircularProgressIndicator();
-                        }
+                              ///get current user
+                              FireAuth.User? fireUser = FireAuth.FirebaseAuth.instance.currentUser;
+                              if (fireUser == null) {
+                                return const CircularProgressIndicator();
+                              }
 
-                        ///get all groups
-                        List<MyGroup> groups = groupsData!.docs.map(
-                                (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
+                              MyUser? currentUser = users.where((MyUser user) => user.uuid == fireUser.uid).firstOrNull;
+                              if (currentUser == null) {
+                                return const CircularProgressIndicator();
+                              }
 
-                        ///get groups from current user
-                        List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
-                        groupsFromUser.sort((a, b) => a.groupUUID!.compareTo(b.groupUUID!));
+                              ///get all groups
+                              List<MyGroup> groups = groupsData!.docs.map(
+                                      (userDoc) => MyGroup.fromMap(userDoc.data() as Map<String, dynamic>)).toList();
 
-                        List<String> groupUUIDs = currentUser.groupUUIDs;
-                        groupUUIDs.sort((a, b) => a.compareTo(b));
+                              ///get groups from current user
+                              List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
+                              groupsFromUser.sort((a, b) => a.groupUUID!.compareTo(b.groupUUID!));
 
-                        ///get index of selected group
-                        if (itemsValue.selectedGroupUUID != "") {
-                          selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
-                        }
+                              List<String> groupUUIDs = currentUser.groupUUIDs;
+                              groupUUIDs.sort((a, b) => a.compareTo(b));
 
-                        ///Error Handling for empty lists
-                        Widget? emptyErrorWidget = myHomeErrorWidgetHandler.getEmptyErrorWidget(
-                            groupsFromUser,
-                            widget.isGroup,
-                            selectedGroupIndex,
-                            widget.isListEmptyWidget
-                        );
-                        if (emptyErrorWidget != null) {
-                          return emptyErrorWidget;
-                        }
+                              ///get index of selected group
+                              if (itemsValue.selectedGroupUUID != "") {
+                                selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
+                              }
 
-                        int itemLength = widget.isGroup ?
-                        groupsFromUser.length :
-                        (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0);
+                              if (mySearchProvider.isSearching && !itemsValue.isGroup) {
 
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: itemLength,
-                          controller: _controller,
-                          itemBuilder: (context, index) {
+                                return FutureBuilder<List<Product>>(
+                                    future: MyOpenFoodFactsService().getProducts(mySearchProvider.searchedText),
+                                    builder: (BuildContext context, AsyncSnapshot<List<Product>> searchSnapshot) {
 
-                            return MyDismissibleWidget(
-                                isGroup: widget.isGroup,
-                                groupsFromUser: groupsFromUser,
-                                itemIndex: index,
-                                selectedGroupIndex: selectedGroupIndex,
-                                itemsValue: itemsValue,
-                                child: MyBasicStructItem(///the basic struct of the group, product, ... elements
-                                  onTapFunction: () async {
+                                      if (searchSnapshot.connectionState == ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
 
-                                    if (widget.isGroup) {
+                                      if (!searchSnapshot.hasData) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
 
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
-                                    } else {
-                                      List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
-                                      if (!mounted) return;
-                                      showBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-                                        },
+                                      //int itemLength = searchSnapshot.data!.length;
+                                      int itemLength = searchSnapshot.data!.length;
+
+                                      ///if there no products in group
+                                      if (mySearchProvider.isSearching && itemLength == 0) {
+                                        return const Center(
+                                          child: Text("Keine Produkte gefunden!"),
+                                        );
+                                      }
+
+                                      return MyListWidget(
+                                          itemLength: itemLength, controller: _controller,
+                                          mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
+                                          itemsValue: itemsValue, groupUUIDs: groupUUIDs,
+                                          isSearch: true, isGroup: itemsValue.isGroup,
+                                          selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
                                       );
                                     }
-                                    Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(widget.isGroup ? groupUUIDs[index] : itemsValue.selectedGroupUUID);
-                                    Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
-                                  },
-                                  content:
-                                  widget.isGroup == true ?
-                                  MyGroupItem(///shows all groups of current user
-                                      myGroup: groupsFromUser.elementAt(index)
-                                  )
-                                      :
-                                  MyProductItem(///shows products of selected group from current user
-                                    myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[index] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
-                                    selectedGroupUUID: itemsValue.selectedGroupUUID,
-                                  ),
-                                ),
-                            );
-                          },
-                        );
+                                );
+                              }
+
+                              int itemLength = itemsValue.isGroup ?
+                              groupsFromUser.length :
+                              (selectedGroupIndex != -1 ? groupsFromUser[selectedGroupIndex].products.length : 0);
+
+                              ///Error Handling for empty lists
+                              Widget? emptyErrorWidget = myHomeErrorWidgetHandler.getEmptyErrorWidget(
+                                  groupsFromUser,
+                                  itemsValue.isGroup,
+                                  selectedGroupIndex,
+                                  widget.isListEmptyWidget
+                              );
+                              if (emptyErrorWidget != null) {
+                                return emptyErrorWidget;
+                              }
+
+                              return MyListWidget(
+                                  itemLength: itemLength, controller: _controller,
+                                  mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
+                                  itemsValue: itemsValue, groupUUIDs: groupUUIDs,
+                                  isSearch: false, isGroup: itemsValue.isGroup,
+                                  selectedGroupIndex: selectedGroupIndex
+                              );
+                            });
                       });
-                });
+                }
+            );
         });
   }
 }

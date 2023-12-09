@@ -1,16 +1,12 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/product/MyProductAddItem.dart';
-import 'package:shopping_app/exceptions/MyCustomException.dart';
-import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
-import 'package:shopping_app/objects/products/MyProduct.dart';
+import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
-import '../../functions/providers/items/MyItemsProvider.dart';
-import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../functions/services/snackbars/MySnackBarService.dart';
 
 class MySearchBar extends StatefulWidget {
+
   const MySearchBar({super.key});
 
   @override
@@ -21,116 +17,82 @@ class _MySearchBarState extends State<MySearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<MyItemsProvider>(
-        builder: (BuildContext context,
-            MyItemsProvider itemsValue,
-            Widget? child) {
+
+    Future<void> scan() async {
+      final result = await BarcodeScanner.scan();
+
+      if (result.type == ResultType.Barcode) {
+
+        Provider.of<MySearchProvider>(context, listen: false).updateBarCode(result.rawContent);
+      } else if (result.type == ResultType.Cancelled) {
+
+        MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
+      } else if (result.type == ResultType.Error) {
+
+        MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
+      }
+    }
+
+    TextEditingController controller = TextEditingController();
+
+    return Consumer<MySearchProvider>(
+        builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
+
+          if (mySearchProvider.barcode != "") {
+            controller.text = mySearchProvider.barcode;
+          }
 
           return Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
-            child: SearchAnchor(
-              headerTextStyle: Theme.of(context).textTheme.bodyMedium,
-              viewSurfaceTintColor: Theme.of(context).searchViewTheme.surfaceTintColor,
-              viewBackgroundColor: Theme.of(context).searchViewTheme.backgroundColor,
-                builder: (BuildContext context, SearchController controller) {
-
-                  Future<void> scan() async {
-                    final result = await BarcodeScanner.scan();
-
-                    if (result.type == ResultType.Barcode) {
-
-                      controller.text = result.rawContent;
-                      controller.openView();
-                    } else if (result.type == ResultType.Cancelled) {
-
-                      MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
-                    } else if (result.type == ResultType.Error) {
-
-                      MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
-                    }
-                  }
-
-                  return SearchBar(
-                    surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
-                    backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
-                    textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodySmall),
-                    controller: controller,
-                    onTap: () {
-                      controller.openView();
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
+              child: SearchBar(
+                controller: controller,
+                surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
+                backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
+                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodySmall),
+                onChanged: (String changedText) {
+                  Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(changedText);
+                  Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+                },
+                onSubmitted: (String endText) {
+                  Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
+                  Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+                },
+                leading: Row(
+                    children: [
+                      mySearchProvider.isSearching ?
+                      IconButton(
+                          onPressed: () {
+                            Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+                          },
+                          icon: Icon(
+                            Icons.arrow_back,
+                            size: Theme.of(context).iconTheme.size,
+                            color: Theme.of(context).iconTheme.color,
+                          )
+                      ) : const SizedBox(),
+                      Icon(
+                        Icons.search,
+                        size: Theme.of(context).iconTheme.size,
+                      )
+                    ]
+                ),
+                trailing: <Widget> [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        scan();
+                      });
                     },
-                    onChanged: (_) {
-                      controller.openView();
-                    },
-                    leading: Icon(
-                      Icons.search,
+                    icon: Icon(
+                      Icons.qr_code,
                       size: Theme.of(context).iconTheme.size,
                     ),
-                    trailing: <Widget> [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            scan();
-                          });
-                        },
-                        icon: Icon(
-                          Icons.qr_code,
-                          size: Theme.of(context).iconTheme.size,
-                        ),
-                      ),
-                    ],
-                    padding: const MaterialStatePropertyAll<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 16.0)),
-                  );
-                },
-                suggestionsBuilder: (BuildContext context, SearchController controller) {
+                  ),
+                ],
+                padding: const MaterialStatePropertyAll<EdgeInsets>(
+                    EdgeInsets.symmetric(horizontal: 16.0)),
 
-                  MyOpenFoodFactsService myOpenFoodFactsService = MyOpenFoodFactsService();
-
-                  return List<ListTile>.generate(10, (int index) {
-
-                    MyProduct myProduct = MyProduct(
-                        productID: "",
-                        productName: "Schnitzel",
-                        selectedUserUUID: "",
-                        productCount: 1,
-                        productVolumen: 0,
-                        productVolumenType: '',
-                        productImageUrl: ""
-                    );
-
-                    return MyProductAddItem(
-                      myProduct: myProduct,
-                      addProductFunction: () async {
-
-                        try {
-
-                          if (await MyFirestoreService.groupService.isCurrentUserInGroup(itemsValue.selectedGroupUUID)) {
-
-                            MyFirestoreService.productService.addProductToGroup(itemsValue.selectedGroupUUID, myProduct);
-                            controller.closeView(myProduct.productID);
-                          } else {
-
-                            MySnackBarService.showMySnackBar(context, "Sie haben keine Berechtigung dafür!");
-                          }
-                        } on MyCustomException catch(e) {
-
-                          switch (e.keyword) {
-                            case "snapshot-not-exists":
-                              print(e.message);
-                              break;
-                            case "not-logged-in":
-                              print(e.message);
-                              break;
-                          }
-                        }
-                      },
-                      showProductInfoFunction: () async {
-                        ///TODO: show Product info
-                      },
-                    );
-                  });
-                }
-            ),
+              )
           );
         }
     );

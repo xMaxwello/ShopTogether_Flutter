@@ -1,21 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
+import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../objects/groups/MyGroup.dart';
+import '../../objects/products/MyProduct.dart';
+import '../../pages/MyProductPage.dart';
+import '../bottomSheet/MyDraggableScrollableWidget.dart';
+import '../bottomSheetItems/MyBottomSheetItem.dart';
+import '../group/MyGroupItem.dart';
+import '../home/MyBasicStructItem.dart';
+import '../product/MyProductItem.dart';
 
 class MyDismissibleWidget extends StatelessWidget {
 
   final bool isGroup;
   final List<MyGroup> groupsFromUser;
+  final List<String> groupUUIDs;
   final int itemIndex;
   final int selectedGroupIndex;
-  final Widget child;
   final MyItemsProvider itemsValue;
 
-  const MyDismissibleWidget({super.key, required this.isGroup, required this.groupsFromUser, required this.itemIndex, required this.selectedGroupIndex, required this.child, required this.itemsValue});
+  const MyDismissibleWidget({super.key, required this.isGroup, required this.groupsFromUser, required this.itemIndex, required this.selectedGroupIndex, required this.itemsValue, required this.groupUUIDs});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +80,36 @@ class MyDismissibleWidget extends StatelessWidget {
           MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[itemIndex].productID!);
         }
       },
-      child: child,
+      child: MyBasicStructItem(///the basic struct of the group, product, ... elements
+        onTapFunction: () async {
+
+          if (isGroup) {
+
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
+          } else {
+            List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
+            //if (!mounted) return;
+            showBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+              },
+            );
+          }
+          Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(isGroup ? groupUUIDs[itemIndex] : itemsValue.selectedGroupUUID);
+          Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
+        },
+        content:
+        isGroup == true ?
+        MyGroupItem(///shows all groups of current user
+            myGroup: groupsFromUser.elementAt(itemIndex)
+        )
+            :
+        MyProductItem(///shows products of selected group from current user
+          myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[itemIndex] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
+          selectedGroupUUID: itemsValue.selectedGroupUUID,
+        ),
+      ),
     );
   }
 }

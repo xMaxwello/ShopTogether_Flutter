@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class MyOpenFoodFactsService {
@@ -34,7 +36,7 @@ class MyOpenFoodFactsService {
   Future<SearchResult?> getProductByName(List<String> terms) async {
 
     var parameters = <Parameter>[
-      const PageSize(size: 10),
+      const PageSize(size: 25),
       const SortBy(option: SortOption.POPULARITY),
       SearchTerms(terms: terms),
     ];
@@ -49,5 +51,20 @@ class MyOpenFoodFactsService {
     await OpenFoodAPIClient.searchProducts(null, configuration);
 
     return result;
+  }
+
+  Future<List<Product>> getProducts(String productName) async {
+
+    SearchResult? searchResult = await getProductByName([productName]);
+
+    if (searchResult == null) {
+      return [];
+    }
+
+    if (searchResult.products == null) {
+      return [];
+    }
+
+    return searchResult.products!;
   }
 }
