@@ -52,4 +52,19 @@ class MyOpenFoodFactsService {
 
     return result;
   }
+
+  Future<List<Product>> getProducts(String productName) async {
+
+    SearchResult? searchResult = await getProductByName([productName]);
+
+    if (searchResult == null) {
+      return [];
+    }
+
+    if (searchResult.products == null) {
+      return [];
+    }
+
+    return searchResult.products!;
+  }
 }

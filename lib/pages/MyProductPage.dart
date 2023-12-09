@@ -11,6 +11,7 @@ import '../components/home/MyHomeList.dart';
 import '../components/home/MyHomeNavigationBar.dart';
 import '../functions/floatingAction/MyFloatingActionFunctions.dart';
 import '../functions/providers/items/MyItemsProvider.dart';
+import '../functions/providers/search/MySearchProvider.dart';
 
 class MyProductPage extends StatefulWidget {
   const MyProductPage({super.key});
@@ -21,13 +22,16 @@ class MyProductPage extends StatefulWidget {
 
 class _MyProductPageState extends State<MyProductPage> {
 
-  ///TODO: Wenn User gelöscht wird aus Gruppe, dann kann er trotzdem wenn er in der Gruppe währenddessen ist Produkte hinzufügen
-
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(const Duration(microseconds: 50), () {
+      Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(false);
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    });
 
     ///Refreshs the current user
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
@@ -71,12 +75,6 @@ class _MyProductPageState extends State<MyProductPage> {
           future: MyFirestoreService.groupService.isUserGroupOwner(myItemsProvider.selectedGroupUUID, user.uid),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
             if (!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -89,7 +87,6 @@ class _MyProductPageState extends State<MyProductPage> {
 
                   ///set the padding = status bar height
                   child: MyHomeList(
-                    isGroup: false,
                     isListEmptyWidget: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,

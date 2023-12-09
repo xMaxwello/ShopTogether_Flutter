@@ -9,6 +9,7 @@ import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
 import '../functions/floatingAction/MyFloatingActionFunctions.dart';
+import '../functions/providers/search/MySearchProvider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -24,6 +25,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    Future.delayed(const Duration(milliseconds: 50), () {
+      Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(true);
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    });
 
     ///Refreshs the current user
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
@@ -52,71 +58,66 @@ class _MyHomePageState extends State<MyHomePage> {
     double height = MediaQuery.of(context).padding.top;
     MyFloatingActionFunctions myFloatingActionFunctions = MyFloatingActionFunctions(context, "");
 
-    return Consumer<MyItemsProvider>
-      (builder: (context, MyItemsProvider myItemsProvider, child) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.only(top: height),
 
-      return Scaffold(
-        body: Padding(
-          padding: EdgeInsets.only(top: height),
+        ///set the padding = status bar height
+        child: MyHomeList(
+          isListEmptyWidget: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
 
-          ///set the padding = status bar height
-          child: MyHomeList(
-            isGroup: true,
-            isListEmptyWidget: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
+              Text(
+                  "Die Liste ist leer!",
+                  style: Theme.of(context).textTheme.bodySmall
+              ),
+              const SizedBox(height: 10,),
 
-                Text(
-                    "Die Liste ist leer!",
-                    style: Theme.of(context).textTheme.bodySmall
-                ),
-                const SizedBox(height: 10,),
-
-                ElevatedButton(
-                  onPressed: myFloatingActionFunctions.addGroup,
-                  style: Theme.of(context).elevatedButtonTheme.style,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 5, bottom: 5),
-                    child: Text(
-                        "Gruppe Hinzufügen",
-                        style: Theme.of(context).textTheme.displaySmall
-                    ),
+              ElevatedButton(
+                onPressed: myFloatingActionFunctions.addGroup,
+                style: Theme.of(context).elevatedButtonTheme.style,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, top: 5, bottom: 5),
+                  child: Text(
+                      "Gruppe Hinzufügen",
+                      style: Theme.of(context).textTheme.displaySmall
                   ),
-                )
+                ),
+              )
 
-              ],
-            ),
+            ],
           ),
         ),
-        bottomNavigationBar:  ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomAppBar(
-            color: Theme.of(context).bottomAppBarTheme.color,
-            child: const MyHomeNavigationBar(),
-          ),
+      ),
+      bottomNavigationBar:  ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
         ),
+        child: BottomAppBar(
+          color: Theme.of(context).bottomAppBarTheme.color,
+          child: const MyHomeNavigationBar(),
+        ),
+      ),
 
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(100),
-          child: MyAppBar(
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: MyAppBar(
             isGroup: true
-          ),
         ),
+      ),
 
-        floatingActionButton: MyFloatingButton(
-          buttonTitle: 'Gruppe',
-          iconData: Icons.group_add,
-          function: myFloatingActionFunctions.addGroup,
-          isChangeByScroll: true,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      );
-    });
+      floatingActionButton: MyFloatingButton(
+        buttonTitle: 'Gruppe',
+        iconData: Icons.group_add,
+        function: myFloatingActionFunctions.addGroup,
+        isChangeByScroll: true,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
   }
 }
