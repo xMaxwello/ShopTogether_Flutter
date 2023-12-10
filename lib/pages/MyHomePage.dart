@@ -6,6 +6,7 @@ import 'package:shopping_app/components/appBar/MyAppBar.dart';
 import 'package:shopping_app/components/home/MyFloatingButton.dart';
 import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
+import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
 import '../functions/floatingAction/MyFloatingActionFunctions.dart';
@@ -27,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 50), () {
+      Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
       Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(true);
       Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
     });

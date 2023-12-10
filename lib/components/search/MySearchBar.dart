@@ -1,6 +1,7 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
 import '../../functions/services/snackbars/MySnackBarService.dart';
@@ -55,13 +56,13 @@ class _MySearchBarState extends State<MySearchBar> {
                 },
                 onSubmitted: (String endText) {
                   Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
-                  Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                 },
                 leading: Row(
                     children: [
                       mySearchProvider.isSearching ?
                       IconButton(
                           onPressed: () {
+                            Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                           },
                           icon: Icon(
