@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
 import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 
@@ -10,7 +11,6 @@ import '../../objects/groups/MyGroup.dart';
 import '../../objects/products/MyProduct.dart';
 import '../../pages/MyProductPage.dart';
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
-import '../bottomSheetItems/MyBottomSheetItem.dart';
 import '../group/MyGroupItem.dart';
 import '../home/MyBasicStructItem.dart';
 import '../product/MyProductItem.dart';
@@ -87,7 +87,7 @@ class MyDismissibleWidget extends StatelessWidget {
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
           } else {
-            List<Widget> bottomSheetWidgets = await MyBottomSheetItem.generateBottomSheet(context, '5060337500401');
+            List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(context, '5060337500401');
             //if (!mounted) return;
             showBottomSheet(
               context: context,
