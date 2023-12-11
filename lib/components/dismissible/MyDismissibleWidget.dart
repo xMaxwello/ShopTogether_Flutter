@@ -19,18 +19,19 @@ class MyDismissibleWidget extends StatelessWidget {
 
   final bool isGroup;
   final List<MyGroup> groupsFromUser;
-  final List<String> groupUUIDs;
+  final List<MyProduct> productsFromSelectedGroup;
   final int itemIndex;
   final int selectedGroupIndex;
   final MyItemsProvider itemsValue;
 
-  const MyDismissibleWidget({super.key, required this.isGroup, required this.groupsFromUser, required this.itemIndex, required this.selectedGroupIndex, required this.itemsValue, required this.groupUUIDs});
+  const MyDismissibleWidget({super.key, required this.isGroup, required this.groupsFromUser, required this.itemIndex, required this.selectedGroupIndex, required this.itemsValue, required this.productsFromSelectedGroup});
 
   @override
   Widget build(BuildContext context) {
 
     return Dismissible(
-      key: isGroup ? Key(groupsFromUser[itemIndex].groupUUID!) : Key(groupsFromUser[selectedGroupIndex].products[itemIndex].productID!),
+      ///Defines the key for the Dismissible and uses the uuids of the objects
+      key: isGroup ? Key(groupsFromUser[itemIndex].groupUUID!) : Key(productsFromSelectedGroup[itemIndex].productID!),
       direction: DismissDirection.endToStart,
       background: Container(
         color: Colors.red[300],
@@ -77,36 +78,45 @@ class MyDismissibleWidget extends StatelessWidget {
             }
           }
         } else {
-          MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, groupsFromUser[selectedGroupIndex].products[itemIndex].productID!);
+          MyFirestoreService.productService.removeProductFromGroup(itemsValue.selectedGroupUUID, productsFromSelectedGroup[itemIndex].productID!);
         }
       },
       child: MyBasicStructItem(///the basic struct of the group, product, ... elements
         onTapFunction: () async {
 
+          ///if the item is a group item, then it should open the product list
+          ///if the item is a product item, it should shows the product bottom sheet
           if (isGroup) {
 
             Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
           } else {
-            List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(context, '5060337500401');
-            //if (!mounted) return;
-            showBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-              },
-            );
+
+            String productUUID = productsFromSelectedGroup[itemIndex].productID!;
+            MyProduct? myProduct = await MyFirestoreService.productService.getProductByUUID(groupsFromUser[selectedGroupIndex].groupUUID!, productUUID);
+
+            if (myProduct != null) {
+              List<Widget> bottomSheetWidgets = await MyItemBottomSheet
+                  .generateBottomSheet(context, myProduct.barcode);
+              showBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return MyDraggableScrollableWidget(
+                      widgets: bottomSheetWidgets);
+                },
+              );
+            }
           }
-          Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(isGroup ? groupUUIDs[itemIndex] : itemsValue.selectedGroupUUID);
+          Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(isGroup ? groupsFromUser[itemIndex].groupUUID! : itemsValue.selectedGroupUUID);
           Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
         },
         content:
         isGroup == true ?
-        MyGroupItem(///shows all groups of current user
+        MyGroupItem(///shows the group at itemindex
             myGroup: groupsFromUser.elementAt(itemIndex)
         )
             :
-        MyProductItem(///shows products of selected group from current user
-          myProduct: selectedGroupIndex != -1 ? groupsFromUser.elementAt(selectedGroupIndex).products[itemIndex] : MyProduct(productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
+        MyProductItem(///shows the product in group selectedGroupIndex at itemIndex
+          myProduct: selectedGroupIndex != -1 ? productsFromSelectedGroup[itemIndex] : MyProduct(barcode: "", productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
           selectedGroupUUID: itemsValue.selectedGroupUUID,
         ),
       ),

@@ -13,8 +13,9 @@ class MyLoginWidget extends StatefulWidget {
   final List<Color> buttonForegroundColors;
   final List<Color> buttonBackgroundColors;
   final List<bool> isInputPassword;
+  final List<TextInputType> textTypes;
 
-  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword, required this.title});
+  const MyLoginWidget({super.key, required this.buttonFunctions, required this.controllers, required this.inputLabels, required this.buttonLabels, required this.buttonForegroundColors, required this.buttonBackgroundColors, required this.isInputPassword, required this.title, required this.textTypes});
 
   @override
   State<MyLoginWidget> createState() => _MyLoginWidgetState();
@@ -59,6 +60,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                       TextFormField(
                         controller: widget.controllers[i],
                         style: Theme.of(context).textTheme.bodyMedium,
+                        keyboardType: widget.textTypes[i],
                         decoration: InputDecoration(
                           labelStyle: Theme.of(context).textTheme.bodyMedium,
                           labelText: widget.inputLabels[i],

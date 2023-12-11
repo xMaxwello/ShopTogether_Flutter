@@ -8,7 +8,11 @@ class MyItemBottomSheet {
     MyOpenFoodFactsService service = MyOpenFoodFactsService();
     String placeholderBarcode = '5060337500401';
 
-    Product? product = await service.getProductByBarcode(placeholderBarcode);
+    if (barcode == '') {
+      placeholderBarcode;
+    }
+
+    Product? product = await service.getProductByBarcode(barcode);
     if (product == null) {
       return [const Center(child: Text('Produkt nicht gefunden.'))];
     } else {

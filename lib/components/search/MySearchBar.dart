@@ -25,6 +25,7 @@ class _MySearchBarState extends State<MySearchBar> {
       if (result.type == ResultType.Barcode) {
 
         Provider.of<MySearchProvider>(context, listen: false).updateBarCode(result.rawContent);
+        Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
       } else if (result.type == ResultType.Cancelled) {
 
         MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
@@ -56,12 +57,14 @@ class _MySearchBarState extends State<MySearchBar> {
                 },
                 onSubmitted: (String endText) {
                   Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
+                  controller.clear();
                 },
                 leading: Row(
                     children: [
                       mySearchProvider.isSearching ?
                       IconButton(
                           onPressed: () {
+                            controller.clear();
                             Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                           },

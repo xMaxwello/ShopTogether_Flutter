@@ -17,6 +17,8 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
     contentBuilder: (dialogContext) => [
       TextField(
         controller: emailController,
+        style: Theme.of(context).textTheme.displayMedium,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           hintText: 'E-Mail',
           hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
@@ -25,6 +27,7 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
       TextField(
         controller: passwordController,
         obscureText: true,
+        style: Theme.of(context).textTheme.displayMedium,
         decoration: InputDecoration(
           hintText: 'Passwort',
           hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
