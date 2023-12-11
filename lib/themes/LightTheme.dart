@@ -125,7 +125,7 @@ class LightTheme {
 
         //Buttonfont
         displaySmall: GoogleFonts.tiltNeon(
-            fontSize: 14,
+            fontSize: 16,
             color: Colors.white
         ),
 

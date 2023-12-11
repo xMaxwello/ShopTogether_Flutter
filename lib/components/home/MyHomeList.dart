@@ -103,9 +103,6 @@ class _MyHomeListState extends State<MyHomeList> {
                               List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
                               groupsFromUser.sort((a, b) => a.groupUUID!.compareTo(b.groupUUID!));
 
-                              List<String> groupUUIDs = currentUser.groupUUIDs;
-                              groupUUIDs.sort((a, b) => a.compareTo(b));
-
                               ///get index of selected group
                               if (itemsValue.selectedGroupUUID != "") {
                                 selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
@@ -142,7 +139,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                       return MyListWidget(
                                           itemLength: itemLength, controller: _controller,
                                           mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
-                                          itemsValue: itemsValue, groupUUIDs: groupUUIDs,
+                                          itemsValue: itemsValue,
                                           isSearch: true, isGroup: itemsValue.isGroup,
                                           selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
                                       );
@@ -168,7 +165,7 @@ class _MyHomeListState extends State<MyHomeList> {
                               return MyListWidget(
                                   itemLength: itemLength, controller: _controller,
                                   mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
-                                  itemsValue: itemsValue, groupUUIDs: groupUUIDs,
+                                  itemsValue: itemsValue,
                                   isSearch: false, isGroup: itemsValue.isGroup,
                                   selectedGroupIndex: selectedGroupIndex
                               );

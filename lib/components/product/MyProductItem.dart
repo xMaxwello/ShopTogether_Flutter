@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
@@ -57,7 +58,7 @@ class _MyProductItemState extends State<MyProductItem> {
                         children: [
 
                           Text(
-                            widget.myProduct.productName, ///shows the product name
+                            MyStringHandler.truncateText(widget.myProduct.productName, 35), ///shows the product name
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
 

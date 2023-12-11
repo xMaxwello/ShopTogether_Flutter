@@ -30,22 +30,6 @@ class MyFloatingActionFunctions {
 
   }
 
-  void addProduct() async {
-    ///TODO: function
-    MyFirestoreService.productService.addProductToGroup(
-      "",
-      MyProduct(
-          productID: "",
-          productName: "Milch",
-          selectedUserUUID: "fsdfsd",
-          productCount: 3,
-          productVolumen: 0,
-          productVolumenType: '',
-          productImageUrl: ""
-      )
-    );
-  }
-
   void addUserToGroup() {
 
 
@@ -58,13 +42,5 @@ class MyFloatingActionFunctions {
         );
       },
     );
-
-    /*try {
-
-      MyMembersRequestService myMembersRequestService = MyMembersRequestService();
-      myMembersRequestService.addUserToGroupOverRequest("NVNIiFSCH8cEXnvOZTtvNWy8eo23", "h3tKwlXaRBkBflA8Mg9g", 275542);
-    } on MyCustomException catch(e) {
-      print(e.keyword);
-    } */
   }
 }
