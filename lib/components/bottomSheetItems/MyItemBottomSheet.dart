@@ -27,7 +27,7 @@ class MyItemBottomSheet {
                 ),
               ),
               const SizedBox(height: 10),
-              Image.network(product.imageFrontUrl ?? '', height: 200),
+              Image.network(product.imageFrontUrl ?? 'Bild nicht verfügbar', height: 200),
               const SizedBox(height: 20),
             ],
           ),
@@ -35,11 +35,11 @@ class MyItemBottomSheet {
       ];
 
       List<Map<String, String>> productDetails = [
-        {'Barcode': product.barcode ?? ''},
-        {'Marke': product.brands ?? ''},
-        {'Menge': product.quantity ?? ''},
-        {'Labels': product.labels ?? ''},
-        {'Kategorie': product.categories ?? ''},
+        {'Barcode': product.barcode ?? 'N/A'},
+        {'Marke': product.brands ?? 'N/A'},
+        {'Menge': product.quantity ?? 'N/A'},
+        {'Labels': product.labels ?? 'N/A'},
+        {'Kategorie': product.categories ?? 'N/A'},
       ];
 
       //Produktdetails
