@@ -92,7 +92,7 @@ class MyDismissibleWidget extends StatelessWidget {
           } else {
 
             String productUUID = productsFromSelectedGroup[itemIndex].productID!;
-            MyProduct? myProduct = await MyFirestoreService.productService.getProductByUUID(groupsFromUser[selectedGroupIndex].groupUUID, productUUID);
+            MyProduct? myProduct = await MyFirestoreService.productService.getProductByUUID(groupsFromUser[selectedGroupIndex].groupUUID!, productUUID);
 
             if (myProduct != null) {
               List<Widget> bottomSheetWidgets = await MyItemBottomSheet

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shopping_app/objects/groups/MyGroup.dart';
 
 import '../../../../exceptions/MyCustomException.dart';
 import '../../../../objects/products/MyProduct.dart';
@@ -107,13 +106,34 @@ class ProductService {
     }
   }
 
-  void updateProductFromGroup(String groupUuid, MyProduct myProduct) async {
+  void updateSelectedUserOfProduct(String groupUUID, String productUUID, String selectedUserUUID) async {
 
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (!snapshot.exists) {
+      throw MyCustomException("the snapshot of the $getProductByUUID(String productUUID) doesn`t exists!", "snapshot-not-exists");
+    }
+
+    List<Map<String, dynamic>> productsData =
+    List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
+
+    Map<String, dynamic>? myProduct = productsData
+        .where((element) => element["productID"] == productUUID)
+        .firstOrNull;
+
+    if (myProduct != null) {
+
+      myProduct['selectedUserUUID'] = selectedUserUUID;
+      ref.update({"products": productsData});
+    }
   }
 
   /// [MyCustomException] Keys:
   /// - snapshot-not-exists: the snapshot of the getProductByUUID(String productUUID) doesn`t exists!
-  Future<MyProduct?> getProductByUUID(groupUUID, String productUUID) async {
+  Future<MyProduct?> getProductByUUID(String groupUUID, String productUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
@@ -138,5 +158,26 @@ class ProductService {
     MyProduct product = MyProduct.fromMap(myProduct);
 
     return product;
+  }
+
+  Future<List<String?>?> getProductUUIDsOfSelectedUser(String groupUUID, String userUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (!snapshot.exists) {
+      throw MyCustomException("the snapshot of the $getProductByUUID(String productUUID) doesn`t exists!", "snapshot-not-exists");
+    }
+
+    List<Map<String, dynamic>> productsData =
+    List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
+
+    List<String?>? productUUIDs = productsData
+        .where((element) => element["userOwnerUUID"] == userUUID)
+        .map((Map<String, dynamic> myProduct) => MyProduct.fromMap(myProduct).productID).toList();
+
+    return productUUIDs;
   }
 }

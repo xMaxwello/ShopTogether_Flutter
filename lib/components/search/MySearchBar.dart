@@ -57,13 +57,14 @@ class _MySearchBarState extends State<MySearchBar> {
                 },
                 onSubmitted: (String endText) {
                   Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
+                  controller.clear();
                 },
                 leading: Row(
                     children: [
                       mySearchProvider.isSearching ?
                       IconButton(
                           onPressed: () {
-                            controller.text = "";
+                            controller.clear();
                             Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                           },

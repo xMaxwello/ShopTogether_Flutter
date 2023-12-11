@@ -64,6 +64,12 @@ class MyUserWidget extends StatelessWidget {
 
                         await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, myUser.uuid);
                         MyFirestoreService.userService.removeGroupUUIDsFromUser(myUser.uuid, groupUUID);
+
+                        List<String?>? productUUIDs = await MyFirestoreService.productService.getProductUUIDsOfSelectedUser(groupUUID, myUser.uuid);
+                        for (String? productUUID in productUUIDs!) {
+
+                          MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, "");
+                        }
                       } else {
 
                         MySnackBarService.showMySnackBar(context, "Als Gruppen-Owner dürfen Sie sich nicht löschen!");
