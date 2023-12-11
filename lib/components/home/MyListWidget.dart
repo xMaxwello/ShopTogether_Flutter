@@ -78,6 +78,7 @@ class MyListWidget extends StatelessWidget {
               ListView.builder(
                   itemCount: userProducts.length,
                   shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int itemIndex) {
 
                     return MyDismissibleWidget( /// for the product and group views
