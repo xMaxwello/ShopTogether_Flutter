@@ -1,6 +1,8 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
@@ -23,9 +25,18 @@ class _MySearchBarState extends State<MySearchBar> {
       final result = await BarcodeScanner.scan();
 
       if (result.type == ResultType.Barcode) {
+        List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
+          context,
+          result.rawContent,
+          fromScanner: true,
+        );
 
-        Provider.of<MySearchProvider>(context, listen: false).updateBarCode(result.rawContent);
-        Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+        showBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+          },
+        );
       } else if (result.type == ResultType.Cancelled) {
 
         MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
