@@ -61,7 +61,9 @@ class _MySearchBarState extends State<MySearchBar> {
                 controller: controller,
                 surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                 backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
-                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodySmall),
+                hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.labelMedium),
+                hintText: 'Nach Produkt suchen...',
+                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
                 onChanged: (String changedText) {
                   Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(changedText);
                   Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
