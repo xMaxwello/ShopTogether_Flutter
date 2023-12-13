@@ -98,11 +98,11 @@ class MyListWidget extends StatelessWidget {
         ///shows the items, dependent on the var isSearching and if the items should be a group or a product
         return SizedBox(
           child:  isSearch && !isGroup ?
-          MySearchItem( ///for the search view
+          (MySearchItem( ///for the search view
             currentUserUUID: user.uid,
             selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
             product: searchSnapshot!.data!.elementAt(index)
-          )
+          ))
             :
           MyDismissibleWidget( /// for the product and group views
             isGroup: isGroup,
