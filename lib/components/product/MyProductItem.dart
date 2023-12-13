@@ -42,11 +42,15 @@ class _MyProductItemState extends State<MyProductItem> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: widget.myProduct.productImageUrl.isNotEmpty ? Image.network(
-                      widget.myProduct.productImageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
-                    ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: widget.myProduct.productImageUrl.isNotEmpty ? Image.network(
+                        widget.myProduct.productImageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
+                      ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
+                    )
                   ),
 
                   const SizedBox(width: 10),

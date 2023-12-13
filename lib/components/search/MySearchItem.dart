@@ -46,7 +46,7 @@ class MySearchItem extends StatelessWidget {
                 productCount: 1,
                 productVolumen: 0,
                 productVolumenType: '',
-                productImageUrl: product.images!.first.url ?? ''
+                productImageUrl: product.imageFrontUrl ?? ''
               )
             );
           },

@@ -47,7 +47,7 @@ class MyOpenFoodFactsService {
         parametersList: parameters,
         language: OpenFoodFactsLanguage.GERMAN,
         version: ProductQueryVersion.v3,
-        fields: [ProductField.BARCODE, ProductField.NAME, ProductField.BRANDS, ProductField.QUANTITY, ProductField.LABELS, ProductField.CATEGORIES, ProductField.NUTRISCORE, ProductField.INGREDIENTS_TEXT, ProductField.NUTRIMENTS, ProductField.SERVING_SIZE]
+        fields: [ProductField.BARCODE, ProductField.NAME, ProductField.BRANDS, ProductField.QUANTITY, ProductField.LABELS, ProductField.CATEGORIES, ProductField.NUTRISCORE, ProductField.INGREDIENTS_TEXT, ProductField.NUTRIMENTS, ProductField.SERVING_SIZE, ProductField.IMAGE_FRONT_URL]
     );
 
     SearchResult result =
