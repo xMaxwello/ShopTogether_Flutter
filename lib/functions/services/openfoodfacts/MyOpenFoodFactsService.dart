@@ -44,7 +44,8 @@ class MyOpenFoodFactsService {
     ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
         parametersList: parameters,
         language: OpenFoodFactsLanguage.GERMAN,
-        version: ProductQueryVersion.v3
+        version: ProductQueryVersion.v3,
+        fields: [ProductField.BARCODE, ProductField.NAME, ProductField.BRANDS, ProductField.QUANTITY, ProductField.LABELS, ProductField.CATEGORIES, ProductField.NUTRISCORE, ProductField.INGREDIENTS_TEXT, ProductField.NUTRIMENTS, ProductField.SERVING_SIZE]
     );
 
     SearchResult result =
@@ -66,5 +67,49 @@ class MyOpenFoodFactsService {
     }
 
     return searchResult.products!;
+  }
+
+  Future<SearchResult?> getProductNamesByName(List<String> terms) async {
+
+    var parameters = <Parameter>[
+      const PageSize(size: 25),
+      const SortBy(option: SortOption.POPULARITY),
+      SearchTerms(terms: terms),
+    ];
+
+    ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
+        parametersList: parameters,
+        language: OpenFoodFactsLanguage.GERMAN,
+        version: ProductQueryVersion.v3,
+        fields: [ProductField.BARCODE, ProductField.NAME] ///TODO: Die Felder anpassen
+    );
+
+    SearchResult result =
+    await OpenFoodAPIClient.searchProducts(null, configuration);
+
+    return result;
+  }
+
+  Future<String?> getProductNameByBarcode(User? user, String barcode) async {
+    try {
+      final ProductQueryConfiguration configuration = ProductQueryConfiguration(
+        barcode,
+        language: OpenFoodFactsLanguage.GERMAN,
+        fields: [ProductField.NAME], ///TODO: Die Felder anpassen
+        version: ProductQueryVersion.v3,
+      );
+
+      final ProductResultV3 result = await OpenFoodAPIClient.getProductV3(configuration);
+
+      if (result.status == ProductResultV3.statusSuccess && result.product != null) {
+        return result.product!.productName;
+      } else {
+        print("Product not found for barcode: $barcode");
+        return null;
+      }
+    } catch (e) {
+      print('Error getting product name by barcode: $e');
+      rethrow;
+    }
   }
 }

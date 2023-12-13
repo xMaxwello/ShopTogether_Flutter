@@ -64,6 +64,13 @@ class MyDismissibleWidget extends StatelessWidget {
 
                     await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, currentUser.uid);
                     MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
+
+                    ///remove UserUUID of the products in this group, who should buy this product. (selectedUserUUID)
+                    List<String?>? productUUIDs = await MyFirestoreService.productService.getProductUUIDsOfSelectedUser(groupUUID, currentUser.uid);
+                    for (String? productUUID in productUUIDs!) {
+
+                      MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, "");
+                    }
                   });
             } else {
 

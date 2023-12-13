@@ -6,6 +6,7 @@ import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
+import '../../functions/services/notification/MyNotificationService.dart';
 
 class MyProductItem extends StatefulWidget {
 

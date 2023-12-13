@@ -8,6 +8,7 @@ import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/functions/services/notification/MyNotificationService.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 import 'package:shopping_app/themes/DarkTheme.dart';
@@ -22,6 +23,8 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await MyNotificationService.initialize();
+  MyNotificationService.scheduleWeeklyNotification();
 
   runApp(
       MultiProvider(
@@ -101,3 +104,9 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
     );
   }
 }
+/*
+MyNotificationService.showNotification(
+            title: 'Test Notification',
+            body: 'This is a test notification!',
+          );
+* */
