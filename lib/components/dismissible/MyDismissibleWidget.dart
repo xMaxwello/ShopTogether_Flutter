@@ -102,13 +102,17 @@ class MyDismissibleWidget extends StatelessWidget {
             MyProduct? myProduct = await MyFirestoreService.productService.getProductByUUID(groupsFromUser[selectedGroupIndex].groupUUID!, productUUID);
 
             if (myProduct != null) {
-              List<Widget> bottomSheetWidgets = await MyItemBottomSheet
-                  .generateBottomSheet(context, myProduct.barcode);
+              String groupUUID = groupsFromUser[selectedGroupIndex].groupUUID!;
+              List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
+                  context,
+                  myProduct.barcode,
+                  fromProductList: true,
+                  groupUUID: groupUUID,
+              );
               showBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
-                  return MyDraggableScrollableWidget(
-                      widgets: bottomSheetWidgets);
+                  return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
                 },
               );
             }
