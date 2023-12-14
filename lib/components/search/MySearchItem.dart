@@ -34,6 +34,7 @@ class MySearchItem extends StatelessWidget {
       ),
       trailing: IconButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
 
             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
 
@@ -62,6 +63,7 @@ class MySearchItem extends StatelessWidget {
         showBottomSheet(
           context: context,
           builder: (BuildContext context) {
+            FocusScope.of(context).unfocus();
             return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
           },
         );
