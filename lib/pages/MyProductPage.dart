@@ -55,6 +55,7 @@ class _MyProductPageState extends State<MyProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSearchActive = Provider.of<MySearchProvider>(context).isSearching;
 
     ///get status bar height
     double height = MediaQuery.of(context).padding.top;
@@ -122,9 +123,9 @@ class _MyProductPageState extends State<MyProductPage> {
                 ),
 
                 floatingActionButton: MyFloatingButton(
-                    buttonTitle: 'Mitglied',
-                    iconData: snapshot.data ? Icons.person_add : Icons.person,
-                    function: myFloatingActionFunctions.addUserToGroup,
+                    buttonTitle: isSearchActive ? 'Produkt\n hinzufügen' : 'Mitglied',
+                    iconData: isSearchActive ? Icons.add : Icons.person,
+                    function: isSearchActive ? myFloatingActionFunctions.addCustomProduct : myFloatingActionFunctions.addUserToGroup,
                     isChangeByScroll: true
                 ),
             floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,

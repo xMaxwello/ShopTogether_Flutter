@@ -17,10 +17,25 @@ class MySearchBar extends StatefulWidget {
 }
 
 class _MySearchBarState extends State<MySearchBar> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (focusNode.hasFocus) {
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+    } else {
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     Future<void> scan() async {
       final result = await BarcodeScanner.scan();
 
@@ -38,19 +53,14 @@ class _MySearchBarState extends State<MySearchBar> {
           },
         );
       } else if (result.type == ResultType.Cancelled) {
-
         MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
       } else if (result.type == ResultType.Error) {
-
         MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
       }
     }
 
-    TextEditingController controller = TextEditingController();
-
     return Consumer<MySearchProvider>(
         builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
-
           if (mySearchProvider.barcode != "") {
             controller.text = mySearchProvider.barcode;
           }
@@ -59,6 +69,7 @@ class _MySearchBarState extends State<MySearchBar> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
               child: SearchBar(
                 controller: controller,
+                focusNode: focusNode,
                 surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                 backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
                 hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.labelMedium),
@@ -78,6 +89,7 @@ class _MySearchBarState extends State<MySearchBar> {
                       IconButton(
                           onPressed: () {
                             controller.clear();
+                            FocusScope.of(context).unfocus();
                             Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
                             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                           },
@@ -113,5 +125,13 @@ class _MySearchBarState extends State<MySearchBar> {
           );
         }
     );
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(_onFocusChange);
+    focusNode.dispose();
+    controller.dispose();
+    super.dispose();
   }
 }
