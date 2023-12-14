@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
-import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
 import '../../functions/services/snackbars/MySnackBarService.dart';
@@ -19,6 +18,16 @@ class MySearchBar extends StatefulWidget {
 class _MySearchBarState extends State<MySearchBar> {
   final TextEditingController controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
+  bool _isSearchActive = false;
+  bool _isKeyboardVisible() {
+    return MediaQuery.of(context).viewInsets.bottom != 0;
+  }
+
+  void _resetSearchState() {
+    _isSearchActive = false;
+    Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    controller.clear();
+  }
 
   @override
   void initState() {
@@ -28,8 +37,9 @@ class _MySearchBarState extends State<MySearchBar> {
 
   void _onFocusChange() {
     if (focusNode.hasFocus) {
+      _isSearchActive = true;
       Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
-    } else {
+    } else if (!_isSearchActive) {
       Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
     }
   }
@@ -88,10 +98,16 @@ class _MySearchBarState extends State<MySearchBar> {
                       mySearchProvider.isSearching ?
                       IconButton(
                           onPressed: () {
+                            if (!_isKeyboardVisible() && _isSearchActive) {
+                              _resetSearchState();
+                            }
+                            if (_isKeyboardVisible()) {
+                              _resetSearchState();
+                              focusNode.unfocus();
+                            }
+                            _isSearchActive = false;
+                            focusNode.unfocus();
                             controller.clear();
-                            FocusScope.of(context).unfocus();
-                            Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
-                            Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
                           },
                           icon: Icon(
                             Icons.arrow_back,
