@@ -42,11 +42,11 @@ class MyNotificationService {
   static void scheduleWeeklyNotification() async {
     final notifications = FlutterLocalNotificationsPlugin();
 
-    final androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+    const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'weekly_channel_id',
       'Weekly Channel',
     );
-    final platformChannelSpecifics =
+    const platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await notifications.periodicallyShow(0, "Mache es!", "Jo", RepeatInterval.everyMinute, platformChannelSpecifics);

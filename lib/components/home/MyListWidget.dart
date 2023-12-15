@@ -95,6 +95,7 @@ class MyListWidget extends StatelessWidget {
           );
         }
 
+        ///TODO: Button Mehr Produkte anzeigen vielleicht
         ///shows the items, dependent on the var isSearching and if the items should be a group or a product
         return SizedBox(
           child:  isSearch && !isGroup ?
