@@ -22,8 +22,6 @@ class MyHomeList extends StatefulWidget {
   State<MyHomeList> createState() => _MyHomeListState();
 }
 
-///TODO: Datei auslagern => übersichtlicher machen
-
 class _MyHomeListState extends State<MyHomeList> {
 
   late MyScrollAnimation myScrollAnimation;
@@ -108,6 +106,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                 selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
                               }
 
+                              ///shows the MySearchItems for the search process
                               if (mySearchProvider.isSearching && !itemsValue.isGroup) {
 
                                 return FutureBuilder<List<Product>>(
@@ -126,7 +125,6 @@ class _MyHomeListState extends State<MyHomeList> {
                                         );
                                       }
 
-                                      //int itemLength = searchSnapshot.data!.length;
                                       int itemLength = searchSnapshot.data!.length;
 
                                       ///if there no products in group
@@ -158,10 +156,12 @@ class _MyHomeListState extends State<MyHomeList> {
                                   selectedGroupIndex,
                                   widget.isListEmptyWidget
                               );
+                              ///shows many errors and returns a widget
                               if (emptyErrorWidget != null) {
                                 return emptyErrorWidget;
                               }
 
+                              ///shows the ProductItems or the GroupItems
                               return MyListWidget(
                                   itemLength: itemLength, controller: _controller,
                                   mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,

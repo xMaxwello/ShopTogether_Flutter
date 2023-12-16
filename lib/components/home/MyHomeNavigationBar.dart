@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/pages/MyHomePage.dart';
 
-import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../pages/MySettingsPage.dart';
 
 class MyHomeNavigationBar extends StatefulWidget {

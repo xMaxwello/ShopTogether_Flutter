@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyCustomItemBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyGroupBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyMemberBottomSheet.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';

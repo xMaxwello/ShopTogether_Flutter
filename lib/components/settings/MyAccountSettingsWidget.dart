@@ -5,8 +5,6 @@ import 'package:shopping_app/functions/dialog/settingsDialog/changePasswordDialo
 import 'package:shopping_app/functions/dialog/settingsDialog/deleteAccountDialog.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/changeUserNameDialog.dart';
 
-///TODO: Email Adresse wird nicht übernommen, da die neue erst verifiziert werden muss
-
 class MyAccountSettingsWidget extends StatelessWidget {
 
   const MyAccountSettingsWidget({super.key});

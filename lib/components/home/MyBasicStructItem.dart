@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/**
+ * This widget is the basic of the groupitem and productitem
+ * */
 class MyBasicStructItem extends StatelessWidget {
 
   final Widget content;

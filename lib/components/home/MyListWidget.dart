@@ -25,6 +25,8 @@ class MyListWidget extends StatelessWidget {
 
   const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex});
 
+  ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
+
   @override
   Widget build(BuildContext context) {
 
@@ -55,6 +57,7 @@ class MyListWidget extends StatelessWidget {
           return Column(
             children: [
 
+              ///shows the name of the member who should buy these products
               FutureBuilder<List<String>>(
                   future: MyFirestoreService.userService.getNameOfUser(uniqueUserUUIDs!.elementAt(index)),
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
@@ -75,6 +78,7 @@ class MyListWidget extends StatelessWidget {
                   }
               ),
 
+              ///shows the products of every single member
               ListView.builder(
                   itemCount: userProducts.length,
                   shrinkWrap: true,

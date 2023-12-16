@@ -41,7 +41,7 @@ class MyGroupBottomSheet {
                   subtitle: "Hier können Sie Ihre eigene \n Gruppe erstellen!",
                   function: () => newGroupDialog(context),
                 ),
-                if (myGroupProvider.isShowWidget)
+                if (myGroupProvider.isShowWidget) ///switchs between the join group button and the enter code to join to a group widget
                   MyInMemberRequestWidget(
                       title: "Gruppe beitreten",
                       onNumbersEntered: (List<String> enteredNumbers) async {
@@ -62,8 +62,8 @@ class MyGroupBottomSheet {
                             String fullName = names.join(' ');
 
                             MyDialog.showCustomDialog(
-                                context: context, 
-                                title: "Möchtest du dieser Gruppe beitreten?", 
+                                context: context,
+                                title: "Möchtest du dieser Gruppe beitreten?",
                                 contentBuilder: (dialogContext) => [
                                   Text(
                                     "Gruppenname: $groupName",
@@ -77,7 +77,7 @@ class MyGroupBottomSheet {
                                     "Besitzer: $fullName",
                                     style: Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                ], 
+                                ],
                                 onConfirm: () async {
                                   User? user = FirebaseAuth.instance.currentUser;
 

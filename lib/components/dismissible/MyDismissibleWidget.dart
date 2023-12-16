@@ -47,7 +47,6 @@ class MyDismissibleWidget extends StatelessWidget {
         ///remove group or product if the item is swiped
         if (isGroup) {
 
-          ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
           User? currentUser = FirebaseAuth.instance.currentUser;
 
           if (currentUser != null) {
@@ -117,6 +116,7 @@ class MyDismissibleWidget extends StatelessWidget {
               );
             }
           }
+          ///Updates the index of the clicked item, expands is the item a group or Product
           Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(isGroup ? groupsFromUser[itemIndex].groupUUID! : itemsValue.selectedGroupUUID);
           Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
         },
