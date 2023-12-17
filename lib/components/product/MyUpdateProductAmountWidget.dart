@@ -13,8 +13,9 @@ class MyUpdateProductAmountWidget extends StatefulWidget {
   final int updateAmountAbout;
   final IconData icon;
   final bool isAddWidget;
+  final Function(int) onUpdateCounter;
 
-  const MyUpdateProductAmountWidget({super.key, required this.myProduct, required this.selectedGroupUUID, required this.updateAmountAbout, required this.icon, required this.isAddWidget});
+  const MyUpdateProductAmountWidget({super.key, required this.myProduct, required this.selectedGroupUUID, required this.updateAmountAbout, required this.icon, required this.isAddWidget, required this.onUpdateCounter});
 
   @override
   State<MyUpdateProductAmountWidget> createState() => _MyUpdateProductAmountWidgetState();
@@ -23,6 +24,7 @@ class MyUpdateProductAmountWidget extends StatefulWidget {
 class _MyUpdateProductAmountWidgetState extends State<MyUpdateProductAmountWidget> {
 
   late Timer timer;
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +58,14 @@ class _MyUpdateProductAmountWidgetState extends State<MyUpdateProductAmountWidge
 
                 if (widget.myProduct.productCount > 1) {
 
-                  MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, widget.updateAmountAbout);
+                  counter += widget.updateAmountAbout;
+                  widget.onUpdateCounter(counter);
                 }
               }
           );
         },
         onLongPressEnd: (_) {
+          MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, counter);
           timer.cancel();
         },
         child: Icon(
