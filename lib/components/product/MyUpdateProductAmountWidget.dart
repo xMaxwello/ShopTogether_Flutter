@@ -56,16 +56,22 @@ class _MyUpdateProductAmountWidgetState extends State<MyUpdateProductAmountWidge
               const Duration(milliseconds: 100),
                   (timer) {
 
-                if (widget.myProduct.productCount > 1) {
+                setState(() {
 
-                  counter += widget.updateAmountAbout;
-                  widget.onUpdateCounter(counter);
-                }
+                  if ((widget.myProduct.productCount + counter) > 1) {
+
+                    counter += widget.updateAmountAbout;
+                    widget.onUpdateCounter(counter);
+                  }
+                });
               }
           );
         },
         onLongPressEnd: (_) {
+
           MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, counter);
+          widget.onUpdateCounter(0);
+          counter = 0;
           timer.cancel();
         },
         child: Icon(
