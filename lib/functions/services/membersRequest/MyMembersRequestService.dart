@@ -15,7 +15,7 @@ class MyMembersRequestService {
   ///- request-not-exists: the request code doesn't exist!
   ///- Has Keys from [MyFirestoreService.userService.addGroupUUIDsFromUser]
   ///  and [MyFirestoreService.groupService.addUserUUIDToGroup]
-  void addUserToGroupOverRequest(String userUUID, String groupUUID, int requestCode) async {
+  static void addUserToGroupOverRequest(String userUUID, String groupUUID, int requestCode) async {
 
     bool existsUser = await MyFirestoreService.userService.isUserExists(userUUID);
     bool existsGroup = await MyFirestoreService.groupService.isGroupExists(groupUUID);
@@ -44,7 +44,7 @@ class MyMembersRequestService {
     }
   }
 
-  Future<int> getRequestCode() async {
+  static Future<int> getRequestCode() async {
 
     return await MyFirestoreService.requestService.generateNotUsedRequestCode();
   }
