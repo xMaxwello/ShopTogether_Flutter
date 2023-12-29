@@ -1,7 +1,13 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart';
 
 class MyNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  static void requestPermissions() {
+
+    _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
+  }
 
   static Future<void> initialize() async {
     const InitializationSettings initializationSettings =
@@ -39,8 +45,27 @@ class MyNotificationService {
     );
   }
 
+  static Future<void> showZonedNotification({
+    required String title,
+    required String body,
+    required TZDateTime dateTime
+  }) async {
+
+    await _notificationsPlugin.zonedSchedule(
+        0,
+        'scheduled title',
+        'scheduled body',
+        TZDateTime.now(local).add(const Duration(seconds: 40)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name',
+                channelDescription: 'your channel description')),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime);
+  }
+
   static void scheduleWeeklyNotification() async {
-    final notifications = FlutterLocalNotificationsPlugin();
 
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'weekly_channel_id',
@@ -49,7 +74,7 @@ class MyNotificationService {
     const platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await notifications.periodicallyShow(0, "Mache es!", "Jo", RepeatInterval.everyMinute, platformChannelSpecifics);
+    await _notificationsPlugin.periodicallyShow(0, "Füge jetzt Produkte zu deinem Einkaufswägen zu!", "Deine Einkaufswägen warten auf dich!", RepeatInterval.daily, platformChannelSpecifics);
 
   }
 }

@@ -16,6 +16,9 @@ import 'package:shopping_app/themes/LightTheme.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 ///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
 ///TODO: Notification Service einbauen
 
@@ -24,6 +27,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await MyNotificationService.initialize();
+  MyNotificationService.requestPermissions();
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
   MyNotificationService.scheduleWeeklyNotification();
 
   runApp(
