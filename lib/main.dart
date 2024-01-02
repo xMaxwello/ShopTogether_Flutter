@@ -20,7 +20,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 ///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
-///TODO: Notification Service einbauen
 
 Future<void> main() async {
 
@@ -111,9 +110,3 @@ class _MyAuthenticationWrapperState extends State<MyAuthenticationWrapper> {
     );
   }
 }
-/*
-MyNotificationService.showNotification(
-            title: 'Test Notification',
-            body: 'This is a test notification!',
-          );
-* */
