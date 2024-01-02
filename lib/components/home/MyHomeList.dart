@@ -22,8 +22,6 @@ class MyHomeList extends StatefulWidget {
   State<MyHomeList> createState() => _MyHomeListState();
 }
 
-///TODO: Datei auslagern => übersichtlicher machen
-
 class _MyHomeListState extends State<MyHomeList> {
 
   late MyScrollAnimation myScrollAnimation;
@@ -108,10 +106,11 @@ class _MyHomeListState extends State<MyHomeList> {
                                 selectedGroupIndex = groupsFromUser.indexWhere((MyGroup group) => group.groupUUID == itemsValue.selectedGroupUUID);
                               }
 
+                              ///shows the MySearchItems for the search process
                               if (mySearchProvider.isSearching && !itemsValue.isGroup) {
 
                                 return FutureBuilder<List<Product>>(
-                                    future: MyOpenFoodFactsService().getProducts(mySearchProvider.searchedText),
+                                    future: MyOpenFoodFactsService().getProducts(mySearchProvider.searchedText, mySearchProvider.sizeOfSearchedProducts),
                                     builder: (BuildContext context, AsyncSnapshot<List<Product>> searchSnapshot) {
 
                                       if (searchSnapshot.connectionState == ConnectionState.waiting) {
@@ -126,8 +125,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                         );
                                       }
 
-                                      //int itemLength = searchSnapshot.data!.length;
-                                      int itemLength = searchSnapshot.data!.length;
+                                      int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
 
                                       ///if there no products in group
                                       if (mySearchProvider.isSearching && itemLength == 0) {
@@ -158,10 +156,12 @@ class _MyHomeListState extends State<MyHomeList> {
                                   selectedGroupIndex,
                                   widget.isListEmptyWidget
                               );
+                              ///shows many errors and returns a widget
                               if (emptyErrorWidget != null) {
                                 return emptyErrorWidget;
                               }
 
+                              ///shows the ProductItems or the GroupItems
                               return MyListWidget(
                                   itemLength: itemLength, controller: _controller,
                                   mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,

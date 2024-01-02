@@ -22,10 +22,8 @@ class MyAccountSettingsService {
     }
   }
 
-  ///TODO: Entweder die re-verification für die neue email implementieren oder Funktion löschen
-
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
-    if (newEmail.isEmpty || password.isEmpty) {
+    if (newEmail.trim().isEmpty || password.trim().isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
     }
 
@@ -33,15 +31,16 @@ class MyAccountSettingsService {
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
     }
+
     try {
       AuthCredential credential = EmailAuthProvider.credential(
         email: user!.email!,
         password: password,
       );
 
-      await user.reauthenticateWithCredential(credential);
-      await user.updateEmail(newEmail);
-      MySnackBarService.showMySnackBar(context, 'Die E-Mail wurde erfolgreich geändert.', isError: false);
+      UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+      await userCredential.user!.verifyBeforeUpdateEmail(newEmail);
+      MySnackBarService.showMySnackBar(context, 'Die Verifizierung-Email wurde an Ihre neue Email versendet!', isError: false);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');

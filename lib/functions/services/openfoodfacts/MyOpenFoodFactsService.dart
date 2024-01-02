@@ -13,6 +13,8 @@ class MyOpenFoodFactsService {
     OpenFoodAPIConfiguration.globalLanguages = <OpenFoodFactsLanguage>[
       OpenFoodFactsLanguage.GERMAN
     ];
+
+    OpenFoodAPIConfiguration.globalCountry = OpenFoodFactsCountry.GERMANY;
   }
 
   Future<Product?> getProductByBarcode(String barcode) async {
@@ -33,10 +35,10 @@ class MyOpenFoodFactsService {
     }
   }
 
-  Future<SearchResult?> getProductByName(List<String> terms) async {
+  Future<SearchResult?> getProductByName(List<String> terms, int sizeOfProducts) async {
 
     var parameters = <Parameter>[
-      const PageSize(size: 25),
+      PageSize(size: sizeOfProducts),
       const SortBy(option: SortOption.POPULARITY),
       SearchTerms(terms: terms),
     ];
@@ -44,7 +46,8 @@ class MyOpenFoodFactsService {
     ProductSearchQueryConfiguration configuration = ProductSearchQueryConfiguration(
         parametersList: parameters,
         language: OpenFoodFactsLanguage.GERMAN,
-        version: ProductQueryVersion.v3
+        version: ProductQueryVersion.v3,
+        fields: [ProductField.BARCODE, ProductField.NAME, ProductField.BRANDS, ProductField.QUANTITY, ProductField.LABELS, ProductField.CATEGORIES, ProductField.NUTRISCORE, ProductField.INGREDIENTS_TEXT, ProductField.NUTRIMENTS, ProductField.SERVING_SIZE, ProductField.IMAGE_FRONT_URL]
     );
 
     SearchResult result =
@@ -53,9 +56,9 @@ class MyOpenFoodFactsService {
     return result;
   }
 
-  Future<List<Product>> getProducts(String productName) async {
+  Future<List<Product>> getProducts(String productName, int sizeOfProducts) async {
 
-    SearchResult? searchResult = await getProductByName([productName]);
+    SearchResult? searchResult = await getProductByName([productName], sizeOfProducts);
 
     if (searchResult == null) {
       return [];

@@ -8,6 +8,7 @@ import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:shopping_app/functions/services/notification/MyNotificationService.dart';
 import 'package:shopping_app/pages/MyEmailVerificationPage.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 import 'package:shopping_app/themes/DarkTheme.dart';
@@ -15,13 +16,21 @@ import 'package:shopping_app/themes/LightTheme.dart';
 import 'functions/providers/items/MyItemsProvider.dart';
 import 'pages/MyHomePage.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 ///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
-///TODO: Notification Service einbauen
 
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await MyNotificationService.initialize();
+  MyNotificationService.requestPermissions();
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
+  MyNotificationService.scheduleWeeklyNotification();
 
   runApp(
       MultiProvider(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:openfoodfacts/openfoodfacts.dart' as openFood;
+import 'package:shopping_app/components/search/MySearchForMoreProductsWidget.dart';
 import 'package:shopping_app/functions/home/MySortHandler.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
@@ -24,6 +25,8 @@ class MyListWidget extends StatelessWidget {
   final int selectedGroupIndex;
 
   const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex});
+
+  ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,7 @@ class MyListWidget extends StatelessWidget {
           return Column(
             children: [
 
+              ///shows the name of the member who should buy these products
               FutureBuilder<List<String>>(
                   future: MyFirestoreService.userService.getNameOfUser(uniqueUserUUIDs!.elementAt(index)),
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
@@ -75,9 +79,11 @@ class MyListWidget extends StatelessWidget {
                   }
               ),
 
+              ///shows the products of every single member
               ListView.builder(
                   itemCount: userProducts.length,
                   shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int itemIndex) {
 
                     return MyDismissibleWidget( /// for the product and group views
@@ -94,24 +100,31 @@ class MyListWidget extends StatelessWidget {
           );
         }
 
+        ///TODO: Button Mehr Produkte anzeigen vielleicht
         ///shows the items, dependent on the var isSearching and if the items should be a group or a product
-        return SizedBox(
-          child:  isSearch && !isGroup ?
-          MySearchItem( ///for the search view
-            currentUserUUID: user.uid,
-            selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
-            product: searchSnapshot!.data!.elementAt(index)
-          )
-            :
-          MyDismissibleWidget( /// for the product and group views
+
+        if (isSearch && !isGroup) {
+
+          if (index == itemLength - 1) {
+            return MySearchForMoreProductsWidget(itemLength: itemLength,);
+          }
+
+          return MySearchItem( ///for the search view
+              currentUserUUID: user.uid,
+              selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
+              product: searchSnapshot!.data!.elementAt(index)
+          );
+        } else {
+
+          return MyDismissibleWidget( /// for the product and group views
             isGroup: isGroup,
             groupsFromUser: groupsFromUser,
             itemIndex: index,
             selectedGroupIndex: selectedGroupIndex,
             itemsValue: itemsValue,
             productsFromSelectedGroup: products ?? [],
-          )
-        );
+          );
+        }
       },
     );
   }

@@ -7,6 +7,7 @@ import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/dialog/groupDialog/newGroupDialog.dart';
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
+import 'package:shopping_app/functions/services/membersRequest/MyMembersRequestService.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/requests/MyRequestGroup.dart';
 
@@ -41,7 +42,7 @@ class MyGroupBottomSheet {
                   subtitle: "Hier können Sie Ihre eigene \n Gruppe erstellen!",
                   function: () => newGroupDialog(context),
                 ),
-                if (myGroupProvider.isShowWidget)
+                if (myGroupProvider.isShowWidget) ///switchs between the join group button and the enter code to join to a group widget
                   MyInMemberRequestWidget(
                       title: "Gruppe beitreten",
                       onNumbersEntered: (List<String> enteredNumbers) async {
@@ -62,8 +63,8 @@ class MyGroupBottomSheet {
                             String fullName = names.join(' ');
 
                             MyDialog.showCustomDialog(
-                                context: context, 
-                                title: "Möchtest du dieser Gruppe beitreten?", 
+                                context: context,
+                                title: "Möchtest du dieser Gruppe beitreten?",
                                 contentBuilder: (dialogContext) => [
                                   Text(
                                     "Gruppenname: $groupName",
@@ -77,17 +78,43 @@ class MyGroupBottomSheet {
                                     "Besitzer: $fullName",
                                     style: Theme.of(context).textTheme.bodyMedium,
                                   ),
-                                ], 
+                                ],
                                 onConfirm: () async {
                                   User? user = FirebaseAuth.instance.currentUser;
 
                                   if (user != null) {
 
-                                    await MyFirestoreService.userService.addGroupUUIDsToUser(user.uid, myRequestGroup.groupUUID);
-                                    await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
-                                    MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
-                                    MySnackBarService.showMySnackBar(context, "Sie wurden zur Gruppe hinzugefügt!", isError: false);
-                                    Navigator.pop(context);
+                                    ///TODO: Gucken ob das klappt
+                                    //await MyFirestoreService.userService.addGroupUUIDsToUser(user.uid, myRequestGroup.groupUUID);
+                                    //await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
+                                    //MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
+                                    try {
+
+                                      MyMembersRequestService
+                                          .addUserToGroupOverRequest(
+                                          user.uid, myRequestGroup.groupUUID,
+                                          joinedNumbersAsInt);
+                                      MySnackBarService.showMySnackBar(context,
+                                          "Sie wurden zur Gruppe hinzugefügt!",
+                                          isError: false);
+                                      Navigator.pop(context);
+                                    } on MyCustomException catch(e) {
+
+                                      switch (e.keyword) {
+
+                                        case "group-user-not-exists":
+                                          print(e.message);
+                                          break;
+
+                                        case "request-not-exists":
+                                          print(e.message);
+                                          break;
+
+                                        case "snapchot-not-exists":
+                                          print(e.message);
+                                          break;
+                                      }
+                                    }
                                   }
                                 }
                             );

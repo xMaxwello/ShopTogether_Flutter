@@ -1,7 +1,8 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
+import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
 import '../../functions/services/snackbars/MySnackBarService.dart';
@@ -15,31 +16,61 @@ class MySearchBar extends StatefulWidget {
 }
 
 class _MySearchBarState extends State<MySearchBar> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  bool _isSearchActive = false;
+  bool _isKeyboardVisible() {
+    return MediaQuery.of(context).viewInsets.bottom != 0;
+  }
+
+  void _resetSearchState() {
+    _isSearchActive = false;
+    Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    controller.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (focusNode.hasFocus) {
+      _isSearchActive = true;
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+    } else if (!_isSearchActive) {
+      Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     Future<void> scan() async {
       final result = await BarcodeScanner.scan();
 
       if (result.type == ResultType.Barcode) {
+        List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
+          context,
+          result.rawContent,
+          fromScanner: true,
+        );
 
-        Provider.of<MySearchProvider>(context, listen: false).updateBarCode(result.rawContent);
-        Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+        showBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+          },
+        );
       } else if (result.type == ResultType.Cancelled) {
-
         MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
       } else if (result.type == ResultType.Error) {
-
         MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
       }
     }
 
-    TextEditingController controller = TextEditingController();
-
     return Consumer<MySearchProvider>(
         builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
-
           if (mySearchProvider.barcode != "") {
             controller.text = mySearchProvider.barcode;
           }
@@ -48,9 +79,12 @@ class _MySearchBarState extends State<MySearchBar> {
               padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
               child: SearchBar(
                 controller: controller,
+                focusNode: focusNode,
                 surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
                 backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
-                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodySmall),
+                hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.labelMedium),
+                hintText: 'Nach Produkt suchen...',
+                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
                 onChanged: (String changedText) {
                   Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(changedText);
                   Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
@@ -64,9 +98,17 @@ class _MySearchBarState extends State<MySearchBar> {
                       mySearchProvider.isSearching ?
                       IconButton(
                           onPressed: () {
+                            if (!_isKeyboardVisible() && _isSearchActive) {
+                              _resetSearchState();
+                            }
+                            if (_isKeyboardVisible()) {
+                              _resetSearchState();
+                              focusNode.unfocus();
+                            }
+                            _isSearchActive = false;
+                            focusNode.unfocus();
                             controller.clear();
-                            Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
-                            Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+                            Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(45);
                           },
                           icon: Icon(
                             Icons.arrow_back,
@@ -100,5 +142,13 @@ class _MySearchBarState extends State<MySearchBar> {
           );
         }
     );
+  }
+
+  @override
+  void dispose() {
+    focusNode.removeListener(_onFocusChange);
+    focusNode.dispose();
+    controller.dispose();
+    super.dispose();
   }
 }

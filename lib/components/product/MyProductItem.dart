@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:shopping_app/components/product/MyUpdateProductAmountWidget.dart';
 import 'package:shopping_app/functions/String/MyStringHandler.dart';
-import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
-
-import '../../functions/services/firestore/MyFirestoreService.dart';
 
 class MyProductItem extends StatefulWidget {
 
@@ -20,10 +16,11 @@ class MyProductItem extends StatefulWidget {
 
 class _MyProductItemState extends State<MyProductItem> {
 
-  late Timer _timer;
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
         margin: const EdgeInsets.only(left: 6, right: 6),
         child: Column(
@@ -41,11 +38,15 @@ class _MyProductItemState extends State<MyProductItem> {
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: widget.myProduct.productImageUrl.isNotEmpty ? Image.network(
-                      widget.myProduct.productImageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
-                    ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: widget.myProduct.productImageUrl.isNotEmpty ? Image.network(
+                        widget.myProduct.productImageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.error)),
+                      ) : const Center(child: Icon(Icons.image, color: Colors.grey)),
+                    )
                   ),
 
                   const SizedBox(width: 10),
@@ -76,75 +77,24 @@ class _MyProductItemState extends State<MyProductItem> {
 
                   const SizedBox(width: 10),
 
-                  GestureDetector(
-                      onTap: () {
-
-                        ///the amount of the product shouldn`t be under 1
-                        if (widget.myProduct.productCount > 1) {
-
-                          MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, -1);
-                        } else {
-
-                          ///if amount of the product is 1 and the user want to reduce the amount this message will show up
-                          MySnackBarService.showMySnackBar(
-                            context,
-                            "Wollen Sie das Product löschen?",
-                            isFunctionAvailable: true,
-                            isError: false,
-                            actionLabel: "Löschen",
-                            actionFunction: () {
-
-                              MyFirestoreService.productService.removeProductFromGroup(widget.selectedGroupUUID, widget.myProduct.productID!);
-                            },
-                          );
-                        }
-                      },
-                      onLongPress: () {
-                        _timer = Timer.periodic(
-                            const Duration(milliseconds: 100),
-                                (timer) {
-
-                              if (widget.myProduct.productCount > 1) {
-
-                                MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, -1);
-                              }
-                            }
-                        );
-                      },
-                      onLongPressEnd: (_) {
-                        _timer.cancel();
-                      },
-                      child: const Icon(Icons.remove)
-                  ),
+                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: -1, icon: Icons.remove, isAddWidget: false,
+                    onUpdateCounter: (int newCounter) {
+                      setState(() {
+                        counter = newCounter;
+                      });
+                    }, ),
                   const SizedBox(width: 5,),
                   Text(
-                    widget.myProduct.productCount.toString(),
+                    counter == 0 ? widget.myProduct.productCount.toString() : (widget.myProduct.productCount + counter).toString(),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(width: 5,),
-                  GestureDetector(
-                      onTap: () {
-
-                        ///add amount to the product
-                        MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, 1);
-                      },
-                      onLongPress: () {
-                        _timer = Timer.periodic(
-                            const Duration(milliseconds: 100),
-                                (timer) {
-                              MyFirestoreService.productService.updateProductCountFromProduct(widget.selectedGroupUUID, widget.myProduct.productID!, 1);
-                            }
-                        );
-                      },
-                      onLongPressEnd: (_) {
-                        _timer.cancel();
-                      },
-                      child: Icon(
-                        Icons.add,
-                        size: Theme.of(context).iconTheme.size,
-                        color: Theme.of(context).iconTheme.color,
-                      )
-                  ),
+                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: 1, icon: Icons.add, isAddWidget: true,
+                    onUpdateCounter: (int newCounter) {
+                      setState(() {
+                        counter = newCounter;
+                      });
+                    }, ),
                 ],
               ),
             ),

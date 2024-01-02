@@ -129,6 +129,12 @@ class LightTheme {
             color: Colors.white
         ),
 
+        //Buttonfont for Buttons with no background
+        displayMedium: GoogleFonts.tiltNeon(
+            fontSize: 16,
+            color: Colors.indigo[400]
+        ),
+
         //Überschrift der Anmeldeseite
         headlineLarge: GoogleFonts.tiltNeon(
           fontSize: 40,

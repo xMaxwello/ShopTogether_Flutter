@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyGroupBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyMemberBottomSheet.dart';
+import 'package:shopping_app/functions/services/notification/MyNotificationService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
+import 'package:timezone/timezone.dart';
 
 import '../services/firestore/MyFirestoreService.dart';
 
@@ -16,7 +18,7 @@ class MyFloatingActionFunctions {
     _selectedGroupUUID = selectedGroupUUID;
   }
 
-  void addGroup() {
+  void addGroup() async {
 
     showModalBottomSheet(
       context: _context,
@@ -42,5 +44,9 @@ class MyFloatingActionFunctions {
         );
       },
     );
+  }
+
+  void addCustomProduct() {
+
   }
 }

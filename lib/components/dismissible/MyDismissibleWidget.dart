@@ -47,7 +47,6 @@ class MyDismissibleWidget extends StatelessWidget {
         ///remove group or product if the item is swiped
         if (isGroup) {
 
-          ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
           User? currentUser = FirebaseAuth.instance.currentUser;
 
           if (currentUser != null) {
@@ -64,6 +63,13 @@ class MyDismissibleWidget extends StatelessWidget {
 
                     await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, currentUser.uid);
                     MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
+
+                    ///remove UserUUID of the products in this group, who should buy this product. (selectedUserUUID)
+                    List<String?>? productUUIDs = await MyFirestoreService.productService.getProductUUIDsOfSelectedUser(groupUUID, currentUser.uid);
+                    for (String? productUUID in productUUIDs!) {
+
+                      MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, "");
+                    }
                   });
             } else {
 
@@ -95,17 +101,22 @@ class MyDismissibleWidget extends StatelessWidget {
             MyProduct? myProduct = await MyFirestoreService.productService.getProductByUUID(groupsFromUser[selectedGroupIndex].groupUUID!, productUUID);
 
             if (myProduct != null) {
-              List<Widget> bottomSheetWidgets = await MyItemBottomSheet
-                  .generateBottomSheet(context, myProduct.barcode);
+              String groupUUID = groupsFromUser[selectedGroupIndex].groupUUID!;
+              List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
+                  context,
+                  myProduct.barcode,
+                  fromProductList: true,
+                  groupUUID: groupUUID,
+              );
               showBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
-                  return MyDraggableScrollableWidget(
-                      widgets: bottomSheetWidgets);
+                  return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
                 },
               );
             }
           }
+          ///Updates the index of the clicked item, expands is the item a group or Product
           Provider.of<MyItemsProvider>(context, listen: false).updateItemIndex(isGroup ? groupsFromUser[itemIndex].groupUUID! : itemsValue.selectedGroupUUID);
           Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
         },

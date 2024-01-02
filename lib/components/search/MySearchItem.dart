@@ -22,7 +22,7 @@ class MySearchItem extends StatelessWidget {
 
     return ListTile(
       title: Text(
-        MyStringHandler.truncateText((product.productName! != "" ? product.productName! :  "Unkown")
+        MyStringHandler.truncateText((product.productName != "" && product.productName != null ? product.productName! :  "Unkown")
             + ": " +
             (product.servingSize.toString() != "null" ? product.servingSize.toString() : "/"), 35),
         style: Theme.of(context).textTheme.bodySmall,
@@ -34,6 +34,7 @@ class MySearchItem extends StatelessWidget {
       ),
       trailing: IconButton(
           onPressed: () {
+            FocusScope.of(context).unfocus();
 
             Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
 
@@ -46,7 +47,7 @@ class MySearchItem extends StatelessWidget {
                 productCount: 1,
                 productVolumen: 0,
                 productVolumenType: '',
-                productImageUrl: product.images!.first.url ?? ''
+                productImageUrl: product.imageFrontUrl ?? ''
               )
             );
           },
@@ -62,6 +63,7 @@ class MySearchItem extends StatelessWidget {
         showBottomSheet(
           context: context,
           builder: (BuildContext context) {
+            FocusScope.of(context).unfocus();
             return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
           },
         );

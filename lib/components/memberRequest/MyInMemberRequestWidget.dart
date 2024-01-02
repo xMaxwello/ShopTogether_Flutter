@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 
-class MyInMemberRequestWidget extends StatelessWidget {
+class MyInMemberRequestWidget extends StatefulWidget {
   final String title;
   final Function(List<String>) onNumbersEntered;
 
@@ -12,24 +12,41 @@ class MyInMemberRequestWidget extends StatelessWidget {
     required this.onNumbersEntered,
   }) : super(key: key);
 
-  List<String> getEnteredNumbers(List<TextEditingController> controllers) {
-    return controllers.map((controller) => controller.text).toList();
+  @override
+  _MyInMemberRequestWidgetState createState() => _MyInMemberRequestWidgetState();
+}
+
+class _MyInMemberRequestWidgetState extends State<MyInMemberRequestWidget> {
+  late List<TextEditingController> textControllers;
+  late List<FocusNode> focusNodes;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialisiere die TextControllers und FocusNodes
+    textControllers = List.generate(6, (index) => TextEditingController());
+    focusNodes = List.generate(6, (index) => FocusNode());
   }
 
-  ///TODO: Wenn man in der Tastatur ist und dann unten links die Tastatur schließt löschen sich alle Zahlen in den Textfields
-  ///TODO: Der Focus bei den Textfields ist nicht flüssig, vorallem wenn man auf ein Textfield klickt
+  @override
+  void dispose() {
+    // Disponiere die TextControllers und FocusNodes
+    for (var controller in textControllers) {
+      controller.dispose();
+    }
+    for (var node in focusNodes) {
+      node.dispose();
+    }
+    super.dispose();
+  }
+
+  List<String> getEnteredNumbers() {
+    return textControllers.map((controller) => controller.text).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Erstelle eine Liste von Controllern für die Textfelder
-    List<TextEditingController> textControllers = List.generate(
-      6,
-          (index) => TextEditingController(),
-    );
-
-    List<IconData> icons = [Icons.check, Icons.close];
-    List<Function()> functions = [() => onNumbersEntered(getEnteredNumbers(textControllers)), () => Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false)];
-
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Card(
@@ -44,7 +61,7 @@ class MyInMemberRequestWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                title,
+                widget.title,
                 style: Theme.of(context).textTheme.headline6,
               ),
               const SizedBox(height: 20),
@@ -60,6 +77,7 @@ class MyInMemberRequestWidget extends StatelessWidget {
                       width: 40,
                       child: TextField(
                         controller: textControllers[index],
+                        focusNode: focusNodes[index],
                         textAlign: TextAlign.center,
                         maxLength: 1,
                         keyboardType: TextInputType.number,
@@ -78,14 +96,14 @@ class MyInMemberRequestWidget extends StatelessWidget {
                         ),
                         onChanged: (value) {
                           if (value.isNotEmpty) {
-                            final nextField = index < 5 ? index + 1 : null;
+                            final nextField = index < textControllers.length - 1 ? index + 1 : null;
                             if (nextField != null) {
-                              FocusScope.of(context).nextFocus();
+                              FocusScope.of(context).requestFocus(focusNodes[nextField]);
                             }
                           } else {
                             final prevField = index > 0 ? index - 1 : null;
                             if (prevField != null) {
-                              FocusScope.of(context).previousFocus();
+                              FocusScope.of(context).requestFocus(focusNodes[prevField]);
                             }
                           }
                         },
@@ -95,22 +113,22 @@ class MyInMemberRequestWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 15),
-
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-
-                  for (int i = 0;i < icons.length;i++)
+                  for (int i = 0; i < 2; i++)
                     Container(
                       padding: const EdgeInsets.only(right: 10),
                       height: 50,
                       width: 50,
                       child: FloatingActionButton.extended(
-                        onPressed: functions.elementAt(i),
+                        onPressed: i == 0
+                            ? () { widget.onNumbersEntered(getEnteredNumbers()); Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false); }
+                            : () => Provider.of<MyGroupProvider>(context, listen: false).updateShowWidget(false),
                         backgroundColor: Theme.of(context).primaryColor,
                         foregroundColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
                         label: Icon(
-                          icons.elementAt(i),
+                          i == 0 ? Icons.check : Icons.close,
                           size: Theme.of(context).floatingActionButtonTheme.iconSize! * 0.8,
                         ),
                       ),
