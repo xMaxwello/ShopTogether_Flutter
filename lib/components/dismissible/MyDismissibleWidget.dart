@@ -9,6 +9,7 @@ import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../objects/groups/MyGroup.dart';
 import '../../objects/products/MyProduct.dart';
+import '../../pages/MyHomePage.dart';
 import '../../pages/MyProductPage.dart';
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
 import '../group/MyGroupItem.dart';
@@ -70,17 +71,25 @@ class MyDismissibleWidget extends StatelessWidget {
 
                       MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, "");
                     }
-                  });
+                  },
+                onCancelled: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
+                }
+              );
             } else {
 
               MyDialog.showCustomDialog(
-                  context: context,
-                  title: "Wollen Sie die Gruppe wirklich löschen?",
-                  contentBuilder: (dialogContext) => [],
-                  onConfirm: () async {
+                context: context,
+                title: "Wollen Sie die Gruppe wirklich löschen?",
+                contentBuilder: (dialogContext) => [],
+                onConfirm: () async {
 
-                    MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
-              });
+                  MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
+                },
+                onCancelled: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
+                }
+              );
             }
           }
         } else {

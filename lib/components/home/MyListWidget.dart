@@ -26,8 +26,6 @@ class MyListWidget extends StatelessWidget {
 
   const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex});
 
-  ///TODO: Item wird nach löschen zuerst nicht angezeigt und dann doch, nach refreshen
-
   @override
   Widget build(BuildContext context) {
 
@@ -100,7 +98,6 @@ class MyListWidget extends StatelessWidget {
           );
         }
 
-        ///TODO: Button Mehr Produkte anzeigen vielleicht
         ///shows the items, dependent on the var isSearching and if the items should be a group or a product
 
         if (isSearch && !isGroup) {
