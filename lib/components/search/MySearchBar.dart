@@ -1,4 +1,5 @@
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
@@ -50,10 +51,16 @@ class _MySearchBarState extends State<MySearchBar> {
       final result = await BarcodeScanner.scan();
 
       if (result.type == ResultType.Barcode) {
+        String currentUserUUID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+        String groupUUID = ;
+
         List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
           context,
           result.rawContent,
           fromScanner: true,
+          groupUUID: groupUUID,
+          currentUserUUID: currentUserUUID,
         );
 
         showBottomSheet(

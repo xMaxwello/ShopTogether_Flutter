@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
+import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../objects/users/MyUsers.dart';
@@ -13,7 +14,7 @@ class MyItemBottomSheet {
       {bool fromProductList = false,
         String? groupUUID,
         bool fromScanner = false,
-        String? selectedGroupUUID}) async {
+        String? currentUserUUID }) async {
     MyOpenFoodFactsService service = MyOpenFoodFactsService();
     Product? product = await service.getProductByBarcode(barcode);
 
@@ -48,15 +49,24 @@ class MyItemBottomSheet {
     ];
 
     //Button für BottomSheet nach Scan
-    if (fromScanner) {
+    if (fromScanner && groupUUID != null && currentUserUUID != null) {
       productInfoWidgets.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              MyProduct newProduct = MyProduct(
+                  barcode: barcode,
+                  productName: product.productName ?? "Unbekannt",
+                  selectedUserUUID: currentUserUUID,
+                  productCount: 1,
+                  productVolumen: 0,
+                  productVolumenType: '',
+                  productImageUrl: product.imageFrontUrl ?? ''
+              );
 
-              //TODO Produkt in Liste einfügen
-
+              MyFirestoreService.productService.addProductToGroup(groupUUID, newProduct);
+              Navigator.pop(context);
             },
             child: Text('Produkt hinzufügen',
               style: Theme.of(context).textTheme.displaySmall,
@@ -75,9 +85,7 @@ class MyItemBottomSheet {
           stream: userStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Text('Keine Mitglieder gefunden');
@@ -85,23 +93,25 @@ class MyItemBottomSheet {
             List<MyUser> users = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: DropdownButton<String>(
-                hint: Text('Mitglied auswählen',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                items: users.map((MyUser user) {
-                  return DropdownMenuItem<String>(
-                    value: user.uuid,
-                    child: Text('${user.prename} ${user.surname}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+              child: Column(
+                children: [
+                  DropdownButton<String>(
+                    hint: Text('Mitglied auswählen',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  );
-                }).toList(),
-                onChanged: (_) {
+                    items: users.map((MyUser user) {
+                      return DropdownMenuItem<String>(
+                        value: user.uuid,
+                        child: Text('${user.prename} ${user.surname}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (_) async {
 
-                  //TODO User speichern und anzeigen lassen
-
-                  }
+                    },
+                  ),
+                ],
               ),
             );
           },
