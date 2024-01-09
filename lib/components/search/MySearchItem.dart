@@ -45,7 +45,7 @@ class MySearchItem extends StatelessWidget {
                 productName: product.productName!,
                 selectedUserUUID: currentUserUUID,
                 productCount: 1,
-                productVolumen: 0,
+                productVolumen: product.quantity != null ? product.quantity! : "",
                 productVolumenType: '',
                 productImageUrl: product.imageFrontUrl ?? ''
               )

@@ -51,7 +51,7 @@ class MyDismissibleWidget extends StatelessWidget {
         )
             :
         MyProductItem(///shows the product in group selectedGroupIndex at itemIndex
-          myProduct: selectedGroupIndex != -1 ? productsFromSelectedGroup[itemIndex] : MyProduct(barcode: "", productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: 0, productVolumenType: '', productImageUrl: ""),
+          myProduct: selectedGroupIndex != -1 ? productsFromSelectedGroup[itemIndex] : MyProduct(barcode: "", productID: "", productName: "", selectedUserUUID: "", productCount: 0, productVolumen: "", productVolumenType: '', productImageUrl: ""),
           selectedGroupUUID: itemsValue.selectedGroupUUID,
         ),
       ),

@@ -8,7 +8,7 @@ class MyProduct extends ChangeNotifier {
   final String productName;
   final String selectedUserUUID;
   final int productCount;
-  final int productVolumen;
+  final String productVolumen;
   final String productVolumenType;
   final String productImageUrl;
 
@@ -67,7 +67,7 @@ class MyProduct extends ChangeNotifier {
       productName: map['productName'] as String,
       selectedUserUUID: map['selectedUserUUID'] as String,
       productCount: map['productCount'] as int,
-      productVolumen: map['productVolumen'] as int,
+      productVolumen: map['productVolumen'] as String,
       productVolumenType: map['productVolumenType'] as String,
       productImageUrl: map['productImageUrl'] as String,
     );
@@ -82,7 +82,7 @@ class MyProduct extends ChangeNotifier {
       productName: data['productName'] as String,
       selectedUserUUID: data['selectedUserUUID'] as String,
       productCount: data['productCount'] as int,
-      productVolumen: data['productVolumen'] as int,
+      productVolumen: data['productVolumen'] as String,
       productVolumenType: data['productVolumenType'] as String,
       productImageUrl: data['productImageUrl'] as String,
     );
