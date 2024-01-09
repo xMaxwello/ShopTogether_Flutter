@@ -110,7 +110,7 @@ class _MyHomeListState extends State<MyHomeList> {
                               if (mySearchProvider.isSearching && !itemsValue.isGroup) {
 
                                 return FutureBuilder<List<Product>>(
-                                    future: MyOpenFoodFactsService().getProducts(mySearchProvider.searchedText),
+                                    future: MyOpenFoodFactsService().getProducts(mySearchProvider.searchedText, mySearchProvider.sizeOfSearchedProducts),
                                     builder: (BuildContext context, AsyncSnapshot<List<Product>> searchSnapshot) {
 
                                       if (searchSnapshot.connectionState == ConnectionState.waiting) {
@@ -125,7 +125,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                         );
                                       }
 
-                                      int itemLength = searchSnapshot.data!.length;
+                                      int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
 
                                       ///if there no products in group
                                       if (mySearchProvider.isSearching && itemLength == 0) {

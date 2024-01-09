@@ -35,10 +35,10 @@ class MyOpenFoodFactsService {
     }
   }
 
-  Future<SearchResult?> getProductByName(List<String> terms) async {
+  Future<SearchResult?> getProductByName(List<String> terms, int sizeOfProducts) async {
 
     var parameters = <Parameter>[
-      const PageSize(size: 45),
+      PageSize(size: sizeOfProducts),
       const SortBy(option: SortOption.POPULARITY),
       SearchTerms(terms: terms),
     ];
@@ -56,9 +56,9 @@ class MyOpenFoodFactsService {
     return result;
   }
 
-  Future<List<Product>> getProducts(String productName) async {
+  Future<List<Product>> getProducts(String productName, int sizeOfProducts) async {
 
-    SearchResult? searchResult = await getProductByName([productName]);
+    SearchResult? searchResult = await getProductByName([productName], sizeOfProducts);
 
     if (searchResult == null) {
       return [];

@@ -115,6 +115,7 @@ class _MySearchBarState extends State<MySearchBar> {
                             _isSearchActive = false;
                             focusNode.unfocus();
                             controller.clear();
+                            Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(45);
                           },
                           icon: Icon(
                             Icons.arrow_back,

@@ -16,8 +16,11 @@ class MyProductItem extends StatefulWidget {
 
 class _MyProductItemState extends State<MyProductItem> {
 
+  int counter = 0;
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
         margin: const EdgeInsets.only(left: 6, right: 6),
         child: Column(
@@ -74,14 +77,24 @@ class _MyProductItemState extends State<MyProductItem> {
 
                   const SizedBox(width: 10),
 
-                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: -1, icon: Icons.remove, isAddWidget: false, ),
+                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: -1, icon: Icons.remove, isAddWidget: false,
+                    onUpdateCounter: (int newCounter) {
+                      setState(() {
+                        counter = newCounter;
+                      });
+                    }, ),
                   const SizedBox(width: 5,),
                   Text(
-                    widget.myProduct.productCount.toString(),
+                    counter == 0 ? widget.myProduct.productCount.toString() : (widget.myProduct.productCount + counter).toString(),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                   const SizedBox(width: 5,),
-                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: 1, icon: Icons.add, isAddWidget: true, ),
+                  MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: 1, icon: Icons.add, isAddWidget: true,
+                    onUpdateCounter: (int newCounter) {
+                      setState(() {
+                        counter = newCounter;
+                      });
+                    }, ),
                 ],
               ),
             ),
