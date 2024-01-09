@@ -22,9 +22,7 @@ class MySearchItem extends StatelessWidget {
 
     return ListTile(
       title: Text(
-        MyStringHandler.truncateText((product.productName != "" && product.productName != null ? product.productName! :  "Unkown")
-            + ": " +
-            (product.servingSize.toString() != "null" ? product.servingSize.toString() : "/"), 35),
+        MyStringHandler.truncateText("${product.productName != "" && product.productName != null ? product.productName! :  "Unkown"}: ${product.servingSize.toString() != "null" ? product.servingSize.toString() : "/"}", 35),
         style: Theme.of(context).textTheme.bodySmall,
       ),
       leading: Icon(
