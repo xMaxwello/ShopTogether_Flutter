@@ -1,13 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/components/bottomSheetItems/groupBottomSheet/MyGroupBottomSheetDialog.dart';
 import 'package:shopping_app/components/group/MyAddGroupWidget.dart';
 import 'package:shopping_app/components/memberRequest/MyInMemberRequestWidget.dart';
-import 'package:shopping_app/functions/dialog/MyDialog.dart';
 import 'package:shopping_app/functions/dialog/groupDialog/newGroupDialog.dart';
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
-import 'package:shopping_app/functions/services/membersRequest/MyMembersRequestService.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/objects/requests/MyRequestGroup.dart';
 
@@ -55,70 +53,10 @@ class MyGroupBottomSheet {
                           MyRequestGroup myRequestGroup = await MyFirestoreService.requestService.getInfosAboutSession(joinedNumbersAsInt);
                           bool isUserAleadyInGroup = await MyFirestoreService.groupService.isCurrentUserInGroup(myRequestGroup.groupUUID);
                           
-                          if (!isUserAleadyInGroup) {
+                          if (!isUserAleadyInGroup) { ///when user is not in group and anything is correct, then show the dialog for joining the group
 
-                            String groupName = await MyFirestoreService.groupService.getNameOfGroup(myRequestGroup.groupUUID);
-                            int membersSize = await MyFirestoreService.groupService.getSizeOfMembers(myRequestGroup.groupUUID);
-                            List<String> names = await MyFirestoreService.userService.getNameOfUser(myRequestGroup.userOwnerUUID);
-                            String fullName = names.join(' ');
-
-                            MyDialog.showCustomDialog(
-                                context: context,
-                                title: "Möchtest du dieser Gruppe beitreten?",
-                                contentBuilder: (dialogContext) => [
-                                  Text(
-                                    "Gruppenname: $groupName",
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  Text(
-                                    "Anzahl der Mitglieder: $membersSize",
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                  Text(
-                                    "Besitzer: $fullName",
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                                onConfirm: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
-
-                                  if (user != null) {
-
-                                    try {
-
-                                      MyMembersRequestService
-                                          .addUserToGroupOverRequest(
-                                          user.uid, myRequestGroup.groupUUID,
-                                          joinedNumbersAsInt);
-                                      MySnackBarService.showMySnackBar(context,
-                                          "Sie wurden zur Gruppe hinzugefügt!",
-                                          isError: false);
-                                      Navigator.pop(context);
-                                    } on MyCustomException catch(e) {
-
-                                      switch (e.keyword) {
-
-                                        case "group-not-user-exists":
-                                          MySnackBarService.showMySnackBar(context,
-                                              "Der eingegebene Code ist falsch!",
-                                              isError: false);
-                                          break;
-
-                                        case "request-not-exists":
-                                          MySnackBarService.showMySnackBar(context,
-                                              "Der eingegebene Code ist falsch!",
-                                              isError: false);
-                                          break;
-
-                                        case "snapchot-not-exists":
-                                          print(e.message);
-                                          break;
-                                      }
-                                    }
-                                  }
-                                }
-                            );
-                          } else {
+                            MyGroupBottomSheetDialog.showGroupDialog(context, myRequestGroup, joinedNumbersAsInt);
+                          } else {///User is already in Group
                             
                             MySnackBarService.showMySnackBar(context, "Sie sind bereits in dieser Gruppe!");
                             Navigator.pop(context);
