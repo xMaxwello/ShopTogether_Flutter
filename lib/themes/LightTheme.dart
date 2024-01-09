@@ -105,6 +105,12 @@ class LightTheme {
           color: Colors.black
         ),
 
+        //Font für Mitgliedauswahl in ItemBottomsheet
+        bodyLarge: GoogleFonts.tiltNeon(
+          fontSize: 17,
+          color: Colors.black
+        ),
+
         //Überschrift der Produkt-/Gruppen-/User Tiles
         titleSmall: GoogleFonts.tiltNeon(
             fontSize: 19,
@@ -125,7 +131,7 @@ class LightTheme {
 
         //Buttonfont
         displaySmall: GoogleFonts.tiltNeon(
-            fontSize: 16,
+            fontSize: 15,
             color: Colors.white
         ),
 

@@ -94,57 +94,81 @@ class MyItemBottomSheet {
               return const Text('Keine Mitglieder gefunden');
             }
             List<MyUser> users = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: FutureBuilder<MyProduct?>(
-                  future: MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID!),
-                  builder: (BuildContext context, AsyncSnapshot<MyProduct?> snapshot) {
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+            if (users.length > 1) {
+              return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: FutureBuilder<MyProduct?>(
+                      future: MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID!),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<MyProduct?> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
 
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
 
-                    return Column(
-                      children: [
-                        DropdownButton<String>(
-                          hint: Text('Mitglied auswählen',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          items: users.map((MyUser user) {
-                            return DropdownMenuItem<String>(
-                              value: user.uuid,
-                              child: Center(
-                                child: Text('${user.prename} ${user.surname}',
-                                  style: Theme.of(context).textTheme.bodyMedium,
+                        return Column(
+                            children: [
+                              Card(
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(20))
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (String? selectedUserUUID) async {
-
-                            if (selectedUserUUID != null) {
-
-                              MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID, selectedUserUUID);
-                            }
-                          },
-                          value: snapshot.data?.selectedUserUUID,
-                        ),
-                      ],
-                    );
-                  }
-              )
-            );
-          },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text('Käufer zuweisen',
+                                          style: Theme.of(context).textTheme.titleMedium,
+                                        ),
+                                        DropdownButton<String>(
+                                          hint: Text('Mitglied auswählen',
+                                            style: Theme.of(context).textTheme.bodySmall,
+                                          ),
+                                          items: users.map((MyUser user) {
+                                            return DropdownMenuItem<String>(
+                                              value: user.uuid,
+                                              child: Center(
+                                                child: Text('${user.prename} ${user.surname}',
+                                                  style: Theme.of(context).textTheme.bodyLarge,
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (
+                                              String? selectedUserUUID) async {
+                                            if (selectedUserUUID != null) {
+                                              MyFirestoreService.productService.updateSelectedUserOfProduct(
+                                                  groupUUID, productUUID, selectedUserUUID);
+                                            }
+                                          },
+                                          value: snapshot.data?.selectedUserUUID,
+                                        ),
+                                      ]
+                                  ),
+                                ),
+                              )
+                            ]
+                        );
+                      }
+                  )
+              );
+            }
+            else {
+              return Container();
+            }
+          }
         ),
       );
+      productInfoWidgets.add(const SizedBox(height: 20));
     }
 
     List<Map<String, String>> productDetails = [

@@ -6,6 +6,8 @@ import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.
 import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
+import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
+import 'package:vibration/vibration.dart';
 
 import '../../functions/services/snackbars/MySnackBarService.dart';
 
@@ -53,6 +55,10 @@ class _MySearchBarState extends State<MySearchBar> {
       final result = await BarcodeScanner.scan();
 
       if (result.type == ResultType.Barcode) {
+        var settingsProvider = Provider.of<MySettingsProvider>(context, listen: false);
+        if (settingsProvider.isVibrationEnabled) {
+          Vibration.vibrate(duration: 500);
+        }
         String currentUserUUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
         List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
