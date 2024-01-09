@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/functions/services/clipBoard/MyClipBoardService.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 
+/**
+ * This widget shows the user the created request code. So that a other person join this group
+ * */
 class MyOutMemberRequestWidget extends StatelessWidget {
 
   final String title;
-  String requestCode;
+  final String requestCode;
 
   MyOutMemberRequestWidget({Key? key, required this.requestCode, required this.title}) : super(key: key) {
     _validateLength();

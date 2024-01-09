@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/group/MyGroupProvider.dart';
 
+/**
+ * this widget contains textfields where you can add you request code to join a group
+ * */
 class MyInMemberRequestWidget extends StatefulWidget {
   final String title;
   final Function(List<String>) onNumbersEntered;
@@ -24,14 +27,12 @@ class _MyInMemberRequestWidgetState extends State<MyInMemberRequestWidget> {
   void initState() {
     super.initState();
 
-    // Initialisiere die TextControllers und FocusNodes
     textControllers = List.generate(6, (index) => TextEditingController());
     focusNodes = List.generate(6, (index) => FocusNode());
   }
 
   @override
   void dispose() {
-    // Disponiere die TextControllers und FocusNodes
     for (var controller in textControllers) {
       controller.dispose();
     }
@@ -62,7 +63,7 @@ class _MyInMemberRequestWidgetState extends State<MyInMemberRequestWidget> {
             children: [
               Text(
                 widget.title,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 20),
               Row(
