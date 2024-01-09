@@ -116,6 +116,7 @@ class MyDismissibleWidget extends StatelessWidget {
                   myProduct.barcode,
                   fromProductList: true,
                   groupUUID: groupUUID,
+                  productUUID: productUUID
               );
               showBottomSheet(
                 context: context,

@@ -11,10 +11,13 @@ class MyItemBottomSheet {
   static Future<List<Widget>> generateBottomSheet(
       BuildContext context,
       String barcode,
-      {bool fromProductList = false,
+      {
+        bool fromProductList = false,
         String? groupUUID,
         bool fromScanner = false,
-        String? currentUserUUID }) async {
+        String? currentUserUUID,
+        String? productUUID
+      }) async {
     MyOpenFoodFactsService service = MyOpenFoodFactsService();
     Product? product = await service.getProductByBarcode(barcode);
 
@@ -93,26 +96,51 @@ class MyItemBottomSheet {
             List<MyUser> users = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                children: [
-                  DropdownButton<String>(
-                    hint: Text('Mitglied auswählen',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    items: users.map((MyUser user) {
-                      return DropdownMenuItem<String>(
-                        value: user.uuid,
-                        child: Text('${user.prename} ${user.surname}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (_) async {
+              child: FutureBuilder<MyProduct?>(
+                  future: MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID!),
+                  builder: (BuildContext context, AsyncSnapshot<MyProduct?> snapshot) {
 
-                    },
-                  ),
-                ],
-              ),
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return Column(
+                      children: [
+                        DropdownButton<String>(
+                          hint: Text('Mitglied auswählen',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          items: users.map((MyUser user) {
+                            return DropdownMenuItem<String>(
+                              value: user.uuid,
+                              child: Center(
+                                child: Text('${user.prename} ${user.surname}',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? selectedUserUUID) async {
+
+                            if (selectedUserUUID != null) {
+
+                              MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID, selectedUserUUID);
+                            }
+                          },
+                          value: snapshot.data?.selectedUserUUID,
+                        ),
+                      ],
+                    );
+                  }
+              )
             );
           },
         ),
