@@ -84,10 +84,6 @@ class MyGroupBottomSheet {
 
                                   if (user != null) {
 
-                                    ///TODO: Gucken ob das klappt
-                                    //await MyFirestoreService.userService.addGroupUUIDsToUser(user.uid, myRequestGroup.groupUUID);
-                                    //await MyFirestoreService.groupService.addUserUUIDToGroup(myRequestGroup.groupUUID, user.uid);
-                                    //MyFirestoreService.requestService.removeRequestWithCode(joinedNumbersAsInt);
                                     try {
 
                                       MyMembersRequestService
