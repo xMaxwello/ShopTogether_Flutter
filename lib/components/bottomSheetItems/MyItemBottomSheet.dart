@@ -114,49 +114,48 @@ class MyItemBottomSheet {
                           );
                         }
 
-                        return Column(
-                            children: [
-                              Card(
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(20))
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text('Käufer zuweisen',
-                                          style: Theme.of(context).textTheme.titleMedium,
-                                        ),
-                                        DropdownButton<String>(
-                                          hint: Text('Mitglied auswählen',
-                                            style: Theme.of(context).textTheme.bodySmall,
-                                          ),
-                                          items: users.map((MyUser user) {
-                                            return DropdownMenuItem<String>(
-                                              value: user.uuid,
-                                              child: Center(
-                                                child: Text('${user.prename} ${user.surname}',
-                                                  style: Theme.of(context).textTheme.bodyLarge,
-                                                ),
-                                              ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (
-                                              String? selectedUserUUID) async {
-                                            if (selectedUserUUID != null) {
-                                              MyFirestoreService.productService.updateSelectedUserOfProduct(
-                                                  groupUUID, productUUID, selectedUserUUID);
-                                            }
-                                          },
-                                          value: snapshot.data?.selectedUserUUID,
-                                        ),
-                                      ]
+                        return Card(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(20))
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text('Käufer zuweisen:',
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                    textAlign: TextAlign.center,
                                   ),
-                                ),
-                              )
-                            ]
+                                  DropdownButton<String>(
+                                    hint: Text('Mitglied auswählen',
+                                      style: Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                    items: users.map((MyUser user) {
+                                      return DropdownMenuItem<String>(
+                                        value: user.uuid,
+                                        child: Center(
+                                          child: Text('${user.prename} ${user.surname}',
+                                            style: Theme.of(context).textTheme.bodyLarge,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (
+                                        String? selectedUserUUID) async {
+                                      if (selectedUserUUID != null) {
+                                        MyFirestoreService.productService.updateSelectedUserOfProduct(
+                                            groupUUID, productUUID, selectedUserUUID);
+                                      }
+                                    },
+                                    value: snapshot.data?.selectedUserUUID,
+                                  ),
+                                ]
+                            ),
+                          ),
                         );
                       }
                   )

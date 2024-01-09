@@ -11,7 +11,7 @@ class MyMembersRequestService {
   /// [groupUUID] => the group uuid where the user uuid want to add
   ///
   /// [MyCustomException] Keys:
-  ///- group-user-not-exists: the groupUUID or the userUUID doesn't exist!
+  ///- group-not-user-exists: the groupUUID or the userUUID doesn't exist!
   ///- request-not-exists: the request code doesn't exist!
   ///- Has Keys from [MyFirestoreService.userService.addGroupUUIDsFromUser]
   ///  and [MyFirestoreService.groupService.addUserUUIDToGroup]
@@ -23,7 +23,7 @@ class MyMembersRequestService {
     bool contuine = existsUser && existsGroup;
     if (!contuine) {
       throw MyCustomException("the groupUUID or the userUUID doesn't exist!",
-          "group-user-not-exists");
+          "group-not-user-exists");
     }
 
     bool existsRequest = await MyFirestoreService.requestService.isRequestCodeExists(requestCode);

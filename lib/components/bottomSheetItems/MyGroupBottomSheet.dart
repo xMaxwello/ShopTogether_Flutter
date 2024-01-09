@@ -102,12 +102,16 @@ class MyGroupBottomSheet {
 
                                       switch (e.keyword) {
 
-                                        case "group-user-not-exists":
-                                          print(e.message);
+                                        case "group-not-user-exists":
+                                          MySnackBarService.showMySnackBar(context,
+                                              "Der eingegebene Code ist falsch!",
+                                              isError: false);
                                           break;
 
                                         case "request-not-exists":
-                                          print(e.message);
+                                          MySnackBarService.showMySnackBar(context,
+                                              "Der eingegebene Code ist falsch!",
+                                              isError: false);
                                           break;
 
                                         case "snapchot-not-exists":
