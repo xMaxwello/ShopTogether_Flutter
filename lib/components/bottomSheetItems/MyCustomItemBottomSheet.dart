@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 class MyCustomItemBottomSheet extends StatefulWidget {
@@ -62,7 +63,7 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
           const SizedBox(height: 15),
 
           ElevatedButton(
-            onPressed: () => print("test"),
+            onPressed: () => _updateProductDetails(),
             child: Text('Speichern',
                 style: Theme.of(context).textTheme.displaySmall
             ),
@@ -70,5 +71,16 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
         ],
       ),
     );
+  }
+
+  void _updateProductDetails() {
+    MyFirestoreService.productService.updateProductDetails(
+      widget.groupUUID!,
+      widget.productUUID,
+      _titleController.text,
+      _volumeController.text,
+      _descriptionController.text,
+    );
+    Navigator.pop(context);
   }
 }

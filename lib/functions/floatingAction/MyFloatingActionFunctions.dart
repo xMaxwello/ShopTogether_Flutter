@@ -56,16 +56,14 @@ class MyFloatingActionFunctions {
     MyProduct newProduct = MyProduct(
       productID: newProductUUID,
       barcode: '',
-      productName: 'Test',
+      productName: '',
+      selectedUserUUID: currentUserUUID,
       productCount: 1,
       productVolumen: '',
       productVolumenType: '',
       productImageUrl: '',
-      selectedUserUUID: currentUserUUID,
-      productDescription: 'lol'
+      productDescription: '',
     );
-
-    ProductService().addProductToGroup(_selectedGroupUUID, newProduct);
 
     showModalBottomSheet(
       context: _context,
@@ -83,5 +81,4 @@ class MyFloatingActionFunctions {
       },
     );
   }
-
 }

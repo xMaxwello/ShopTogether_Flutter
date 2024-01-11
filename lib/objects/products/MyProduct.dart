@@ -22,7 +22,7 @@ class MyProduct extends ChangeNotifier {
     required this.productVolumen,
     required this.productVolumenType,
     required this.productImageUrl,
-    required this.productDescription
+    required this.productDescription,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,7 +35,7 @@ class MyProduct extends ChangeNotifier {
       'productVolumen': productVolumen,
       'productVolumenType': productVolumenType,
       'productImageUrl': productImageUrl,
-      'productDescription': productDescription
+      'productDescription': productDescription,
     };
   }
 
@@ -73,7 +73,7 @@ class MyProduct extends ChangeNotifier {
       productVolumen: map['productVolumen'] as String,
       productVolumenType: map['productVolumenType'] as String,
       productImageUrl: map['productImageUrl'] as String,
-      productDescription: map['productDescription'] as String
+      productDescription: map['productDescription'] as String,
     );
   }
 
@@ -89,7 +89,7 @@ class MyProduct extends ChangeNotifier {
       productVolumen: data['productVolumen'] as String,
       productVolumenType: data['productVolumenType'] as String,
       productImageUrl: data['productImageUrl'] as String,
-      productDescription: data['productDescription'] as String
+      productDescription: data['productDescription'] as String,
     );
   }
 }
