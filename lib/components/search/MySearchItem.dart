@@ -45,7 +45,11 @@ class MySearchItem extends StatelessWidget {
               selectedGroupUUID,
               MyProduct(
                 barcode: product.barcode!,
-                productName: product.productName != "" && product.productName != null ? product.productName! : searchedText,
+                productName: (product.productName != "" && product.productName != null ?
+                product.productName! :
+                (searchedText != "" ? searchedText :
+                (product.brands != null ? product.brands! : "Unkown"))
+                ),
                 selectedUserUUID: currentUserUUID,
                 productCount: 1,
                 productVolumen: product.quantity != null ? product.quantity! : "",
