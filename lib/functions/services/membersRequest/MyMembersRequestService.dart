@@ -14,7 +14,7 @@ class MyMembersRequestService {
   ///  and [MyFirestoreService.groupService.addUserUUIDToGroup]
   static void addUserToGroupOverRequest(String userUUID, String groupUUID, int requestCode) async {
 
-    bool existsUser = await MyFirestoreService.userService.isUserExists(userUUID);
+    bool existsUserInGroup = await MyFirestoreService.groupService.isSpecificUserInGroup(userUUID, groupUUID);
     bool existsGroup = await MyFirestoreService.groupService.isGroupExists(groupUUID);
 
     if (!existsGroup) {
@@ -22,7 +22,7 @@ class MyMembersRequestService {
           "group-not-exists");
     }
 
-    if (existsUser) {
+    if (existsUserInGroup) {
       throw MyCustomException("the user exists already in group!",
           "user-exists");
     }
