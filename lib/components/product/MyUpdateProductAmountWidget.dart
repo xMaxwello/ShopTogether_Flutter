@@ -6,6 +6,9 @@ import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../functions/services/snackbars/MySnackBarService.dart';
 import '../../objects/products/MyProduct.dart';
 
+/**
+ * this widget updates the amount of the product
+ * */
 class MyUpdateProductAmountWidget extends StatefulWidget {
 
   final MyProduct myProduct;

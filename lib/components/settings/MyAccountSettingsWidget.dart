@@ -5,6 +5,9 @@ import 'package:shopping_app/functions/dialog/settingsDialog/changePasswordDialo
 import 'package:shopping_app/functions/dialog/settingsDialog/deleteAccountDialog.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/changeUserNameDialog.dart';
 
+/**
+ * The body of the MyAccountSettingsPage
+ * */
 class MyAccountSettingsWidget extends StatelessWidget {
 
   const MyAccountSettingsWidget({super.key});

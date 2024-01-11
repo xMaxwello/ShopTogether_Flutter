@@ -1,12 +1,12 @@
-import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
+import 'package:shopping_app/components/search/searchBar/MySearchBarFunctions.dart';
+import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 
-import '../../functions/services/snackbars/MySnackBarService.dart';
-
+/**
+ * With this widget, the user can search for products
+ * */
 class MySearchBar extends StatefulWidget {
 
   const MySearchBar({super.key});
@@ -16,6 +16,7 @@ class MySearchBar extends StatefulWidget {
 }
 
 class _MySearchBarState extends State<MySearchBar> {
+
   final TextEditingController controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
   bool _isSearchActive = false;
@@ -29,12 +30,6 @@ class _MySearchBarState extends State<MySearchBar> {
     controller.clear();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    focusNode.addListener(_onFocusChange);
-  }
-
   void _onFocusChange() {
     if (focusNode.hasFocus) {
       _isSearchActive = true;
@@ -45,100 +40,90 @@ class _MySearchBarState extends State<MySearchBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(_onFocusChange);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Future<void> scan() async {
-      final result = await BarcodeScanner.scan();
-
-      if (result.type == ResultType.Barcode) {
-        List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
-          context,
-          result.rawContent,
-          fromScanner: true,
-        );
-
-        showBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-          },
-        );
-      } else if (result.type == ResultType.Cancelled) {
-        MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
-      } else if (result.type == ResultType.Error) {
-        MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
-      }
-    }
 
     return Consumer<MySearchProvider>(
         builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
+
           if (mySearchProvider.barcode != "") {
             controller.text = mySearchProvider.barcode;
           }
 
-          return Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
-              child: SearchBar(
-                controller: controller,
-                focusNode: focusNode,
-                surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
-                backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
-                hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.labelMedium),
-                hintText: 'Nach Produkt suchen...',
-                textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
-                onChanged: (String changedText) {
-                  Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(changedText);
-                  Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
-                },
-                onSubmitted: (String endText) {
-                  Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
-                  controller.clear();
-                },
-                leading: Row(
-                    children: [
-                      mySearchProvider.isSearching ?
-                      IconButton(
+          return Consumer<MyItemsProvider>(
+              builder: (BuildContext context, MyItemsProvider myItemsProvider, Widget? child) {
+
+                return Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 8),
+                    child: SearchBar(
+                      controller: controller,
+                      focusNode: focusNode,
+                      surfaceTintColor: Theme.of(context).searchBarTheme.surfaceTintColor,
+                      backgroundColor: Theme.of(context).searchBarTheme.backgroundColor,
+                      hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.labelMedium),
+                      hintText: 'Nach Produkt suchen...',
+                      textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
+                      onChanged: (String changedText) {
+                        Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(changedText);
+                        Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(true);
+                      },
+                      onSubmitted: (String endText) {
+                        Provider.of<MySearchProvider>(context, listen: false).updateSearchedText(endText);
+                        controller.clear();
+                      },
+                      leading: Row(
+                          children: [
+                            mySearchProvider.isSearching ?
+                            IconButton(
+                                onPressed: () {
+                                  if (!_isKeyboardVisible() && _isSearchActive) {
+                                    _resetSearchState();
+                                  }
+                                  if (_isKeyboardVisible()) {
+                                    _resetSearchState();
+                                    focusNode.unfocus();
+                                  }
+                                  _isSearchActive = false;
+                                  focusNode.unfocus();
+                                  controller.clear();
+                                  Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(45);
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  size: Theme.of(context).iconTheme.size,
+                                  color: Theme.of(context).iconTheme.color,
+                                )
+                            ) : const SizedBox(),
+                            Icon(
+                              Icons.search,
+                              size: Theme.of(context).iconTheme.size,
+                            )
+                          ]
+                      ),
+                      trailing: <Widget> [
+                        IconButton(
                           onPressed: () {
-                            if (!_isKeyboardVisible() && _isSearchActive) {
-                              _resetSearchState();
-                            }
-                            if (_isKeyboardVisible()) {
-                              _resetSearchState();
-                              focusNode.unfocus();
-                            }
-                            _isSearchActive = false;
-                            focusNode.unfocus();
-                            controller.clear();
-                            Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(45);
+                            setState(() {
+                              MySearchBarFunctions.scan(context, myItemsProvider.selectedGroupUUID);
+                            });
                           },
                           icon: Icon(
-                            Icons.arrow_back,
+                            Icons.qr_code,
                             size: Theme.of(context).iconTheme.size,
-                            color: Theme.of(context).iconTheme.color,
-                          )
-                      ) : const SizedBox(),
-                      Icon(
-                        Icons.search,
-                        size: Theme.of(context).iconTheme.size,
-                      )
-                    ]
-                ),
-                trailing: <Widget> [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        scan();
-                      });
-                    },
-                    icon: Icon(
-                      Icons.qr_code,
-                      size: Theme.of(context).iconTheme.size,
-                    ),
-                  ),
-                ],
-                padding: const MaterialStatePropertyAll<EdgeInsets>(
-                    EdgeInsets.symmetric(horizontal: 16.0)),
+                          ),
+                        ),
+                      ],
+                      padding: const MaterialStatePropertyAll<EdgeInsets>(
+                          EdgeInsets.symmetric(horizontal: 16.0)),
 
-              )
+                    )
+                );
+              }
           );
         }
     );

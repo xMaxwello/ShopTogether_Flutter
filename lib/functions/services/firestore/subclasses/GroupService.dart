@@ -193,6 +193,25 @@ class GroupService {
     return userUUIDs.contains(user.uid);
   }
 
+  /// [MyCustomException] Keys:
+  /// - snapshot-not-exists: the snapshot of the isCurrentUserAlreadyInGroup(groupUUID) doesn`t exists!
+  /// - not-logged-in: the current user is not logged in!
+  Future<bool> isSpecificUserInGroup(String userUUID, String groupUUID) async {
+
+    DocumentReference<Map<String, dynamic>> ref =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
+
+    if (!snapshot.exists) {
+      throw MyCustomException("the snapshot of the $isCurrentUserInGroup(groupUUID) doesn`t exists!", "snapshot-not-exists");
+    }
+
+    List<String> userUUIDs = List<String>.from(snapshot.get("userUUIDs"));
+
+    return userUUIDs.contains(userUUID);
+  }
+
   ///[MyCustomException] Keys:
   ///- snapshot-not-existent: snapshot doesn`t exists
   Future<Stream<List<MyUser>>> getMembersAsStream(String groupUUID) async {

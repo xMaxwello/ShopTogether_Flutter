@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../search/MySearchBar.dart';
 
+/**
+ * The appbar. its anytime on the top of the screen
+ * */
 class MyAppBar extends StatefulWidget {
 
   final bool isGroup;

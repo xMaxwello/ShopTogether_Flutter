@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
 
-
+/**
+ * this shows the name of the user. When you click on it you navigate to the account settings
+ * */
 class MyUserCard extends StatelessWidget {
   const MyUserCard({super.key});
 

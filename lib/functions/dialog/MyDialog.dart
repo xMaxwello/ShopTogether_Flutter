@@ -9,6 +9,7 @@ class MyDialog {
     required String title,
     required DialogContentBuilder contentBuilder,
     required DialogOnConfirm onConfirm,
+    Function? onCancelled,
     String confirmButtonText = 'Bestätigen',
     String cancelButtonText = 'Abbrechen',
   }) {
@@ -31,6 +32,9 @@ class MyDialog {
               ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
+                if (onCancelled != null) {
+                  onCancelled();
+                }
               },
               child: Text(
                 cancelButtonText,

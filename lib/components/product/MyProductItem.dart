@@ -3,6 +3,9 @@ import 'package:shopping_app/components/product/MyUpdateProductAmountWidget.dart
 import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
+/**
+ * its shows the product with there infos
+ * */
 class MyProductItem extends StatefulWidget {
 
   final MyProduct myProduct;
@@ -32,6 +35,7 @@ class _MyProductItemState extends State<MyProductItem> {
               child: Row(
                 children: [
 
+                  ///the image of the product
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
@@ -51,6 +55,7 @@ class _MyProductItemState extends State<MyProductItem> {
 
                   const SizedBox(width: 10),
 
+                  ///infos about the product
                   Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +68,7 @@ class _MyProductItemState extends State<MyProductItem> {
                             style: Theme.of(context).textTheme.titleSmall,
                           ),
 
-                          widget.myProduct.productVolumen == 0 && widget.myProduct.productVolumenType == "" ?
+                          widget.myProduct.productVolumen == "" && widget.myProduct.productVolumenType == "" ?
                           const SizedBox()
                               :
                           Text( /// shows product volumen
@@ -77,6 +82,7 @@ class _MyProductItemState extends State<MyProductItem> {
 
                   const SizedBox(width: 10),
 
+                  ///with the MyUpdateProductAmountWidget can the user change the amount of the Product
                   MyUpdateProductAmountWidget(myProduct: widget.myProduct, selectedGroupUUID: widget.selectedGroupUUID, updateAmountAbout: -1, icon: Icons.remove, isAddWidget: false,
                     onUpdateCounter: (int newCounter) {
                       setState(() {

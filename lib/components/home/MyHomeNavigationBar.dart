@@ -5,6 +5,9 @@ import 'package:shopping_app/pages/MyHomePage.dart';
 
 import '../../pages/MySettingsPage.dart';
 
+/**
+ * its the navigationbar on the bottom
+ * */
 class MyHomeNavigationBar extends StatefulWidget {
 
   const MyHomeNavigationBar({super.key});
@@ -52,8 +55,8 @@ class _MyHomeNavigationBarState extends State<MyHomeNavigationBar> {
 
                             Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected(value.isNavigationSelected);
 
-                            //Switch statement to switch between different Views by pressing
-                            // on the corresponding Icon on the BottomBar
+                            ///Switch statement to switch between different Views by pressing
+                            ///on the corresponding Icon on the BottomBar
                             switch(iconView) {
                               case 0: //Shows Homepage
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));

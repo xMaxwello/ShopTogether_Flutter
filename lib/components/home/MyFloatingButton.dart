@@ -74,4 +74,3 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
     );
   }
 }
-

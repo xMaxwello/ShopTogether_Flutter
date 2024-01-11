@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/pages/MyLoginPage.dart';
 
 import '../../components/login/MyLoginWidget.dart';
@@ -33,8 +34,10 @@ class MyLoginFunctions {
   Future<void> login() async {
 
     bool error = false;
+    String emailAddress = _emailController.text.trim();
+    String password = _passwordController.text.trim();
 
-    if (_emailController.text == "" || _passwordController.text == "") {
+    if (emailAddress == "" || password == "") {
       MySnackBarService.showMySnackBar(_context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
@@ -44,8 +47,8 @@ class MyLoginFunctions {
       try {
 
         await _auth.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
+          email: emailAddress,
+          password: password,
         );
       } on FirebaseAuthException catch(e) {
 
@@ -131,14 +134,19 @@ class MyLoginFunctions {
   Future<void> _register() async {
 
     bool error = false;
+    String emailAddress = MyStringHandler.removeHtmlTags(_emailController.text.trim());
+    String password = MyStringHandler.validatePassword(_passwordController.text.trim());
+    String passwordConfirm = MyStringHandler.validatePassword(_confirmPasswordController.text.trim());
+    String nameOfUser = MyStringHandler.removeHtmlTags(_nameController.text.trim());
+    String prenameOfUser = MyStringHandler.removeHtmlTags(_prenameController.text.trim());
 
-    if (_passwordController.text == "" || _confirmPasswordController.text == "" || _prenameController.text == "" ||
-        _nameController.text == "" || _emailController.text == "") {
+    if (password == "" || passwordConfirm == "" || prenameOfUser == "" ||
+        nameOfUser == "" || emailAddress == "") {
       MySnackBarService.showMySnackBar(_context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
       error = true;
     }
 
-    if (_passwordController.text != _confirmPasswordController.text) {
+    if (password != passwordConfirm) {
       MySnackBarService.showMySnackBar(_context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
       error = true;
     }
@@ -147,8 +155,8 @@ class MyLoginFunctions {
 
       try {
         UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-            email: _emailController.text,
-            password: _passwordController.text
+            email: emailAddress,
+            password: password
         );
 
         String uuid = FirebaseAuth.instance.currentUser!.uid;
@@ -156,8 +164,8 @@ class MyLoginFunctions {
         ///create a user in the database, where prename and surname are saved
         MyUser user = MyUser(
             uuid: uuid,
-            prename: _prenameController.text,
-            surname: _nameController.text,
+            prename: prenameOfUser,
+            surname: nameOfUser,
             groupUUIDs: []
         );
         MyFirestoreService.userService.addUser(user);

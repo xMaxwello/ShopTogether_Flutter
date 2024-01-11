@@ -5,6 +5,9 @@ import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart
 
 import '../../objects/users/MyUsers.dart';
 
+/**
+ * The widget, which shows the users in the MyMemberListForSheet in the MyMemberBottomSheet
+ * */
 class MyUserWidget extends StatelessWidget {
 
   final MyUser myUser;

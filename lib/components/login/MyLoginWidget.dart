@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/login/MyLoginProvider.dart';
 
+/**
+ * Its the login layout, in which the Textfields are generated.
+ * */
 class MyLoginWidget extends StatefulWidget {
 
   final String title;

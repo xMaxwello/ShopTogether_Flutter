@@ -6,6 +6,9 @@ import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dar
 import 'package:shopping_app/functions/services/settings/MySettingsFunctions.dart';
 import 'package:shopping_app/pages/MyAccountSettingsPage.dart';
 
+/**
+ * Shows the app settings. Its the body of the SettingsPage
+ * */
 class MySettingsWidget extends StatefulWidget {
   const MySettingsWidget({super.key});
 
@@ -86,9 +89,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyAccountSettingsPage(),
-                        ),
-                        );
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const MyAccountSettingsPage(),),);
                       },
                     child: const MyUserCard(),
                     ),

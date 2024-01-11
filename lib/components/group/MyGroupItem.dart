@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 
+/**
+ * in the group screen (e.g. HomeScreen) its shows the group widgets and there infos
+ * */
 class MyGroupItem extends StatelessWidget {
 
   final MyGroup myGroup;

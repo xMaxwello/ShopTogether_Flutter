@@ -3,6 +3,9 @@ import 'package:shopping_app/components/settings/MyAccountSettingsWidget.dart';
 
 import '../components/home/MyHomeNavigationBar.dart';
 
+/**
+ * The AccountSettings for the user. Here are all settings for the account from the user
+ * */
 class MyAccountSettingsPage extends StatelessWidget {
   const MyAccountSettingsPage({super.key});
 
