@@ -180,4 +180,29 @@ class ProductService {
 
     return productUUIDs;
   }
+
+  Future<void> updateProductDetails(String groupUUID, String productUUID, String title, String volume, String description) async {
+    DocumentReference<Map<String, dynamic>> groupRef = FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    DocumentSnapshot<Map<String, dynamic>> groupSnapshot = await groupRef.get();
+
+    if (!groupSnapshot.exists) {
+      throw MyCustomException("Gruppe nicht gefunden", "group-not-found");
+    }
+
+    List<Map<String, dynamic>> productsData = List<Map<String, dynamic>>.from(groupSnapshot.get("products") ?? []);
+
+    int productIndex = productsData.indexWhere((product) => product["productID"] == productUUID);
+
+    if (productIndex != -1) {
+      productsData[productIndex]["productName"] = title;
+      productsData[productIndex]["productVolumen"] = volume;
+      productsData[productIndex]["productDescription"] = description;
+
+      groupRef.update({"products": productsData});
+    } else {
+      throw MyCustomException("Produkt nicht gefunden", "product-not-found");
+    }
+  }
+
 }

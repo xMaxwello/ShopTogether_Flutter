@@ -65,7 +65,8 @@ class MyItemBottomSheet {
                   productCount: 1,
                   productVolumen: "0",
                   productVolumenType: '',
-                  productImageUrl: product.imageFrontUrl ?? ''
+                  productImageUrl: product.imageFrontUrl ?? '',
+                  productDescription: ''
               );
 
               MyFirestoreService.productService.addProductToGroup(groupUUID, newProduct);
@@ -176,6 +177,7 @@ class MyItemBottomSheet {
       {'Menge': product.quantity ?? 'N/A'},
       {'Labels': product.labels ?? 'N/A'},
       {'Kategorie': product.categories ?? 'N/A'},
+      {'Geschäft': product.stores ?? 'N/A'},
     ];
 
     //Produktdetails
