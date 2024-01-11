@@ -1,16 +1,12 @@
-import 'package:barcode_scan2/barcode_scan2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
+import 'package:shopping_app/components/search/searchBar/MySearchBarFunctions.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
-import 'package:shopping_app/functions/providers/settings/MySettingsProvider.dart';
-import 'package:vibration/vibration.dart';
 
-import '../../functions/services/snackbars/MySnackBarService.dart';
-
+/**
+ * With this widget, the user can search for products
+ * */
 class MySearchBar extends StatefulWidget {
 
   const MySearchBar({super.key});
@@ -20,6 +16,7 @@ class MySearchBar extends StatefulWidget {
 }
 
 class _MySearchBarState extends State<MySearchBar> {
+
   final TextEditingController controller = TextEditingController();
   final FocusNode focusNode = FocusNode();
   bool _isSearchActive = false;
@@ -33,12 +30,6 @@ class _MySearchBarState extends State<MySearchBar> {
     controller.clear();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    focusNode.addListener(_onFocusChange);
-  }
-
   void _onFocusChange() {
     if (focusNode.hasFocus) {
       _isSearchActive = true;
@@ -49,41 +40,17 @@ class _MySearchBarState extends State<MySearchBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(_onFocusChange);
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-    Future<void> scan(String groupUUID) async {
-      final result = await BarcodeScanner.scan();
-
-      if (result.type == ResultType.Barcode) {
-        var settingsProvider = Provider.of<MySettingsProvider>(context, listen: false);
-        if (settingsProvider.isVibrationEnabled) {
-          Vibration.vibrate(duration: 500);
-        }
-        String currentUserUUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-
-        List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
-          context,
-          result.rawContent,
-          fromScanner: true,
-          groupUUID: groupUUID,
-          currentUserUUID: currentUserUUID,
-        );
-
-        showBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-          },
-        );
-      } else if (result.type == ResultType.Cancelled) {
-        MySnackBarService.showMySnackBar(context, "BarCodeScanner wurde verlassen!", isError: false);
-      } else if (result.type == ResultType.Error) {
-        MySnackBarService.showMySnackBar(context, "BarCode konnte nicht gescannt werden!");
-      }
-    }
 
     return Consumer<MySearchProvider>(
         builder: (BuildContext context, MySearchProvider mySearchProvider, Widget? child) {
+
           if (mySearchProvider.barcode != "") {
             controller.text = mySearchProvider.barcode;
           }
@@ -142,7 +109,7 @@ class _MySearchBarState extends State<MySearchBar> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              scan(myItemsProvider.selectedGroupUUID);
+                              MySearchBarFunctions.scan(context, myItemsProvider.selectedGroupUUID);
                             });
                           },
                           icon: Icon(

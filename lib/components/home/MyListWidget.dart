@@ -12,6 +12,9 @@ import '../../objects/groups/MyGroup.dart';
 import '../dismissible/MyDismissibleWidget.dart';
 import '../search/MySearchItem.dart';
 
+/**
+ * Its like a sub class of the MyHomeList. Because the class would become too big if not
+ * */
 class MyListWidget extends StatelessWidget {
 
   final int itemLength;
@@ -23,8 +26,9 @@ class MyListWidget extends StatelessWidget {
   final bool isSearch;
   final bool isGroup;
   final int selectedGroupIndex;
+  final String? searchedText;
 
-  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex});
+  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText});
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +111,10 @@ class MyListWidget extends StatelessWidget {
           }
 
           return MySearchItem( ///for the search view
-              currentUserUUID: user.uid,
-              selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
-              product: searchSnapshot!.data!.elementAt(index)
+            currentUserUUID: user.uid,
+            selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
+            product: searchSnapshot!.data!.elementAt(index),
+            searchedText: searchedText!,
           );
         } else {
 

@@ -5,6 +5,9 @@ import 'package:shopping_app/pages/MyHomePage.dart';
 
 import '../../pages/MySettingsPage.dart';
 
+/**
+ * its the navigationbar on the bottom
+ * */
 class MyHomeNavigationBar extends StatefulWidget {
 
   const MyHomeNavigationBar({super.key});

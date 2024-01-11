@@ -9,20 +9,25 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
 
+/**
+ * This widget shows a product and the infos of it.
+ * This widget show up, when you search for products
+ * */
 class MySearchItem extends StatelessWidget {
 
   final String currentUserUUID;
   final String selectedGroupUUID;
   final Product product;
+  final String searchedText;
 
-  const MySearchItem({super.key, required this.product, required this.selectedGroupUUID, required this.currentUserUUID});
+  const MySearchItem({super.key, required this.product, required this.selectedGroupUUID, required this.currentUserUUID, required this.searchedText});
 
   @override
   Widget build(BuildContext context) {
 
     return ListTile(
       title: Text(
-        MyStringHandler.truncateText("${product.productName != "" && product.productName != null ? product.productName! :  "Unkown"}: ${product.servingSize.toString() != "null" ? product.servingSize.toString() : "/"}", 35),
+        MyStringHandler.truncateText("${product.productName != "" && product.productName != null ? product.productName! :  "Unkown"}: ${product.quantity.toString() != "null" ? product.quantity.toString() : "/"}", 35),
         style: Theme.of(context).textTheme.bodySmall,
       ),
       leading: Icon(
@@ -40,7 +45,7 @@ class MySearchItem extends StatelessWidget {
               selectedGroupUUID,
               MyProduct(
                 barcode: product.barcode!,
-                productName: product.productName!,
+                productName: product.productName != "" && product.productName != null ? product.productName! : searchedText,
                 selectedUserUUID: currentUserUUID,
                 productCount: 1,
                 productVolumen: product.quantity != null ? product.quantity! : "",

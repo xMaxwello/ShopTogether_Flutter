@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/**
+ * Its the widget (layout) when you want to add a group or want to create a group in the bottomsheet.
+ * */
 class MyAddGroupWidget extends StatelessWidget {
 
   final Function() function;

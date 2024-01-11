@@ -8,6 +8,10 @@ import '../group/MyGroupItem.dart';
 import '../home/MyBasicStructItem.dart';
 import '../product/MyProductItem.dart';
 
+/**
+ * Its the widget item, which can you swipe to the side.
+ * Its for the MyGroup and MyProduct items
+ * */
 class MyDismissibleWidget extends StatelessWidget {
 
   final bool isGroup;

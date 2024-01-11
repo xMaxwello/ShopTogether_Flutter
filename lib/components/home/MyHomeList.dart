@@ -12,6 +12,9 @@ import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsSer
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 import '../../objects/users/MyUsers.dart';
 
+/**
+ * Its like the main class of the total project. Here changes every Product- , Group- , SearchItem
+ * */
 class MyHomeList extends StatefulWidget {
 
   final Widget isListEmptyWidget;
@@ -135,11 +138,12 @@ class _MyHomeListState extends State<MyHomeList> {
                                       }
 
                                       return MyListWidget(
-                                          itemLength: itemLength, controller: _controller,
-                                          mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
-                                          itemsValue: itemsValue,
-                                          isSearch: true, isGroup: itemsValue.isGroup,
-                                          selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
+                                        itemLength: itemLength, controller: _controller,
+                                        mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
+                                        itemsValue: itemsValue,
+                                        isSearch: true, isGroup: itemsValue.isGroup,
+                                        selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
+                                        searchedText: mySearchProvider.searchedText,
                                       );
                                     }
                                 );
