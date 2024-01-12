@@ -15,10 +15,35 @@ class MyAccountSettingsService {
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
     try {
       String userUuid = FirebaseAuth.instance.currentUser?.uid ?? '';
-      await MyFirestoreService.userService.updateUserName(userUuid, newPrename, newSurname, password);
+      await MyFirestoreService.userService.updateNameOfUser(userUuid, newPrename, newSurname, password);
       MySnackBarService.showMySnackBar(context, 'Name erfolgreich geändert', isError: false);
     } on MyCustomException catch (e) {
-      MySnackBarService.showMySnackBar(context, e.message, isError: true);
+
+      switch (e.keyword) {
+
+        case "empty-fields":
+          MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus!');
+          break;
+
+        case "not-logged-in":
+          MySnackBarService.showMySnackBar(context, 'Sie sind nicht eingeloggt!');
+          break;
+
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
+          break;
+
+        case "invalid-credential":
+          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
+          break;
+
+        case "unknown-error":
+          print(e.message);
+          break;
+
+      }
+
+      return;
     }
   }
 
@@ -42,18 +67,37 @@ class MyAccountSettingsService {
       await userCredential.user!.verifyBeforeUpdateEmail(newEmail);
       MySnackBarService.showMySnackBar(context, 'Die Verifizierung-Email wurde an Ihre neue Email versendet!', isError: false);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
-    } else if (e.code == 'too-many-requests') {
-        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
-    } else if (e.code == 'network-request-failed') {
-        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-    } else if (e.code == 'invalid-email') {
-        MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
-      } else {
-        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
-        print("Firebase Error Code: ${e.code}");
+
+      switch (e.code) {
+
+        case "invalid-credential":
+          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
+          break;
+
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+          break;
+
+        case "too-many-requests'":
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          break;
+
+        case "network-request-failed":
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          break;
+
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
+        default:
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          print("Firebase Error Code: ${e.code}");
+          break;
+
       }
+
+      return;
     }
   }
 
@@ -82,16 +126,37 @@ class MyAccountSettingsService {
       await user.updatePassword(newPassword);
       MySnackBarService.showMySnackBar(context, 'Das Passwort wurde erfolgreich geändert.', isError: false);
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        MySnackBarService.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
-      } else if (e.code == 'too-many-requests') {
-        MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
-      } else if (e.code == 'network-request-failed') {
-        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-      } else {
-        MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später noch einmal.');
-        print("Firebase Error Code: ${e.code}");
+
+      switch (e.code) {
+
+        case "invalid-credential":
+          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
+          break;
+
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+          break;
+
+        case "too-many-requests'":
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          break;
+
+        case "network-request-failed":
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          break;
+
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
+        default:
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          print("Firebase Error Code: ${e.code}");
+          break;
+
       }
+
+      return;
     }
   }
 
@@ -111,6 +176,9 @@ class MyAccountSettingsService {
     );
     try {
 
+      UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+      await user.delete();
+
       MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
       for (String groupUUID in userData.groupUUIDs) {
 
@@ -119,25 +187,43 @@ class MyAccountSettingsService {
           MyFirestoreService.groupService.removeGroup(groupUUID);
         } else {
 
-          MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, user.uid);
+          MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, user.uid);
         }
       }
 
       MyFirestoreService.userService.removeUser(user.uid);
-
-      await user.reauthenticateWithCredential(credential);
-      await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
 
-      if (e.code == 'wrong-password') {
-        MySnackBarService.showMySnackBar(context, 'Das alte Passwort ist nicht korrekt.');
-      } else if (e.code == 'network-request-failed') {
-        MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-      } else {
-        MySnackBarService.showMySnackBar(context, 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später noch einmal.');
-        print("Firebase Error Code: ${e.code}");
+      switch (e.code) {
+
+        case "invalid-credential":
+          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
+          break;
+
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+          break;
+
+        case "too-many-requests'":
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          break;
+
+        case "network-request-failed":
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          break;
+
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
+        default:
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          print("Firebase Error Code: ${e.code}");
+          break;
       }
+
+      return;
     } on MyCustomException catch(e) {
 
       switch(e.keyword) {
@@ -145,8 +231,12 @@ class MyAccountSettingsService {
           print(e.message);
           break;
       }
+
+      return;
     } catch(e) {
+
       print(e);
+      return;
     }
   }
 }

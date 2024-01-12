@@ -113,7 +113,7 @@ class GroupService {
 
   ///[MyCustomException] Keys:
   ///- snapchot-not-exists: the snapchot doesn't exists of the userUuid
-  Future<void> removeUserUUIDToGroup(String groupUUID, String userUUID) async {
+  Future<void> removeUserUUIDFromGroup(String groupUUID, String userUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);

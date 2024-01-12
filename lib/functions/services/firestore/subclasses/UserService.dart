@@ -148,18 +148,33 @@ class UserService {
   }
 
   ///[MyCustomException] Keys:
-  ///- empty-fields: Textfelder sind leer
-  ///- not-logged-in: User ist nicht angemeldet
-  ///- wrong-password: Falsches Passwort eingegeben
-  Future<void> updateUserName(String userUuid, String newPrename, String newSurname, String password) async {
+  ///- empty-fields: The required fields are empty!
+  ///- not-logged-in: the user is not logged in!
+  ///- wrong-password: the password is wrong
+  ///- unknown-error: Unkown Error: $e
+  ///
+  /// - All exceptions from firebase reauthenticateWithCredential() function:
+  /// - user-mismatch:
+  /// Thrown if the credential given does not correspond to the user.
+  /// - user-not-found:
+  /// Thrown if the credential given does not correspond to any existing user.
+  /// - invalid-credential:
+  /// Thrown if the provider's credential is not valid. This can happen if it has already expired when calling link, or if it used invalid token(s). See the Firebase documentation for your provider, and make sure you pass in the correct parameters to the credential method.
+  /// - wrong-password:
+  /// Thrown if the password used in a EmailAuthProvider.credential is not correct or when the user associated with the email does not have a password.
+  /// - invalid-verification-code:
+  /// Thrown if the credential is a PhoneAuthProvider.credential and the verification code of the credential is not valid.
+  /// - invalid-verification-id:
+  /// Thrown if the credential is a PhoneAuthProvider.credential and the verification ID of the credential is not valid.
+  Future<void> updateNameOfUser(String userUuid, String newPrename, String newSurname, String password) async {
     try {
       if (newPrename.isEmpty || newSurname.isEmpty || password.isEmpty) {
-        throw MyCustomException('Bitte füllen Sie alle Felder aus.', 'empty-fields');
+        throw MyCustomException('The required fields are empty!', 'empty-fields');
       }
 
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        throw MyCustomException('Sie sind nicht angemeldet.', 'not-logged-in');
+        throw MyCustomException('the user is not logged in!', 'not-logged-in');
       }
 
       AuthCredential credential = EmailAuthProvider.credential(
@@ -172,11 +187,16 @@ class UserService {
         'prename': newPrename,
         'surname': newSurname,
       });
-    } on MyCustomException catch (e) {
-        throw MyCustomException(e.message, e.keyword);
+    } on FirebaseAuthException catch (e) {
 
+      print(e.code);
+      throw MyCustomException(e.message!, e.code);
+    } on MyCustomException catch (e) {
+
+      throw MyCustomException(e.message, e.keyword);
     } catch (e) {
-      throw MyCustomException("Unbekannter Fehler: $e", "unknown-error");
+
+      throw MyCustomException("Unkown Error: $e", "unknown-error");
     }
   }
 

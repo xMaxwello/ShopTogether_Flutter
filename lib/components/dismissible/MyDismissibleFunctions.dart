@@ -35,7 +35,7 @@ class MyDismissibleFuntions {
               contentBuilder: (dialogContext) => [],
               onConfirm: () async {
 
-                await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, currentUser.uid);
+                await MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, currentUser.uid);
                 MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
 
                 ///remove UserUUID of the products in this group, who should buy this product. (selectedUserUUID)

@@ -88,12 +88,16 @@ class _MyHomeListState extends State<MyHomeList> {
                               ///get current user
                               FireAuth.User? fireUser = FireAuth.FirebaseAuth.instance.currentUser;
                               if (fireUser == null) {
-                                return const CircularProgressIndicator();
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               }
 
                               MyUser? currentUser = users.where((MyUser user) => user.uuid == fireUser.uid).firstOrNull;
                               if (currentUser == null) {
-                                return const CircularProgressIndicator();
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
                               }
 
                               ///get all groups
