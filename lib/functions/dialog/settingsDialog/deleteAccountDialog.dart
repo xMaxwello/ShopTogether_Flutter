@@ -17,7 +17,7 @@ void deleteAccountDialog(BuildContext context) {
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
-          hintText: 'Passwort',
+          hintText: 'Passwort*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,

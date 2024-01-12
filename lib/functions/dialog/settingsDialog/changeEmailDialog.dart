@@ -14,7 +14,7 @@ void changeEmailDialog(BuildContext context) {
       TextField(
         controller: emailController,
         decoration: InputDecoration(
-          hintText: 'Neue E-Mail',
+          hintText: 'Neue E-Mail*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
@@ -23,7 +23,7 @@ void changeEmailDialog(BuildContext context) {
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
-          hintText: 'Aktuelles Passwort',
+          hintText: 'Aktuelles Passwort*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,

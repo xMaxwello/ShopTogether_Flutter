@@ -16,7 +16,7 @@ void changePasswordDialog(BuildContext context) {
       controller: oldPasswordController,
         obscureText: true,
         decoration: InputDecoration(
-          hintText: 'Altes Passwort',
+          hintText: 'Altes Passwort*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
@@ -25,7 +25,7 @@ void changePasswordDialog(BuildContext context) {
         controller: newPasswordController,
         obscureText: true,
         decoration: InputDecoration(
-          hintText: 'Neues Passwort',
+          hintText: 'Neues Passwort*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
@@ -34,7 +34,7 @@ void changePasswordDialog(BuildContext context) {
         controller: repeatNewPasswordController,
         obscureText: true,
         decoration: InputDecoration(
-          hintText: 'Neues Passwort wiederholen',
+          hintText: 'Neues Passwort wiederholen*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
