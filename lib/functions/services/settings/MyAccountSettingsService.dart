@@ -29,16 +29,29 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Sie sind nicht eingeloggt!');
           break;
 
-        case "wrong-password":
-          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
-          break;
-
         case "invalid-credential":
           MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
           break;
 
-        case "unknown-error":
-          print(e.message);
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+          break;
+
+        case "too-many-requests":
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          break;
+
+        case "network-request-failed":
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          break;
+
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
+        default:
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          print("Firebase Error Code: ${e.keyword}");
           break;
 
       }
@@ -78,7 +91,7 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
@@ -137,7 +150,7 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "ttoo-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
@@ -151,11 +164,11 @@ class MyAccountSettingsService {
 
         default:
           MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
-          print("Firebase Error Code: ${e.code}");
           break;
 
       }
 
+      print("Firebase Error Code: ${e.code}");
       return;
     }
   }
@@ -176,7 +189,7 @@ class MyAccountSettingsService {
     );
     try {
 
-      UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+      await user.reauthenticateWithCredential(credential);
       await user.delete();
 
       MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
@@ -205,7 +218,7 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
