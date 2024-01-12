@@ -65,7 +65,7 @@ class MyUserWidget extends StatelessWidget {
 
                       if (snapshotIsUserOwner.data == false) {
 
-                        await MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, myUser.uuid);
+                        await MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, myUser.uuid);
                         MyFirestoreService.userService.removeGroupUUIDsFromUser(myUser.uuid, groupUUID);
 
                         ///remove UserUUID of the products, who should buy this product. (selectedUserUUID)

@@ -42,6 +42,8 @@ class MyAccountSettingsService {
           break;
 
       }
+
+      return;
     }
   }
 
@@ -94,6 +96,8 @@ class MyAccountSettingsService {
           break;
 
       }
+
+      return;
     }
   }
 
@@ -151,6 +155,8 @@ class MyAccountSettingsService {
           break;
 
       }
+
+      return;
     }
   }
 
@@ -170,6 +176,9 @@ class MyAccountSettingsService {
     );
     try {
 
+      UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+      await user.delete();
+
       MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
       for (String groupUUID in userData.groupUUIDs) {
 
@@ -178,14 +187,11 @@ class MyAccountSettingsService {
           MyFirestoreService.groupService.removeGroup(groupUUID);
         } else {
 
-          MyFirestoreService.groupService.removeUserUUIDToGroup(groupUUID, user.uid);
+          MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, user.uid);
         }
       }
 
       MyFirestoreService.userService.removeUser(user.uid);
-
-      await user.reauthenticateWithCredential(credential);
-      await user.delete();
       MySnackBarService.showMySnackBar(context, 'Ihr Account wurde erfolgreich gelöscht.', isError: false);
     } on FirebaseAuthException catch (e) {
 
@@ -215,8 +221,9 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
           print("Firebase Error Code: ${e.code}");
           break;
-
       }
+
+      return;
     } on MyCustomException catch(e) {
 
       switch(e.keyword) {
@@ -224,8 +231,12 @@ class MyAccountSettingsService {
           print(e.message);
           break;
       }
+
+      return;
     } catch(e) {
+
       print(e);
+      return;
     }
   }
 }
