@@ -1,15 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/bottomSheet/MyDraggableScrollableWidget.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyCustomItemBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyGroupBottomSheet.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyMemberBottomSheet.dart';
-import 'package:shopping_app/functions/services/firestore/subclasses/ProductService.dart';
-import 'package:shopping_app/functions/services/notification/MyNotificationService.dart';
-import 'package:shopping_app/objects/products/MyProduct.dart';
-import 'package:timezone/timezone.dart';
 
-import '../services/firestore/MyFirestoreService.dart';
 
 class MyFloatingActionFunctions {
 
@@ -32,12 +26,9 @@ class MyFloatingActionFunctions {
         );
       },
     );
-
   }
 
   void addUserToGroup() {
-
-
     showModalBottomSheet(
       context: _context,
       isScrollControlled: true,
@@ -50,21 +41,6 @@ class MyFloatingActionFunctions {
   }
 
   void addCustomProduct() async {
-    String currentUserUUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-    String newProductUUID = await ProductService().getUnusedProductUUID(_selectedGroupUUID);
-
-    MyProduct newProduct = MyProduct(
-      productID: newProductUUID,
-      barcode: '',
-      productName: '',
-      selectedUserUUID: currentUserUUID,
-      productCount: 1,
-      productVolumen: '',
-      productVolumenType: '',
-      productImageUrl: '',
-      productDescription: '',
-    );
-
     showModalBottomSheet(
       context: _context,
       isScrollControlled: true,
@@ -72,8 +48,6 @@ class MyFloatingActionFunctions {
         return MyDraggableScrollableWidget(
           widgets: [
             MyCustomItemBottomSheet(
-              product: newProduct,
-              productUUID: newProductUUID,
               groupUUID: _selectedGroupUUID,
             )
           ],
