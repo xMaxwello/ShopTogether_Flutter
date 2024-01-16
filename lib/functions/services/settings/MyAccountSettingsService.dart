@@ -13,6 +13,7 @@ class MyAccountSettingsService {
 
   /// Has the [MyCustomException] of [UserService.updateUserName]
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
+
     try {
       String userUuid = FirebaseAuth.instance.currentUser?.uid ?? '';
       await MyFirestoreService.userService.updateNameOfUser(userUuid, newPrename, newSurname, password);
@@ -29,16 +30,29 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Sie sind nicht eingeloggt!');
           break;
 
-        case "wrong-password":
-          MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
-          break;
-
         case "invalid-credential":
           MySnackBarService.showMySnackBar(context, 'Sie haben ein falsches Passwort eingegeben!');
           break;
 
-        case "unknown-error":
-          print(e.message);
+        case "wrong-password":
+          MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
+          break;
+
+        case "too-many-requests":
+          MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+          break;
+
+        case "network-request-failed":
+          MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+          break;
+
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
+        default:
+          MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+          print("Firebase Error Code: ${e.keyword}");
           break;
 
       }
@@ -49,17 +63,19 @@ class MyAccountSettingsService {
 
   Future<void> updateEmailFromCurrentUser(BuildContext context, String newEmail, String password) async {
     if (newEmail.trim().isEmpty || password.trim().isEmpty) {
-      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
+      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+      return;
     }
 
     User? user = _auth.currentUser;
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+      return;
     }
 
     try {
       AuthCredential credential = EmailAuthProvider.credential(
-        email: user!.email!,
+        email: user.email!,
         password: password,
       );
 
@@ -78,7 +94,7 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
@@ -102,21 +118,25 @@ class MyAccountSettingsService {
   }
 
   Future<void> updatePasswordFromCurrentUser(BuildContext context, String oldPassword, String newPassword, String repeatNewPassword) async {
+
     if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+      return;
     }
 
     if (newPassword != repeatNewPassword) {
       MySnackBarService.showMySnackBar(context, 'Die neuen Passwörter stimmen nicht überein.');
+      return;
     }
 
     User? user = _auth.currentUser;
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+      return;
     }
 
     AuthCredential credential = EmailAuthProvider.credential(
-      email: user!.email!,
+      email: user.email!,
       password: oldPassword,
     );
 
@@ -137,7 +157,11 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "weak-password":
+          MySnackBarService.showMySnackBar(context, 'Bitte geben Sie ein stärkeres Password ein!');
+          break;
+
+        case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
@@ -151,32 +175,34 @@ class MyAccountSettingsService {
 
         default:
           MySnackBarService.showMySnackBar(context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
-          print("Firebase Error Code: ${e.code}");
           break;
 
       }
 
+      print("Firebase Error Code: ${e.code}");
       return;
     }
   }
 
   Future<void> deleteAccountFromCurrentUser(BuildContext context, String password) async {
     if (password.isEmpty) {
-      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.', isError: false);
+      MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+      return;
     }
 
     User? user = _auth.currentUser;
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
+      return;
     }
 
     AuthCredential credential = EmailAuthProvider.credential(
-      email: user!.email!,
+      email: user.email!,
       password: password,
     );
     try {
 
-      UserCredential userCredential = await user.reauthenticateWithCredential(credential);
+      await user.reauthenticateWithCredential(credential);
       await user.delete();
 
       MyUser userData = await MyFirestoreService.userService.getUserAsObject(user.uid);
@@ -205,7 +231,7 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
-        case "too-many-requests'":
+        case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 

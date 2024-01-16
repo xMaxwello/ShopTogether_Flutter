@@ -20,7 +20,7 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
         style: Theme.of(context).textTheme.displayMedium,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-          hintText: 'E-Mail',
+          hintText: 'E-Mail*',
           hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
         ),
       ),
@@ -29,7 +29,7 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
         obscureText: true,
         style: Theme.of(context).textTheme.displayMedium,
         decoration: InputDecoration(
-          hintText: 'Passwort',
+          hintText: 'Passwort*',
           hintStyle: Theme.of(dialogContext).textTheme.labelSmall,
         ),
       ),
@@ -58,8 +58,12 @@ void changeBiometricsDialog(BuildContext context, bool switchState) {
             MySnackBarService.showMySnackBar(context, "Sie sind nicht eingeloggt!");
             break;
         }
+
+        return;
       } catch (e) {
+
         print(e.toString());
+        return;
       }
     },
   );
