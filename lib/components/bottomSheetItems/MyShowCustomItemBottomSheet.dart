@@ -21,16 +21,32 @@ class MyShowCustomItemBottomSheet {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(product.productName,
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+                product.productName,
+                style: Theme.of(context).textTheme.titleLarge
+            ),
             const SizedBox(height: 10),
-            Text('Menge: ${product.productVolumen}',
-                style: Theme.of(context).textTheme.bodySmall),
+            product.productVolumen != '' ?
+            Text(
+                'Menge: ${product.productVolumen}',
+                style: Theme.of(context).textTheme.bodySmall
+            ) : const SizedBox(),
             const SizedBox(height: 10),
-            Text('Beschreibung:',
-                style: Theme.of(context).textTheme.bodyLarge),
-            Text(product.productDescription,
-                style: Theme.of(context).textTheme.bodySmall),
+            product.productDescription != '' ?
+            Column(
+              children: [
+
+                Text(
+                    'Beschreibung:',
+                    style: Theme.of(context).textTheme.bodyLarge
+                ),
+                Text(
+                    product.productDescription,
+                    style: Theme.of(context).textTheme.bodySmall
+                ),
+
+              ],
+            ) : const SizedBox()
           ],
         ),
       ),
@@ -124,25 +140,26 @@ class MyShowCustomItemBottomSheet {
     );
 
     productInfoWidgets.add(
-        ElevatedButton(
-          onPressed: () {
-            print(product);
-            print(productUUID);
-            print(groupUUID);
-            showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return MyCustomItemBottomSheet(
-                  product: product,
-                  productUUID: productUUID,
-                  groupUUID: groupUUID,
-                  isNewProduct: false,
-                );
-              },
-            );
-          },
-          child: Text('Produkt bearbeiten',
-              style: Theme.of(context).textTheme.displaySmall
+        Padding(
+          padding: const EdgeInsets.only(left: 80, right: 80),
+          child: ElevatedButton(
+            onPressed: () {
+
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return MyCustomItemBottomSheet(
+                    product: product,
+                    productUUID: productUUID,
+                    groupUUID: groupUUID,
+                    isNewProduct: false,
+                  );
+                },
+              );
+            },
+            child: Text('Produkt bearbeiten',
+                style: Theme.of(context).textTheme.displaySmall
+            ),
           ),
         )
     );
