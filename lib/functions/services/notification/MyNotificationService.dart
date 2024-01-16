@@ -74,7 +74,7 @@ class MyNotificationService {
     const platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await _notificationsPlugin.periodicallyShow(0, "Füge jetzt Produkte zu deinem Einkaufswägen zu!", "Deine Einkaufswägen warten auf dich!", RepeatInterval.daily, platformChannelSpecifics);
+    await _notificationsPlugin.periodicallyShow(0, "Heute Lust shoppen zu gehen?", "Deine Einkaufslisten warten auf dich!", RepeatInterval.daily, platformChannelSpecifics);
 
   }
 }
