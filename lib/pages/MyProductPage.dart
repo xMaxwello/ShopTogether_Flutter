@@ -83,52 +83,52 @@ class _MyProductPageState extends State<MyProductPage> {
             }
 
             return Scaffold(
-                body: Padding(
-                  padding: EdgeInsets.only(top: height),
+              body: Padding(
+                padding: EdgeInsets.only(top: height),
 
-                  ///set the padding = status bar height
-                  child: MyHomeList(
-                    isListEmptyWidget: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                ///set the padding = status bar height
+                child: MyHomeList(
+                  isListEmptyWidget: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
 
-                        Text(
-                            "Die Liste ist leer!",
-                            style: Theme.of(context).textTheme.labelSmall
-                        ),
-                        const SizedBox(height: 10,),
+                      Text(
+                          "Die Liste ist leer!",
+                          style: Theme.of(context).textTheme.labelSmall
+                      ),
+                      const SizedBox(height: 10,),
 
-                      ],
-                    ),
+                    ],
                   ),
                 ),
-                bottomNavigationBar:  ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  child: BottomAppBar(
-                    color: Theme.of(context).bottomAppBarTheme.color,
-                    child: const MyHomeNavigationBar(),
-                  ),
+              ),
+              bottomNavigationBar:  ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
+                child: BottomAppBar(
+                  color: Theme.of(context).bottomAppBarTheme.color,
+                  child: const MyHomeNavigationBar(),
+                ),
+              ),
 
-                appBar: const PreferredSize(
-                  preferredSize: Size.fromHeight(100),
-                  child: MyAppBar(
-                    isGroup: false,
-                  ),
+              appBar: const PreferredSize(
+                preferredSize: Size.fromHeight(100),
+                child: MyAppBar(
+                  isGroup: false,
                 ),
+              ),
 
-                floatingActionButton: MyFloatingButton(
-                    buttonTitle: isSearchActive ? 'Produkt\n hinzufügen' : 'Mitglied',
-                    iconData: isSearchActive ? Icons.add : Icons.person,
-                    function: isSearchActive ? myFloatingActionFunctions.addCustomProduct : myFloatingActionFunctions.addUserToGroup,
-                    isChangeByScroll: true
-                ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+              floatingActionButton: MyFloatingButton(
+                  buttonTitle: isSearchActive ? 'Produkt\n hinzufügen' : 'Mitglied',
+                  iconData: isSearchActive ? Icons.add : Icons.person,
+                  function: isSearchActive ? myFloatingActionFunctions.addCustomProduct : myFloatingActionFunctions.addUserToGroup,
+                  isChangeByScroll: true
+              ),
+              floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
             );
           }
       );
