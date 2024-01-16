@@ -77,21 +77,32 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
   }
 
   void _manageProductDetails() async {
+
+    String title = _titleController.text.trim();
+    String productVolumen = _volumeController.text.trim();
+    String description = _descriptionController.text.trim();
+
+    if (title.isEmpty) {
+      MySnackBarService.showMySnackBar(context, 'Bitte geben Sie einen Titel an!');
+      Navigator.pop(context);
+      return;
+    }
+
     if (widget.isNewProduct) {
+
       String currentUserUUID = FirebaseAuth.instance.currentUser?.uid ?? '';
-      String newProductUUID = await ProductService().getUnusedProductUUID(
-          widget.groupUUID!);
+      String newProductUUID = await ProductService().getUnusedProductUUID(widget.groupUUID!);
 
       MyProduct newProduct = MyProduct(
         productID: newProductUUID,
         barcode: '',
-        productName: _titleController.text,
+        productName: title,
         selectedUserUUID: currentUserUUID,
         productCount: 1,
-        productVolumen: _volumeController.text,
+        productVolumen: productVolumen,
         productVolumenType: '',
         productImageUrl: '',
-        productDescription: _descriptionController.text,
+        productDescription: description,
       );
 
       ProductService().addProductToGroup(widget.groupUUID!, newProduct);
@@ -99,12 +110,13 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
       MySnackBarService.showMySnackBar(context, 'Produkt erfolgreich hinzugefügt.', isError: false);
       Navigator.pop(context);
     } else {
+
       MyFirestoreService.productService.updateProductDetails(
         widget.groupUUID!,
         widget.productUUID!,
-        _titleController.text,
-        _volumeController.text,
-        _descriptionController.text,
+        title,
+        productVolumen,
+        description,
       );
       MySnackBarService.showMySnackBar(context, 'Produkt erfolgreich geändert.', isError: false);
       Navigator.pop(context);
