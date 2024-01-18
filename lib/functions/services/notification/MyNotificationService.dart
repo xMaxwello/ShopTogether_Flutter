@@ -9,6 +9,16 @@ class MyNotificationService {
     _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
   }
 
+  static void requestNoPermissions() {
+
+    _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancelAll();
+  }
+
+  static Future<bool?> isNotificationOn() async {
+
+    return await _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.areNotificationsEnabled();
+  }
+
   static Future<void> initialize() async {
     const InitializationSettings initializationSettings =
     InitializationSettings(
@@ -64,6 +74,8 @@ class MyNotificationService {
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime);
   }
+
+  ///TODO: nicht permissions entziehen sondern. einfach alle notification löschen oder wieder rein packen
 
   static void scheduleWeeklyNotification() async {
 
