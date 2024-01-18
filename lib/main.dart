@@ -30,7 +30,6 @@ Future<void> main() async {
 
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
-  MyNotificationService.scheduleWeeklyNotification();
 
   runApp(
       MultiProvider(
@@ -53,6 +52,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<MySettingsProvider>(
         builder: (context, settingsProvider, child) {
           return MaterialApp(
