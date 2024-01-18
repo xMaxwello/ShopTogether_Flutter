@@ -28,7 +28,7 @@ class MyListWidget extends StatelessWidget {
   final int selectedGroupIndex;
   final String? searchedText;
 
-  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText});
+  MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText});
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +66,11 @@ class MyListWidget extends StatelessWidget {
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Text("Loading...");
                     }
 
                     if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const Text("Loading...");
                     }
 
                     return Text("${snapshot.data!.elementAt(0)} ${snapshot.data!.elementAt(1)}");
