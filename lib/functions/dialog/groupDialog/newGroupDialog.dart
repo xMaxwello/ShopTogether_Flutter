@@ -16,6 +16,7 @@ void newGroupDialog(BuildContext context) {
         maxLength: 40,
         controller: groupNameController,
         decoration: InputDecoration(
+          counterStyle: Theme.of(context).textTheme.labelSmall,
           hintText: 'Gruppenname',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
           labelStyle: Theme.of(dialogContext).textTheme.labelMedium,

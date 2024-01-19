@@ -21,7 +21,7 @@ void changeUserNameDialog(BuildContext context) async {
       TextField(
         controller: newPrenameController,
         decoration: InputDecoration(
-          counterStyle: Theme.of(dialogContext).textTheme.bodySmall,
+          counterStyle: Theme.of(dialogContext).textTheme.labelSmall,
           hintText: 'Vorname*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
@@ -31,7 +31,7 @@ void changeUserNameDialog(BuildContext context) async {
       TextField(
         controller: newSurnameController,
         decoration: InputDecoration(
-          counterStyle: Theme.of(dialogContext).textTheme.bodySmall,
+          counterStyle: Theme.of(dialogContext).textTheme.labelSmall,
           hintText: 'Nachname*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),

@@ -81,17 +81,28 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
           ),
           const SizedBox(height: 10),
           TextField(
+            maxLength: 40,
             controller: _titleController,
-            decoration: const InputDecoration(labelText: 'Produktname*'),
+            decoration: InputDecoration(
+              labelText: 'Produktname*',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           TextField(
+            maxLength: 20,
             controller: _volumeController,
-            decoration: const InputDecoration(
-                labelText: 'Menge (Gramm, Liter, etc.)'),
+            decoration: InputDecoration(
+              labelText: 'Menge (Gramm, Liter, etc.)',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           TextField(
+            maxLength: 200,
             controller: _descriptionController,
-            decoration: const InputDecoration(labelText: 'Beschreibung'),
+            decoration: InputDecoration(
+              labelText: 'Beschreibung',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           const SizedBox(height: 15),
           if (!widget.isNewProduct && _users.length > 1)
