@@ -32,12 +32,8 @@ class MySettingsFunctions {
         MySnackBarService.showMySnackBar(_context, "Ihr Gerät unterstützt keine biometrischen Login!");
       }
     } else {
-
-      bool isAvailable = await MyBiometricsAuthService.isBiometricsAvailableOnDevice();
-      if (!isAvailable) {
-        settingsProvider.updateIsBiometricLock(switchState);
-        mySecureStorageService.updateIsBiometricActive(switchState.toString());
-      }
+      settingsProvider.updateIsBiometricLock(switchState);
+      mySecureStorageService.updateIsBiometricActive(switchState.toString());
       mySecureStorageService.deleteUsers();
     }
   }

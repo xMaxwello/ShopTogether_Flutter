@@ -36,7 +36,7 @@ class MyBiometricsAuthService {
               ],
               options: const AuthenticationOptions(
                   biometricOnly: true,
-                  useErrorDialogs: true,
+                  useErrorDialogs: false,
                   stickyAuth: true
               ));
 
