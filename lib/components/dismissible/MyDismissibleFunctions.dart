@@ -76,7 +76,7 @@ class MyDismissibleFuntions {
     ///if the item is a product item, it should shows the product bottom sheet
     if (isGroup) {
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyProductPage()));
     } else {
 
       String productUUID = productsFromSelectedGroup[itemIndex].productID!;

@@ -13,6 +13,7 @@ void newGroupDialog(BuildContext context) {
     title: 'Neue Gruppe erstellen',
     contentBuilder: (dialogContext) => [
       TextField(
+        maxLength: 40,
         controller: groupNameController,
         decoration: InputDecoration(
           hintText: 'Gruppenname',
