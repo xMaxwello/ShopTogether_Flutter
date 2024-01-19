@@ -33,11 +33,8 @@ class MySettingsFunctions {
       }
     } else {
 
-      bool isAvailable = await MyBiometricsAuthService.isBiometricsAvailableOnDevice();
-      if (!isAvailable) {
-        settingsProvider.updateIsBiometricLock(switchState);
-        mySecureStorageService.updateIsBiometricActive(switchState.toString());
-      }
+      settingsProvider.updateIsBiometricLock(switchState);
+      mySecureStorageService.updateIsBiometricActive(switchState.toString());
       mySecureStorageService.deleteUsers();
     }
   }
@@ -46,11 +43,9 @@ class MySettingsFunctions {
 
     if (switchState) {
 
-      print("notification");
       MyNotificationService.scheduleWeeklyNotification();
     } else {
 
-      print("no notification");
       MyNotificationService.cancelAllNotification();
     }
     settingsProvider.updateIsNotificationsEnabled(switchState);

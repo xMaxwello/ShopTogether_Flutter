@@ -60,6 +60,7 @@ class MyBiometricsAuthService {
   static Future<bool> isBiometricsAvailableOnDevice() async {
 
     LocalAuthentication auth = LocalAuthentication();
+
     bool isBiometricsAvailable = await auth.canCheckBiometrics;
 
     late List<BiometricType> biometricsOptions;
