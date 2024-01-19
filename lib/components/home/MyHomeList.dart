@@ -134,13 +134,6 @@ class _MyHomeListState extends State<MyHomeList> {
 
                                       int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
 
-                                      ///if there no products in group
-                                      if (mySearchProvider.isSearching && itemLength == 0) {
-                                        return const Center(
-                                          child: Text("Keine Produkte gefunden!"),
-                                        );
-                                      }
-
                                       return MyListWidget(
                                         itemLength: itemLength, controller: _controller,
                                         mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,

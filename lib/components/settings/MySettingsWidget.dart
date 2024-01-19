@@ -78,7 +78,7 @@ class _MySettingsWidgetState extends State<MySettingsWidget> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(
-                          top: 40.0, left: 16.0, right: 16.0),
+                          top: 50.0, left: 16.0, right: 16.0),
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
