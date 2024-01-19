@@ -100,6 +100,7 @@ class MyLoginFunctions {
           buttonBackgroundColors: [Theme.of(_context).colorScheme.primary,  Colors.white],
           isInputPassword: const [false, true],
           textTypes: const [TextInputType.emailAddress, TextInputType.text],
+          maxLengthForTextfields: [0, 0],
         )
     );
   }
@@ -127,6 +128,7 @@ class MyLoginFunctions {
           buttonBackgroundColors: [Theme.of(_context).colorScheme.primary, Color.lerp(Colors.white, Theme.of(_context).colorScheme.primary, 0.005)!],
           isInputPassword: _showPassword,
           textTypes: const [TextInputType.text, TextInputType.text, TextInputType.emailAddress, TextInputType.text, TextInputType.text],
+          maxLengthForTextfields: [0, 0],
         )
     );
   }
