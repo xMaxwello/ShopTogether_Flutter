@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/objects/groups/MyGroup.dart';
 
 /**
@@ -23,7 +24,7 @@ class MyGroupItem extends StatelessWidget {
           children: [
 
             Text(
-              myGroup.groupName,
+              MyStringHandler.truncateText(MyStringHandler.breakString(myGroup.groupName, 20), 41),
               style: Theme.of(context).textTheme.titleSmall
             ),
 

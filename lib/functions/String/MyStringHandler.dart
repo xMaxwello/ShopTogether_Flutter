@@ -26,4 +26,19 @@ class MyStringHandler {
     }
     return password;
   }
+
+  static String breakString(String input, int maxLength) {
+    StringBuffer result = StringBuffer();
+
+    for (int i = 0; i < input.length; i += maxLength) {
+      int end = (i + maxLength < input.length) ? i + maxLength : input.length;
+      result.write(input.substring(i, end));
+
+      if (end < input.length) {
+        result.write('\n');
+      }
+    }
+
+    return result.toString();
+  }
 }

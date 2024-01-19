@@ -30,6 +30,8 @@ class MyListWidget extends StatelessWidget {
 
   MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText});
 
+  int oldSearchLength = 0;
+
   @override
   Widget build(BuildContext context) {
 
@@ -102,9 +104,41 @@ class MyListWidget extends StatelessWidget {
 
         if (isSearch && !isGroup) {
 
-          if (index == itemLength - 1) {
+          if (itemLength < 2) {
+            return const Padding(
+              padding: EdgeInsets.only(bottom: 20, top: 10),
+              child: Center(
+                  child: Card(
+                      shape: RoundedRectangleBorder(),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("Keine Suchergebnisse gefunden!"),
+                      )
+                  )
+              ),
+            );
+          }
+
+          if (oldSearchLength == itemLength && index == itemLength - 1) {
+            return const Padding(
+              padding: EdgeInsets.only(bottom: 20, top: 10),
+              child: Center(
+                child: Card(
+                  shape: RoundedRectangleBorder(),
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Keine weitere Suchergebnisse gefunden!"),
+                  )
+                )
+              ),
+            );
+          }
+
+          if (itemLength != 1 && oldSearchLength != itemLength && index == itemLength - 1) {
             return MySearchForMoreProductsWidget(itemLength: itemLength,);
           }
+
+          oldSearchLength = itemLength;
 
           return MySearchItem( ///for the search view
             currentUserUUID: user.uid,

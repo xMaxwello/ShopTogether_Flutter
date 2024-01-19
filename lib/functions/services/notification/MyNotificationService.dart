@@ -12,6 +12,7 @@ class MyNotificationService {
   static void cancelAllNotification() {
 
     _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancel(0);
+    _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancelAll();
   }
 
   static Future<void> initialize() async {
@@ -70,12 +71,11 @@ class MyNotificationService {
         UILocalNotificationDateInterpretation.absoluteTime);
   }
 
-  ///TODO: nicht permissions entziehen sondern. einfach alle notification löschen oder wieder rein packen
 
   static void scheduleWeeklyNotification() async {
 
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'weekly_channel_id',
+      '0',
       'Weekly Channel',
     );
 

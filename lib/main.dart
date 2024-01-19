@@ -19,8 +19,6 @@ import 'pages/MyHomePage.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
-
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
