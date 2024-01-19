@@ -18,13 +18,25 @@ class MyStringHandler {
     return htmlString.replaceAll(exp, '');
   }
 
-  ///TODO: Gucken ob das klappt wegen login
-  static String validatePassword(String password) {
-    RegExp disallowedChars = RegExp(r'[^\w\d!@#\$%^&*()_+]');
-    if (disallowedChars.hasMatch(password)) {
-      return password.replaceAll(disallowedChars, '');
+  static bool isHTMLValid(String s) {
+    RegExp allowedChars = RegExp(r"^[^<>]*$");
+    return allowedChars.hasMatch(s);
+  }
+
+  static bool isPasswordValid(String password) {
+
+    if (password.length < 5) {
+      return false;
     }
-    return password;
+
+    bool containsDigit = RegExp(r'\d').hasMatch(password);
+    bool containsSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
+    return containsDigit && containsSpecialChar;
+  }
+
+  static bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$');
+    return emailRegex.hasMatch(email);
   }
 
   static String breakString(String input, int maxLength) {

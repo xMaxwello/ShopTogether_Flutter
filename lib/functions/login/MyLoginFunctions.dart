@@ -33,48 +33,54 @@ class MyLoginFunctions {
 
   Future<void> login() async {
 
-    bool error = false;
     String emailAddress = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
     if (emailAddress == "" || password == "") {
       MySnackBarService.showMySnackBar(_context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
-      error = true;
+      return;
     }
 
-    if (!error) {
+    if (!MyStringHandler.isPasswordValid(password)) {
+      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Zeichen!');
+      return;
+    }
 
-      try {
+    if (!MyStringHandler.isHTMLValid(emailAddress) || !MyStringHandler.isHTMLValid(password)) {
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
+      return;
+    }
 
-        await _auth.signInWithEmailAndPassword(
-          email: emailAddress,
-          password: password,
-        );
-      } on FirebaseAuthException catch(e) {
+    try {
 
-        if (e.code == 'user-not-found') {
-          MySnackBarService.showMySnackBar(_context, 'Benutzer nicht gefunden.');
-        } else if (e.code == 'wrong-password') {
-          MySnackBarService.showMySnackBar(_context, 'Falsches Passwort.');
-        } else if (e.code == 'user-disabled') {
-          MySnackBarService.showMySnackBar(_context, 'Benutzerkonto deaktiviert.');
-        } else if (e.code == 'too-many-requests') {
-          MySnackBarService.showMySnackBar(_context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
-        } else if (e.code == 'network-request-failed') {
-          MySnackBarService.showMySnackBar(_context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-        } else if (e.code == 'invalid-email') {
-          MySnackBarService.showMySnackBar(_context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
-        } else if (e.code == 'INVALID_LOGIN_CREDENTIALS' || e.code == 'invalid-credential') {
-          MySnackBarService.showMySnackBar(_context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
-        } else {
-          MySnackBarService.showMySnackBar(_context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
-          print("Firebase Error Code: ${e.code}");
-        }
+      await _auth.signInWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+    } on FirebaseAuthException catch(e) {
 
-      } catch (e) {
-
-        MySnackBarService.showMySnackBar(_context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+      if (e.code == 'user-not-found') {
+        MySnackBarService.showMySnackBar(_context, 'Benutzer nicht gefunden.');
+      } else if (e.code == 'wrong-password') {
+        MySnackBarService.showMySnackBar(_context, 'Falsches Passwort.');
+      } else if (e.code == 'user-disabled') {
+        MySnackBarService.showMySnackBar(_context, 'Benutzerkonto deaktiviert.');
+      } else if (e.code == 'too-many-requests') {
+        MySnackBarService.showMySnackBar(_context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
+      } else if (e.code == 'network-request-failed') {
+        MySnackBarService.showMySnackBar(_context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
+      } else if (e.code == 'invalid-email') {
+        MySnackBarService.showMySnackBar(_context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+      } else if (e.code == 'INVALID_LOGIN_CREDENTIALS' || e.code == 'invalid-credential') {
+        MySnackBarService.showMySnackBar(_context, 'E-Mail ist nicht vorhanden oder Passwort ist falsch!');
+      } else {
+        MySnackBarService.showMySnackBar(_context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+        print("Firebase Error Code: ${e.code}");
       }
+
+    } catch (e) {
+
+      MySnackBarService.showMySnackBar(_context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
     }
   }
 
@@ -100,6 +106,7 @@ class MyLoginFunctions {
           buttonBackgroundColors: [Theme.of(_context).colorScheme.primary,  Colors.white],
           isInputPassword: const [false, true],
           textTypes: const [TextInputType.emailAddress, TextInputType.text],
+          maxLengthForTextfields: [-1, -1],
         )
     );
   }
@@ -127,69 +134,82 @@ class MyLoginFunctions {
           buttonBackgroundColors: [Theme.of(_context).colorScheme.primary, Color.lerp(Colors.white, Theme.of(_context).colorScheme.primary, 0.005)!],
           isInputPassword: _showPassword,
           textTypes: const [TextInputType.text, TextInputType.text, TextInputType.emailAddress, TextInputType.text, TextInputType.text],
+          maxLengthForTextfields: const [20, 20, -1, -1, -1],
         )
     );
   }
 
   Future<void> _register() async {
 
-    bool error = false;
-    String emailAddress = MyStringHandler.removeHtmlTags(_emailController.text.trim());
-    String password = MyStringHandler.validatePassword(_passwordController.text.trim());
-    String passwordConfirm = MyStringHandler.validatePassword(_confirmPasswordController.text.trim());
-    String nameOfUser = MyStringHandler.removeHtmlTags(_nameController.text.trim());
-    String prenameOfUser = MyStringHandler.removeHtmlTags(_prenameController.text.trim());
+    String emailAddress = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String passwordConfirm = _confirmPasswordController.text.trim();
+    String nameOfUser = _nameController.text.trim();
+    String prenameOfUser = _prenameController.text.trim();
 
     if (password == "" || passwordConfirm == "" || prenameOfUser == "" ||
         nameOfUser == "" || emailAddress == "") {
       MySnackBarService.showMySnackBar(_context, 'Es müssen alle Felder mit "*" ausgefüllt werden!');
-      error = true;
+      return;
+    }
+
+    if (
+    !MyStringHandler.isHTMLValid(emailAddress) ||
+        !MyStringHandler.isHTMLValid(password) ||
+        !MyStringHandler.isHTMLValid(passwordConfirm) ||
+        !MyStringHandler.isHTMLValid(nameOfUser) ||
+        !MyStringHandler.isHTMLValid(prenameOfUser)
+    ) {
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * > .');
+      return;
+    }
+
+    if (!MyStringHandler.isPasswordValid(password)) {
+      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Zeichen!');
+      return;
     }
 
     if (password != passwordConfirm) {
       MySnackBarService.showMySnackBar(_context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
-      error = true;
+      return;
     }
 
-    if (!error) {
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: emailAddress,
+          password: password
+      );
 
-      try {
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-            email: emailAddress,
-            password: password
-        );
+      String uuid = FirebaseAuth.instance.currentUser!.uid;
 
-        String uuid = FirebaseAuth.instance.currentUser!.uid;
+      ///create a user in the database, where prename and surname are saved
+      MyUser user = MyUser(
+          uuid: uuid,
+          prename: prenameOfUser,
+          surname: nameOfUser,
+          groupUUIDs: []
+      );
+      MyFirestoreService.userService.addUser(user);
 
-        ///create a user in the database, where prename and surname are saved
-        MyUser user = MyUser(
-            uuid: uuid,
-            prename: prenameOfUser,
-            surname: nameOfUser,
-            groupUUIDs: []
-        );
-        MyFirestoreService.userService.addUser(user);
+      ///Send the email-verification
+      userCredential.user!.sendEmailVerification();
+      MySnackBarService.showMySnackBar(_context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false);
 
-        ///Send the email-verification
-        userCredential.user!.sendEmailVerification();
-        MySnackBarService.showMySnackBar(_context, 'Die Verifizierungs-E-Mail wurde versendet!', isError: false);
+    } on FirebaseAuthException catch(e) {
 
-      } on FirebaseAuthException catch(e) {
-
-        if (e.code == 'weak-password') {
-          MySnackBarService.showMySnackBar(_context, 'Ihr Passwort ist zu schwach!');
-        } else if (e.code == 'email-already-in-use') {
-          MySnackBarService.showMySnackBar(_context, 'Die eingegebene E-Mail ist bereits vergeben!');
-        } else if (e.code == 'invalid-email') {
-          MySnackBarService.showMySnackBar(_context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
-        } else {
-          MySnackBarService.showMySnackBar(_context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
-        }
-
-      } catch(e) {
-
-        MySnackBarService.showMySnackBar(_context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
+      if (e.code == 'weak-password') {
+        MySnackBarService.showMySnackBar(_context, 'Ihr Passwort ist zu schwach!');
+      } else if (e.code == 'email-already-in-use') {
+        MySnackBarService.showMySnackBar(_context, 'Die eingegebene E-Mail ist bereits vergeben!');
+      } else if (e.code == 'invalid-email') {
+        MySnackBarService.showMySnackBar(_context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+      } else {
+        MySnackBarService.showMySnackBar(_context, 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
       }
+
+    } catch(e) {
+
+      MySnackBarService.showMySnackBar(_context, 'Ein allgemeiner Fehler ist aufgetreten. Bitte kontaktieren Sie den Support!');
     }
   }
 

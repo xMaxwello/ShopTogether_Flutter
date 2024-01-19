@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
@@ -13,6 +14,10 @@ class MyAccountSettingsService {
 
   /// Has the [MyCustomException] of [UserService.updateUserName]
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
+    if (!MyStringHandler.isHTMLValid(newSurname) || !MyStringHandler.isHTMLValid(newPrename)) {
+      MySnackBarService.showMySnackBar(context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
+      return;
+    }
 
     try {
       String userUuid = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -67,6 +72,11 @@ class MyAccountSettingsService {
       return;
     }
 
+    if (!MyStringHandler.isValidEmail(newEmail)) {
+      MySnackBarService.showMySnackBar(context, 'Es muss eine gültige E-mail-Adresse eingegeben werden.');
+      return;
+    }
+
     User? user = _auth.currentUser;
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
@@ -94,16 +104,16 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
         case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
         case "network-request-failed":
           MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-          break;
-
-        case "invalid-email":
-          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
           break;
 
         default:
@@ -121,6 +131,16 @@ class MyAccountSettingsService {
 
     if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+      return;
+    }
+
+    if (!MyStringHandler.isPasswordValid(newPassword) || !MyStringHandler.isPasswordValid(repeatNewPassword)) {
+      MySnackBarService.showMySnackBar(context, 'Das Passwort muss mindestens 5 Zeichen, 1 Sonderzeichen und 1 Zahl haben.');
+      return;
+    }
+
+    if (!MyStringHandler.isHTMLValid(newPassword) || !MyStringHandler.isHTMLValid(repeatNewPassword)) {
+      MySnackBarService.showMySnackBar(context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
       return;
     }
 

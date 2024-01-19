@@ -22,7 +22,6 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
   late TextEditingController _titleController;
   late TextEditingController _volumeController;
   late TextEditingController _descriptionController;
-  String? _selectedUserUUID;
   List<MyUser> _users = [];
 
   @override
@@ -81,22 +80,34 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
           ),
           const SizedBox(height: 10),
           TextField(
+            maxLength: 40,
             controller: _titleController,
-            decoration: const InputDecoration(labelText: 'Produktname*'),
+            decoration: InputDecoration(
+              labelText: 'Produktname*',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           TextField(
+            maxLength: 20,
             controller: _volumeController,
-            decoration: const InputDecoration(
-                labelText: 'Menge (Gramm, Liter, etc.)'),
+            decoration: InputDecoration(
+              labelText: 'Menge (Gramm, Liter, etc.)',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           TextField(
+            maxLength: 200,
+            maxLines: 6,
             controller: _descriptionController,
-            decoration: const InputDecoration(labelText: 'Beschreibung'),
+            decoration: InputDecoration(
+              labelText: 'Beschreibung',
+              counterStyle: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
           const SizedBox(height: 15),
-          if (!widget.isNewProduct && _users.length > 1)
-            _memberAssignment(),
-          const SizedBox(height: 15),
+          if (!widget.isNewProduct && _users.length > 1 && widget.groupUUID != null && widget.productUUID != null)
+            _memberAssignment(widget.groupUUID!, widget.productUUID!),
+          const SizedBox(height: 45),
           ElevatedButton(
             onPressed: () => _manageProductDetails(),
             child: Text('Speichern',
@@ -108,52 +119,69 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
     );
   }
 
-  Widget _memberAssignment() {
-    return Card(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-              Radius.circular(20))
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text('Käufer zuweisen:',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            DropdownButton<String>(
-              hint: Text('Mitglied auswählen',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              items: _users.map((MyUser user) {
-                return DropdownMenuItem<String>(
-                  value: user.uuid,
-                  child: Center(
-                    child: Text('${user.prename} ${user.surname}',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
+  Widget _memberAssignment(String groupUUID, String productUUID) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: FutureBuilder<MyProduct?>(
+            future: MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID),
+            builder: (BuildContext context,
+                AsyncSnapshot<MyProduct?> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
-              }).toList(),
-              onChanged: (
-                  String? selectedUserUUID) async {
-                setState(() {
-                  _selectedUserUUID = selectedUserUUID;
-                });
-                if (selectedUserUUID != null) {
-                  MyFirestoreService.productService.updateSelectedUserOfProduct(
-                      widget.groupUUID!, widget.productUUID!, selectedUserUUID);
-                }
-              },
-              value: _selectedUserUUID,
-            ),
-          ],
-        ),
-      ),
+              }
+
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Card(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                        Radius.circular(20))
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text('Käufer zuweisen:',
+                          style: Theme.of(context).textTheme.titleMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                        DropdownButton<String>(
+                          hint: Text('Mitglied auswählen',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          items: _users.map((MyUser user) {
+                            return DropdownMenuItem<String>(
+                              value: user.uuid,
+                              child: Center(
+                                child: Text('${user.prename} ${user.surname}',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (
+                              String? selectedUserUUID) async {
+                            if (selectedUserUUID != null) {
+                              MyFirestoreService.productService.updateSelectedUserOfProduct(
+                                  widget.groupUUID!, widget.productUUID!, selectedUserUUID);
+                            }
+                          },
+                          value: snapshot.data!.selectedUserUUID,
+                        ),
+                      ]
+                  ),
+                ),
+              );
+            }
+        )
     );
   }
 

@@ -58,8 +58,44 @@ class MyDismissibleWidget extends StatelessWidget {
 
   void onDismissedFunction(BuildContext context) async {
 
-    ///TODO: Hier gucken: Wenn man die Gruppe löschen möchte. Dann kommt der Dialog man dann wartet und jemand etwas bei Produkten oder Gruppen ändert dann kommt der fehler
-    /*
+    MyDismissibleFuntions.onDismissedFunction(
+        context, isGroup, groupsFromUser, itemIndex, itemsValue, productsFromSelectedGroup);
+  }
+
+  Widget buildMyBasicStructItem(BuildContext context) {
+    return MyBasicStructItem(
+      onTapFunction: () async {
+        MyDismissibleFuntions.onTapFunction(
+            context, isGroup, groupsFromUser, itemIndex, itemsValue, productsFromSelectedGroup, selectedGroupIndex);
+      },
+      content: buildItemContent(),
+    );
+  }
+
+  Widget buildItemContent() {
+    return isGroup
+        ? MyGroupItem(myGroup: groupsFromUser.elementAt(itemIndex))
+        : MyProductItem(
+      myProduct: selectedGroupIndex != -1
+          ? productsFromSelectedGroup[itemIndex]
+          : MyProduct(
+        barcode: "",
+        productID: "",
+        productName: "",
+        selectedUserUUID: "",
+        productCount: 0,
+        productVolumen: "",
+        productVolumenType: '',
+        productImageUrl: "",
+        productDescription: "",
+      ),
+      selectedGroupUUID: itemsValue.selectedGroupUUID,
+    );
+  }
+}
+
+///TODO: Hier gucken: Wenn man die Gruppe löschen möchte. Dann kommt der Dialog man dann wartet und jemand etwas bei Produkten oder Gruppen ändert dann kommt der fehler
+/*
     * ======== Exception caught by widgets library =======================================================
 The following assertion was thrown building Dismissible-[<'jduwVgl99ZutE2lXqhfS'>](dependencies: [Directionality], state: _DismissibleState#3bd2d(tickers: tracking 2 tickers)):
 A dismissed Dismissible widget is still part of the tree.
@@ -192,39 +228,3 @@ When the exception was thrown, this was the stack:
 #119    PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:383:5)
 #120    _drawFrame (dart:ui/hooks.dart:283:31)
     * */
-
-    MyDismissibleFuntions.onDismissedFunction(
-        context, isGroup, groupsFromUser, itemIndex, itemsValue, productsFromSelectedGroup);
-  }
-
-  Widget buildMyBasicStructItem(BuildContext context) {
-    return MyBasicStructItem(
-      onTapFunction: () async {
-        MyDismissibleFuntions.onTapFunction(
-            context, isGroup, groupsFromUser, itemIndex, itemsValue, productsFromSelectedGroup, selectedGroupIndex);
-      },
-      content: buildItemContent(),
-    );
-  }
-
-  Widget buildItemContent() {
-    return isGroup
-        ? MyGroupItem(myGroup: groupsFromUser.elementAt(itemIndex))
-        : MyProductItem(
-      myProduct: selectedGroupIndex != -1
-          ? productsFromSelectedGroup[itemIndex]
-          : MyProduct(
-        barcode: "",
-        productID: "",
-        productName: "",
-        selectedUserUUID: "",
-        productCount: 0,
-        productVolumen: "",
-        productVolumenType: '',
-        productImageUrl: "",
-        productDescription: "",
-      ),
-      selectedGroupUUID: itemsValue.selectedGroupUUID,
-    );
-  }
-}

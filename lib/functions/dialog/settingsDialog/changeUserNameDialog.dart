@@ -21,18 +21,22 @@ void changeUserNameDialog(BuildContext context) async {
       TextField(
         controller: newPrenameController,
         decoration: InputDecoration(
+          counterStyle: Theme.of(dialogContext).textTheme.labelSmall,
           hintText: 'Vorname*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
+        maxLength: 20,
       ),
       TextField(
         controller: newSurnameController,
         decoration: InputDecoration(
+          counterStyle: Theme.of(dialogContext).textTheme.labelSmall,
           hintText: 'Nachname*',
           hintStyle: Theme.of(dialogContext).textTheme.labelMedium,
         ),
         style: Theme.of(dialogContext).textTheme.bodyMedium,
+        maxLength: 20,
       ),
       TextField(
         controller: passwordController,
