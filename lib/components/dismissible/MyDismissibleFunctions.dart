@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyShowCustomItemBottomSheet.dart';
+import 'package:shopping_app/components/bottomSheetItems/MyCustomItemBottomSheet.dart';
 
 import '../../functions/dialog/MyDialog.dart';
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
@@ -12,7 +12,6 @@ import '../../objects/products/MyProduct.dart';
 import '../../pages/MyHomePage.dart';
 import '../../pages/MyProductPage.dart';
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
-import '../bottomSheetItems/MyCustomItemBottomSheet.dart';
 import '../bottomSheetItems/MyItemBottomSheet.dart';
 
 class MyDismissibleFuntions {
@@ -85,30 +84,38 @@ class MyDismissibleFuntions {
 
       if (myProduct != null) {
         String groupUUID = groupsFromUser[selectedGroupIndex].groupUUID!;
-        List<Widget> bottomSheetWidgets;
 
         if (myProduct.barcode.isNotEmpty) {
-          bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
+          List<Widget> bottomSheetWidgets = await MyItemBottomSheet.generateBottomSheet(
               context,
               myProduct.barcode,
               fromProductList: true,
               groupUUID: groupUUID,
               productUUID: productUUID
           );
+          showBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
+            },
+          );
         } else {
-          bottomSheetWidgets = await MyShowCustomItemBottomSheet.generateBottomSheet(
-              context,
-              productUUID,
-              groupUUID
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return MyDraggableScrollableWidget(
+                widgets: [
+                  MyCustomItemBottomSheet(
+                    productUUID: productUUID,
+                    groupUUID: groupUUID,
+                    isNewProduct: false,
+                  )
+                ],
+              );
+            },
           );
         }
-
-        showBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return MyDraggableScrollableWidget(widgets: bottomSheetWidgets);
-          },
-        );
       }
     }
     ///Updates the index of the clicked item, expands is the item a group or Product
