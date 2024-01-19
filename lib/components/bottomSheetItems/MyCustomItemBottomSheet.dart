@@ -98,6 +98,7 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
           ),
           TextField(
             maxLength: 200,
+            maxLines: 6,
             controller: _descriptionController,
             decoration: InputDecoration(
               labelText: 'Beschreibung',
