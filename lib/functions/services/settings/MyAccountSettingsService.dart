@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
+import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
@@ -11,13 +12,12 @@ class MyAccountSettingsService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$');
-    return emailRegex.hasMatch(email);
-  }
-
   /// Has the [MyCustomException] of [UserService.updateUserName]
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
+    if (!MyStringHandler.isHTMLValid(newSurname) || !MyStringHandler.isHTMLValid(newPrename)) {
+      MySnackBarService.showMySnackBar(context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
+      return;
+    }
 
     try {
       String userUuid = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -72,7 +72,7 @@ class MyAccountSettingsService {
       return;
     }
 
-    if (!isValidEmail(newEmail)) {
+    if (!MyStringHandler.isValidEmail(newEmail)) {
       MySnackBarService.showMySnackBar(context, 'Es muss eine gültige E-mail-Adresse eingegeben werden.');
       return;
     }
@@ -131,6 +131,16 @@ class MyAccountSettingsService {
 
     if (oldPassword.isEmpty || newPassword.isEmpty || repeatNewPassword.isEmpty) {
       MySnackBarService.showMySnackBar(context, 'Bitte füllen Sie alle Felder aus.');
+      return;
+    }
+
+    if (!MyStringHandler.isPasswordValid(newPassword) || !MyStringHandler.isPasswordValid(repeatNewPassword)) {
+      MySnackBarService.showMySnackBar(context, 'Das Passwort muss mindestens 5 Zeichen, 1 Sonderzeichen und 1 Zahl haben.');
+      return;
+    }
+
+    if (!MyStringHandler.isHTMLValid(newPassword) || !MyStringHandler.isHTMLValid(repeatNewPassword)) {
+      MySnackBarService.showMySnackBar(context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
       return;
     }
 
