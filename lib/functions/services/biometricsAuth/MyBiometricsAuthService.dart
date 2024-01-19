@@ -36,7 +36,7 @@ class MyBiometricsAuthService {
               ],
               options: const AuthenticationOptions(
                   biometricOnly: true,
-                  useErrorDialogs: true,
+                  useErrorDialogs: false,
                   stickyAuth: true
               ));
 
@@ -60,6 +60,7 @@ class MyBiometricsAuthService {
   static Future<bool> isBiometricsAvailableOnDevice() async {
 
     LocalAuthentication auth = LocalAuthentication();
+
     bool isBiometricsAvailable = await auth.canCheckBiometrics;
 
     late List<BiometricType> biometricsOptions;
