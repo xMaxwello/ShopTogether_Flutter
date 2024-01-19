@@ -67,6 +67,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
                         style: Theme.of(context).textTheme.bodyMedium,
                         keyboardType: widget.textTypes[i],
                         decoration: InputDecoration(
+                          counterStyle: Theme.of(context).textTheme.bodySmall,
                           labelStyle: Theme.of(context).textTheme.bodyMedium,
                           labelText: widget.inputLabels[i],
                           hintStyle: Theme.of(context).textTheme.bodyMedium,
