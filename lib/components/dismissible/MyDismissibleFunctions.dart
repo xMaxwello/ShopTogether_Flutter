@@ -12,6 +12,7 @@ import '../../objects/products/MyProduct.dart';
 import '../../pages/MyHomePage.dart';
 import '../../pages/MyProductPage.dart';
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
+import '../bottomSheetItems/MyCustomItemBottomSheet.dart';
 import '../bottomSheetItems/MyItemBottomSheet.dart';
 
 class MyDismissibleFuntions {
@@ -101,6 +102,7 @@ class MyDismissibleFuntions {
               groupUUID
           );
         }
+
         showBottomSheet(
           context: context,
           builder: (BuildContext context) {

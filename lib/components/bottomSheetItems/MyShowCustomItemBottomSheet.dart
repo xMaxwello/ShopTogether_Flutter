@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/components/bottomSheetItems/MyCustomItemBottomSheet.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/users/MyUsers.dart';
 
+import 'MyCustomItemBottomSheet.dart';
+
 class MyShowCustomItemBottomSheet {
+
   static Future<List<Widget>> generateBottomSheet(
       BuildContext context,
       String productUUID,
       String groupUUID) async {
+
     MyProduct? product = await MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID);
 
     if (product == null) {
@@ -144,6 +147,8 @@ class MyShowCustomItemBottomSheet {
           padding: const EdgeInsets.only(left: 80, right: 80),
           child: ElevatedButton(
             onPressed: () {
+
+
               showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
@@ -161,6 +166,7 @@ class MyShowCustomItemBottomSheet {
           ),
         )
     );
+
     return productInfoWidgets;
   }
 }
