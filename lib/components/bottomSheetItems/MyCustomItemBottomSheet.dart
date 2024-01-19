@@ -107,7 +107,7 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
           const SizedBox(height: 15),
           if (!widget.isNewProduct && _users.length > 1)
             _memberAssignment(),
-          const SizedBox(height: 15),
+          const SizedBox(height: 45),
           ElevatedButton(
             onPressed: () => _manageProductDetails(),
             child: Text('Speichern',
