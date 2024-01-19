@@ -22,7 +22,18 @@ class MyItemBottomSheet {
     Product? product = await service.getProductByBarcode(barcode);
 
     if (product == null) {
-      return [const Center(child: Text('Produkt nicht gefunden.'))];
+      return [const Padding(
+        padding: EdgeInsets.only(bottom: 20, top: 240),
+        child: Center(
+            child: Card(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Produkt wurde nicht gefunden!"),
+                )
+            )
+        ),
+      )];
     }
 
     //Produktname

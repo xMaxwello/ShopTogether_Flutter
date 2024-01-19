@@ -31,7 +31,7 @@ class MyOpenFoodFactsService {
     if (result.status == ProductResultV3.statusSuccess) {
       return result.product;
     } else {
-      throw Exception('product not found, please insert data for $barcode');
+      return null;
     }
   }
 
