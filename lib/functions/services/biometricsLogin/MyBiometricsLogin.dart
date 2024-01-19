@@ -83,7 +83,7 @@ class MyBiometricsLogin {
 
         case "authentication-failed":
 
-          MySnackBarService.showMySnackBar(context, "Die Authentifizierung ist fehlgeschlagen!");
+          MySnackBarService.showMySnackBar(context, "Die Authentifizierung ist fehlgeschlagen! Bitte versuchen Sie es später erneut!");
           break;
         case "weak":
 

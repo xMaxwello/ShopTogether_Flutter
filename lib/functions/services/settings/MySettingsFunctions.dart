@@ -32,6 +32,7 @@ class MySettingsFunctions {
         MySnackBarService.showMySnackBar(_context, "Ihr Gerät unterstützt keine biometrischen Login!");
       }
     } else {
+
       settingsProvider.updateIsBiometricLock(switchState);
       mySecureStorageService.updateIsBiometricActive(switchState.toString());
       mySecureStorageService.deleteUsers();
@@ -42,11 +43,9 @@ class MySettingsFunctions {
 
     if (switchState) {
 
-      print("notification");
       MyNotificationService.scheduleWeeklyNotification();
     } else {
 
-      print("no notification");
       MyNotificationService.cancelAllNotification();
     }
     settingsProvider.updateIsNotificationsEnabled(switchState);

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MySettingsProvider with ChangeNotifier {
   bool _isBiometricLock = false;
-  bool _isNotificationsEnabled = true;
+  bool _isNotificationsEnabled = false;
   bool _isVibrationEnabled = true;
   bool _isSoundEnabled = true;
   bool _isDarkThemeEnabled = false;

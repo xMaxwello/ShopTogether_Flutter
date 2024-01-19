@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
+import 'package:shopping_app/functions/services/openfoodfacts/MyOpenFoodFactsService.dart';
 
 /**
  * When you click on this widget you can shows more Searched Products
@@ -21,9 +22,10 @@ class MySearchForMoreProductsWidget extends StatelessWidget {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Colors.grey.shade100)
             ),
-            onPressed: () {
+            onPressed: () async {
 
-              Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(itemLength + 20);
+              int newItemLength = itemLength + 20;
+              Provider.of<MySearchProvider>(context, listen: false).updateSizeOfSearchedProducts(newItemLength);
             },
             child: Text(
               "20 weitere Produkte anzeigen!",
