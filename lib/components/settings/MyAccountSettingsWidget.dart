@@ -53,7 +53,7 @@ class MyAccountSettingsWidget extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-              top: 40, left: 16.0, right: 16.0),
+              top: 50, left: 16.0, right: 16.0),
           child: Align(
             alignment: Alignment.center,
             child: Text("Accounteinstellungen",

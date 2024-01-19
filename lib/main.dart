@@ -19,8 +19,6 @@ import 'pages/MyHomePage.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-///TODO: Deutsche Unicode Buchstaben werden nicht als Eingabe anerkannt (z.b ü,ö,ä,ß)
-
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +28,6 @@ Future<void> main() async {
 
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Europe/Berlin'));
-  MyNotificationService.scheduleWeeklyNotification();
 
   runApp(
       MultiProvider(
@@ -53,6 +50,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Consumer<MySettingsProvider>(
         builder: (context, settingsProvider, child) {
           return MaterialApp(

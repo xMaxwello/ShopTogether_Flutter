@@ -9,14 +9,10 @@ class MyNotificationService {
     _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
   }
 
-  static void requestNoPermissions() {
+  static void cancelAllNotification() {
 
+    _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancel(0);
     _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancelAll();
-  }
-
-  static Future<bool?> isNotificationOn() async {
-
-    return await _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.areNotificationsEnabled();
   }
 
   static Future<void> initialize() async {
@@ -75,18 +71,18 @@ class MyNotificationService {
         UILocalNotificationDateInterpretation.absoluteTime);
   }
 
-  ///TODO: nicht permissions entziehen sondern. einfach alle notification löschen oder wieder rein packen
 
   static void scheduleWeeklyNotification() async {
 
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'weekly_channel_id',
+      '0',
       'Weekly Channel',
     );
+
     const platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    await _notificationsPlugin.periodicallyShow(0, "Heute Lust shoppen zu gehen?", "Deine Einkaufslisten warten auf dich!", RepeatInterval.daily, platformChannelSpecifics);
+    await _notificationsPlugin.periodicallyShow(0, "Heute Lust shoppen zu gehen?", "Deine Einkaufslisten warten auf dich!", RepeatInterval.everyMinute, platformChannelSpecifics);
 
   }
 }

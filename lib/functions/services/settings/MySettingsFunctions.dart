@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/functions/dialog/settingsDialog/changeBiometricsDialog.dart';
 import 'package:shopping_app/functions/services/biometricsAuth/MyBiometricsAuthService.dart';
+import 'package:shopping_app/functions/services/notification/MyNotificationService.dart';
 import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 import 'package:shopping_app/functions/services/storage/MySecureStorageService.dart';
 
@@ -43,6 +44,15 @@ class MySettingsFunctions {
 
   void notificationFunction(bool switchState) {
 
+    if (switchState) {
+
+      print("notification");
+      MyNotificationService.scheduleWeeklyNotification();
+    } else {
+
+      print("no notification");
+      MyNotificationService.cancelAllNotification();
+    }
     settingsProvider.updateIsNotificationsEnabled(switchState);
   }
   void vibrationFunction(bool switchState) {
