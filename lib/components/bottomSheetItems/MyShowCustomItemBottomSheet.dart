@@ -144,12 +144,10 @@ class MyShowCustomItemBottomSheet {
           padding: const EdgeInsets.only(left: 80, right: 80),
           child: ElevatedButton(
             onPressed: () {
-
               showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
                   return MyCustomItemBottomSheet(
-                    product: product,
                     productUUID: productUUID,
                     groupUUID: groupUUID,
                     isNewProduct: false,

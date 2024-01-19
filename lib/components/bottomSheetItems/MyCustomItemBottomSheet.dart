@@ -7,12 +7,11 @@ import 'package:shopping_app/objects/products/MyProduct.dart';
 
 
 class MyCustomItemBottomSheet extends StatefulWidget {
-  final MyProduct? product;
   final String? productUUID;
   final String? groupUUID;
   final bool isNewProduct;
 
-  const MyCustomItemBottomSheet({super.key, this.product, this.productUUID, this.groupUUID, this.isNewProduct = true});
+  const MyCustomItemBottomSheet({super.key, this.productUUID, this.groupUUID, this.isNewProduct = true});
 
   @override
   _MyCustomItemBottomSheetState createState() => _MyCustomItemBottomSheetState();
