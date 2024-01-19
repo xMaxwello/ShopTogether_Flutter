@@ -11,6 +11,11 @@ class MyAccountSettingsService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$');
+    return emailRegex.hasMatch(email);
+  }
+
   /// Has the [MyCustomException] of [UserService.updateUserName]
   Future<void> updateNameFromCurrentUser(BuildContext context, String newPrename, String newSurname, String password) async {
 
@@ -67,6 +72,11 @@ class MyAccountSettingsService {
       return;
     }
 
+    if (!isValidEmail(newEmail)) {
+      MySnackBarService.showMySnackBar(context, 'Es muss eine gültige E-mail-Adresse eingegeben werden.');
+      return;
+    }
+
     User? user = _auth.currentUser;
     if (user == null) {
       MySnackBarService.showMySnackBar(context, 'Sie sind nicht angemeldet.', isError: true);
@@ -94,16 +104,16 @@ class MyAccountSettingsService {
           MySnackBarService.showMySnackBar(context, 'Falsches Passwort.');
           break;
 
+        case "invalid-email":
+          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
+          break;
+
         case "too-many-requests":
           MySnackBarService.showMySnackBar(context, 'Zu viele Anfragen. Versuchen Sie es später erneut.');
           break;
 
         case "network-request-failed":
           MySnackBarService.showMySnackBar(context, 'Netzwerkfehler. Überprüfen Sie Ihre Internetverbindung.');
-          break;
-
-        case "invalid-email":
-          MySnackBarService.showMySnackBar(context, 'Ungültiges E-Mail-Format. Bitte überprüfen Sie Ihre E-Mail-Adresse.');
           break;
 
         default:
