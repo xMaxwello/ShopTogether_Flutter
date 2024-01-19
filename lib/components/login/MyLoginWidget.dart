@@ -62,7 +62,7 @@ class _MyLoginWidgetState extends State<MyLoginWidget> {
 
                     for (int i = 0; i < widget.controllers.length;i++)
                       TextFormField(
-                        maxLength: widget.maxLengthForTextfields[i],
+                        maxLength: widget.maxLengthForTextfields[i] != -1 ? widget.maxLengthForTextfields[i] : null,
                         controller: widget.controllers[i],
                         style: Theme.of(context).textTheme.bodyMedium,
                         keyboardType: widget.textTypes[i],
