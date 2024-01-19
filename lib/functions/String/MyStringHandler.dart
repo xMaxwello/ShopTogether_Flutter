@@ -34,6 +34,11 @@ class MyStringHandler {
     return containsDigit && containsSpecialChar;
   }
 
+  static bool isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+$');
+    return emailRegex.hasMatch(email);
+  }
+
   static String breakString(String input, int maxLength) {
     StringBuffer result = StringBuffer();
 
