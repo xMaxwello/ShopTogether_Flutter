@@ -46,6 +46,20 @@ class MyGroupBottomSheet {
                       onNumbersEntered: (List<String> enteredNumbers) async {
 
                         String joinedNumbers = enteredNumbers.join('');
+                        if (joinedNumbers == '') {
+
+                          Navigator.pop(context);
+                          MySnackBarService.showMySnackBar(context, "Bitte geben Sie ihren Code ein!");
+                          return;
+                        }
+
+                        if (joinedNumbers.length != 6) {
+
+                          Navigator.pop(context);
+                          MySnackBarService.showMySnackBar(context, "Bitte geben Sie alle 6 Zahlen ein, damit der Code vollständig ist!");
+                          return;
+                        }
+
                         int joinedNumbersAsInt = int.parse(joinedNumbers);
 
                         try {

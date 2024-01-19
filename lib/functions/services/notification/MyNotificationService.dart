@@ -71,7 +71,6 @@ class MyNotificationService {
         UILocalNotificationDateInterpretation.absoluteTime);
   }
 
-  ///TODO: nicht permissions entziehen sondern. einfach alle notification löschen oder wieder rein packen
 
   static void scheduleWeeklyNotification() async {
 
