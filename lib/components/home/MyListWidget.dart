@@ -15,7 +15,8 @@ import '../search/MySearchItem.dart';
 /**
  * Its like a sub class of the MyHomeList. Because the class would become too big if not
  * */
-class MyListWidget extends StatelessWidget {
+
+class MyListWidget extends StatefulWidget {
 
   final int itemLength;
   final ScrollController controller;
@@ -27,10 +28,15 @@ class MyListWidget extends StatelessWidget {
   final bool isGroup;
   final int selectedGroupIndex;
   final String? searchedText;
+  final int? maxSizeForSearch;
 
-  MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText});
+  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText, this.maxSizeForSearch});
 
-  int oldSearchLength = 0;
+  @override
+  State<MyListWidget> createState() => _MyListWidgetState();
+}
+
+class _MyListWidgetState extends State<MyListWidget> {
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,7 @@ class MyListWidget extends StatelessWidget {
 
     ///sort the products to the product names
     ///sort the products to the selected user, but the current users products are any time at the top
-    List<MyProduct>? products = MySortHandler.getSortProductList(isGroup, user, groupsFromUser, selectedGroupIndex);
+    List<MyProduct>? products = MySortHandler.getSortProductList(widget.isGroup, user, widget.groupsFromUser, widget.selectedGroupIndex);
 
     List<String>? uniqueUserUUIDs = products?.map((product) => product.selectedUserUUID).toSet().toList();
     List<List<MyProduct>>? productsForUsers = MySortHandler.getProductsForUsers(products, uniqueUserUUIDs);
@@ -52,11 +58,11 @@ class MyListWidget extends StatelessWidget {
 
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: !isGroup && !isSearch ? uniqueUserLength! : itemLength,
-      controller: controller,
+      itemCount: !widget.isGroup && !widget.isSearch ? uniqueUserLength! : widget.itemLength,
+      controller: widget.controller,
       itemBuilder: (context, index) {
 
-        if (!isGroup && !isSearch) {
+        if (!widget.isGroup && !widget.isSearch) {
 
           List<MyProduct> userProducts = productsForUsers!.elementAt(index);
           return Column(
@@ -87,11 +93,11 @@ class MyListWidget extends StatelessWidget {
                   itemBuilder: (BuildContext context, int itemIndex) {
 
                     return MyDismissibleWidget( /// for the product and group views
-                      isGroup: isGroup,
-                      groupsFromUser: groupsFromUser,
+                      isGroup: widget.isGroup,
+                      groupsFromUser: widget.groupsFromUser,
                       itemIndex: itemIndex,
-                      selectedGroupIndex: selectedGroupIndex,
-                      itemsValue: itemsValue,
+                      selectedGroupIndex: widget.selectedGroupIndex,
+                      itemsValue: widget.itemsValue,
                       productsFromSelectedGroup: userProducts,
                     );
                   }),
@@ -101,15 +107,15 @@ class MyListWidget extends StatelessWidget {
         }
 
         ///shows the items, dependent on the var isSearching and if the items should be a group or a product
+        if (widget.isSearch && !widget.isGroup) {
 
-        if (isSearch && !isGroup) {
-
-          if (itemLength < 2) {
+          ///if no items returned of the search
+          if (widget.itemLength < 2) {
             return const Padding(
               padding: EdgeInsets.only(bottom: 20, top: 10),
               child: Center(
                   child: Card(
-                      shape: RoundedRectangleBorder(),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                       child: Padding(
                         padding: EdgeInsets.all(10),
                         child: Text("Keine Suchergebnisse gefunden!"),
@@ -119,41 +125,45 @@ class MyListWidget extends StatelessWidget {
             );
           }
 
-          if (oldSearchLength == itemLength && index == itemLength - 1) {
+          ///if the maximum is reached of the search
+          if (widget.maxSizeForSearch! <= widget.itemLength && index == widget.itemLength - 1) {
             return const Padding(
               padding: EdgeInsets.only(bottom: 20, top: 10),
               child: Center(
-                child: Card(
-                  shape: RoundedRectangleBorder(),
-                  child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text("Keine weitere Suchergebnisse gefunden!"),
+                  child: Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text("Keine weitere Suchergebnisse gefunden!"),
+                      )
                   )
-                )
               ),
             );
           }
 
-          if (itemLength != 1 && oldSearchLength != itemLength && index == itemLength - 1) {
-            return MySearchForMoreProductsWidget(itemLength: itemLength,);
+          ///Add a widget where the user add more Search Items
+          if (index == widget.itemLength - 1) {
+
+            return MySearchForMoreProductsWidget(
+              itemLength: widget.itemLength,
+            );
           }
 
-          oldSearchLength = itemLength;
-
+          ///if no conditions applies, then show the SearchItem
           return MySearchItem( ///for the search view
             currentUserUUID: user.uid,
-            selectedGroupUUID: groupsFromUser.elementAt(selectedGroupIndex).groupUUID!,
-            product: searchSnapshot!.data!.elementAt(index),
-            searchedText: searchedText!,
+            selectedGroupUUID: widget.groupsFromUser.elementAt(widget.selectedGroupIndex).groupUUID!,
+            product: widget.searchSnapshot!.data!.elementAt(index),
+            searchedText: widget.searchedText!,
           );
         } else {
 
           return MyDismissibleWidget( /// for the product and group views
-            isGroup: isGroup,
-            groupsFromUser: groupsFromUser,
+            isGroup: widget.isGroup,
+            groupsFromUser: widget.groupsFromUser,
             itemIndex: index,
-            selectedGroupIndex: selectedGroupIndex,
-            itemsValue: itemsValue,
+            selectedGroupIndex: widget.selectedGroupIndex,
+            itemsValue: widget.itemsValue,
             productsFromSelectedGroup: products ?? [],
           );
         }

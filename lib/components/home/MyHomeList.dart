@@ -132,15 +132,34 @@ class _MyHomeListState extends State<MyHomeList> {
                                         );
                                       }
 
-                                      int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
+                                      return FutureBuilder<int>(
+                                          future: MyOpenFoodFactsService().getMaximumProductSize([mySearchProvider.searchedText]),
+                                          builder: (BuildContext context, AsyncSnapshot<int> sizeSnapshot) {
 
-                                      return MyListWidget(
-                                        itemLength: itemLength, controller: _controller,
-                                        mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
-                                        itemsValue: itemsValue,
-                                        isSearch: true, isGroup: itemsValue.isGroup,
-                                        selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
-                                        searchedText: mySearchProvider.searchedText,
+                                            if (sizeSnapshot.connectionState == ConnectionState.waiting) {
+                                              return const Center(
+                                                child: CircularProgressIndicator(),
+                                              );
+                                            }
+
+                                            if (!sizeSnapshot.hasData) {
+                                              return const Center(
+                                                child: CircularProgressIndicator(),
+                                              );
+                                            }
+
+                                            int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
+
+                                            return MyListWidget(
+                                              maxSizeForSearch: sizeSnapshot.data!,
+                                              itemLength: itemLength, controller: _controller,
+                                              mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
+                                              itemsValue: itemsValue,
+                                              isSearch: true, isGroup: itemsValue.isGroup,
+                                              selectedGroupIndex: selectedGroupIndex, searchSnapshot: searchSnapshot,
+                                              searchedText: mySearchProvider.searchedText,
+                                            );
+                                          }
                                       );
                                     }
                                 );

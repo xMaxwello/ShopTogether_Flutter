@@ -24,7 +24,7 @@ class MyGroupItem extends StatelessWidget {
           children: [
 
             Text(
-              MyStringHandler.truncateText(MyStringHandler.breakString(myGroup.groupName, 20), 41),
+              MyStringHandler.truncateText(MyStringHandler.breakString(myGroup.groupName, 16), 42),
               style: Theme.of(context).textTheme.titleSmall
             ),
 
