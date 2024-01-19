@@ -18,13 +18,20 @@ class MyStringHandler {
     return htmlString.replaceAll(exp, '');
   }
 
-  ///TODO: Gucken ob das klappt wegen login
-  static String validatePassword(String password) {
-    RegExp disallowedChars = RegExp(r'[^\w\d!@#\$%^&*()_+]');
-    if (disallowedChars.hasMatch(password)) {
-      return password.replaceAll(disallowedChars, '');
+  static bool isHTMLValid(String s) {
+    RegExp disallowedChars = RegExp(r"<[^>]*>");
+    return disallowedChars.hasMatch(s);
+  }
+
+  static bool isPasswordValid(String password) {
+
+    if (password.length < 5) {
+      return false;
     }
-    return password;
+
+    bool containsDigit = RegExp(r'\d').hasMatch(password);
+    bool containsSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(password);
+    return containsDigit && containsSpecialChar;
   }
 
   static String breakString(String input, int maxLength) {
