@@ -160,7 +160,7 @@ class MyLoginFunctions {
         !MyStringHandler.isHTMLValid(nameOfUser) ||
         !MyStringHandler.isHTMLValid(prenameOfUser)
     ) {
-      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * > .');
       return;
     }
 

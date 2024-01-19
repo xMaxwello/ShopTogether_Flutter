@@ -19,8 +19,8 @@ class MyStringHandler {
   }
 
   static bool isHTMLValid(String s) {
-    RegExp disallowedChars = RegExp(r"<[^>]*>");
-    return disallowedChars.hasMatch(s);
+    RegExp allowedChars = RegExp(r"^[^<>]*$");
+    return allowedChars.hasMatch(s);
   }
 
   static bool isPasswordValid(String password) {
