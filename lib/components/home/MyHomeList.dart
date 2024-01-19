@@ -106,7 +106,7 @@ class _MyHomeListState extends State<MyHomeList> {
 
                               ///get groups from current user
                               List<MyGroup> groupsFromUser = groups.where((group) => currentUser.groupUUIDs.contains(group.groupUUID)).toList();
-                              groupsFromUser.sort((a, b) => a.groupUUID!.compareTo(b.groupUUID!));
+                              groupsFromUser.sort((a, b) => a.groupName!.compareTo(b.groupName!));
 
                               ///get index of selected group
                               if (itemsValue.selectedGroupUUID != "") {
