@@ -12,6 +12,7 @@ class MyNotificationService {
   static void cancelAllNotification() {
 
     _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancel(0);
+    _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.cancelAll();
   }
 
   static Future<void> initialize() async {
@@ -75,7 +76,7 @@ class MyNotificationService {
   static void scheduleWeeklyNotification() async {
 
     const androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'weekly_channel_id',
+      '0',
       'Weekly Channel',
     );
 
