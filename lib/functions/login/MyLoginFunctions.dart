@@ -153,6 +153,16 @@ class MyLoginFunctions {
       return;
     }
 
+    if (!MyStringHandler.isValidEmail(emailAddress)) {
+      MySnackBarService.showMySnackBar(_context, 'Es muss eine gültige E-mail-Adresse eingegeben werden.');
+      return;
+    }
+
+    if (password != passwordConfirm) {
+      MySnackBarService.showMySnackBar(_context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
+      return;
+    }
+
     if (
     !MyStringHandler.isHTMLValid(emailAddress) ||
         !MyStringHandler.isHTMLValid(password) ||
@@ -160,7 +170,7 @@ class MyLoginFunctions {
         !MyStringHandler.isHTMLValid(nameOfUser) ||
         !MyStringHandler.isHTMLValid(prenameOfUser)
     ) {
-      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * > .');
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < >');
       return;
     }
 
