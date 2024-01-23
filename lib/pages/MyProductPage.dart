@@ -12,6 +12,7 @@ import '../components/home/MyHomeNavigationBar.dart';
 import '../functions/floatingAction/MyFloatingActionFunctions.dart';
 import '../functions/providers/items/MyItemsProvider.dart';
 import '../functions/providers/search/MySearchProvider.dart';
+import 'MyHomePage.dart';
 
 class MyProductPage extends StatefulWidget {
   const MyProductPage({super.key});
@@ -72,9 +73,9 @@ class _MyProductPageState extends State<MyProductPage> {
         );
       }
 
-      return FutureBuilder<bool>(
-          future: MyFirestoreService.groupService.isUserGroupOwner(myItemsProvider.selectedGroupUUID, user.uid),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      return FutureBuilder(
+          future: MyFirestoreService.groupService.isCurrentMemberInGroupAsStream(myItemsProvider.selectedGroupUUID),
+          builder: (BuildContext context, AsyncSnapshot<Stream<bool>> snapshot) {
 
             if (!snapshot.hasData) {
               return const Center(
@@ -82,53 +83,96 @@ class _MyProductPageState extends State<MyProductPage> {
               );
             }
 
-            return Scaffold(
-              body: Padding(
-                padding: EdgeInsets.only(top: height),
+            return StreamBuilder<bool>(
+                stream: snapshot.data!,
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshotIsInGroup) {
 
-                ///set the padding = status bar height
-                child: MyHomeList(
-                  isListEmptyWidget: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
+                  if (!snapshotIsInGroup.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                      Text(
-                          "Die Liste ist leer!",
-                          style: Theme.of(context).textTheme.labelSmall
+                  if (snapshotIsInGroup.data! == false) {
+
+                    return Scaffold(
+                      body: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+
+                            Text(
+                              "Sie sind nicht mehr länger\n in dieser Gruppe!",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+
+                            const SizedBox(height: 15,),
+
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
+                                },
+                                child: Text(
+                                  "Zur Gruppenansicht",
+                                  style: Theme.of(context).textTheme.displaySmall,
+                                )
+                            )
+
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10,),
+                    );
+                  }
 
-                    ],
-                  ),
-                ),
-              ),
-              bottomNavigationBar:  ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-                child: BottomAppBar(
-                  color: Theme.of(context).bottomAppBarTheme.color,
-                  child: const MyHomeNavigationBar(),
-                ),
-              ),
+                  return Scaffold(
+                    body: Padding(
+                      padding: EdgeInsets.only(top: height),
 
-              appBar: const PreferredSize(
-                preferredSize: Size.fromHeight(100),
-                child: MyAppBar(
-                  isGroup: false,
-                ),
-              ),
+                      ///set the padding = status bar height
+                      child: MyHomeList(
+                        isListEmptyWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
 
-              floatingActionButton: MyFloatingButton(
-                  buttonTitle: isSearchActive ? 'Produkt\n hinzufügen' : 'Mitglied',
-                  iconData: isSearchActive ? Icons.add : Icons.person,
-                  function: isSearchActive ? myFloatingActionFunctions.addCustomProduct : myFloatingActionFunctions.addUserToGroup,
-                  isChangeByScroll: true
-              ),
-              floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+                            Text(
+                                "Die Liste ist leer!",
+                                style: Theme.of(context).textTheme.labelSmall
+                            ),
+                            const SizedBox(height: 10,),
+
+                          ],
+                        ),
+                      ),
+                    ),
+                    bottomNavigationBar:  ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                      child: BottomAppBar(
+                        color: Theme.of(context).bottomAppBarTheme.color,
+                        child: const MyHomeNavigationBar(),
+                      ),
+                    ),
+
+                    appBar: const PreferredSize(
+                      preferredSize: Size.fromHeight(100),
+                      child: MyAppBar(
+                        isGroup: false,
+                      ),
+                    ),
+
+                    floatingActionButton: MyFloatingButton(
+                        buttonTitle: isSearchActive ? 'Produkt\n hinzufügen' : 'Mitglied',
+                        iconData: isSearchActive ? Icons.add : Icons.person,
+                        function: isSearchActive ? myFloatingActionFunctions.addCustomProduct : myFloatingActionFunctions.addUserToGroup,
+                        isChangeByScroll: true
+                    ),
+                    floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+                  );
+                }
             );
           }
       );

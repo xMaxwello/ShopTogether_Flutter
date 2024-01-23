@@ -165,7 +165,7 @@ class MyLoginFunctions {
     }
 
     if (!MyStringHandler.isPasswordValid(password)) {
-      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Zeichen!');
+      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Sonderzeichen!');
       return;
     }
 
