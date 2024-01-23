@@ -102,11 +102,12 @@ class _MyProductPageState extends State<MyProductPage> {
                           children: [
 
                             Text(
-                              "Sie sind nicht mehr länger\n in dieser Gruppe!",
-                              style: Theme.of(context).textTheme.bodySmall,
+                              "Sie sind kein Mitglied\n dieser Gruppe mehr!",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
 
-                            const SizedBox(height: 15,),
+                            const SizedBox(height: 20,),
 
                             ElevatedButton(
                                 onPressed: () {
