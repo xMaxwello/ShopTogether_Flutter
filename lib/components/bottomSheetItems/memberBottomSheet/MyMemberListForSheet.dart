@@ -13,64 +13,46 @@ class MyMemberListForSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return FutureBuilder<Stream<List<MyUser>>>(
-        future: MyFirestoreService.groupService.getMembersAsStream(selectedGroupUUID),
-        builder: (BuildContext context, AsyncSnapshot<Stream<List<MyUser>>> snapshot) {
+    return StreamBuilder<List<MyUser>>(
+        stream: MyFirestoreService.groupService.getMembersAsStream(selectedGroupUUID),
+        builder: (BuildContext context, AsyncSnapshot<List<MyUser>> memberSnapshots) {
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (memberSnapshots.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (!snapshot.hasData) {
+          if (!memberSnapshots.hasData) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          return StreamBuilder<List<MyUser>>(
-              stream: snapshot.data,
-              builder: (BuildContext context, AsyncSnapshot<List<MyUser>> memberSnapshots) {
+          List<MyUser> myUser = memberSnapshots.data!;
 
-                if (memberSnapshots.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+          return Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
 
-                if (!memberSnapshots.hasData) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                List<MyUser> myUser = memberSnapshots.data!;
-
-                return Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-
-                          for (int i = 0;i < myUser.length;i++)
-                            MyUserWidget(
-                              groupUUID: selectedGroupUUID,
-                              myUser: myUser.elementAt(i),
-                            ),
-
-                        ],
+                    for (int i = 0;i < myUser.length;i++)
+                      MyUserWidget(
+                        groupUUID: selectedGroupUUID,
+                        myUser: myUser.elementAt(i),
                       ),
-                    ),
-                  ),
-                );
-              }
+
+                  ],
+                ),
+              ),
+            ),
           );
         }
     );

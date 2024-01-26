@@ -114,6 +114,7 @@ class MyItemBottomSheet {
                       future: MyFirestoreService.productService.getProductByUUID(groupUUID, productUUID!),
                       builder: (BuildContext context,
                           AsyncSnapshot<MyProduct?> snapshot) {
+
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(
                             child: CircularProgressIndicator(),

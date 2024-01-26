@@ -29,6 +29,19 @@ class MyUserWidget extends StatelessWidget {
     return FutureBuilder<bool>(
         future: MyFirestoreService.groupService.isUserGroupOwner(groupUUID, user.uid),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshotIsCurrentUserOwner) {
+
+          if (snapshotIsCurrentUserOwner.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!snapshotIsCurrentUserOwner.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           return FutureBuilder<bool>(
               future: MyFirestoreService.groupService.isUserGroupOwner(groupUUID, myUser.uuid),
               builder: (BuildContext context, AsyncSnapshot<bool> snapshotIsUserOwner) {
