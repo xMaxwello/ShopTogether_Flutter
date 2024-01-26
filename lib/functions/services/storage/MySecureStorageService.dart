@@ -15,38 +15,35 @@ class MySecureStorageService {
   void updateUserInStorage(String email, String password) async {
 
     User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-
-      if (user.emailVerified) {
-
-        AuthCredential credential = EmailAuthProvider.credential(
-          email: email,
-          password: password,
-        );
-
-        try { await user.reauthenticateWithCredential(credential); } catch (e) {
-          throw MyCustomException("the login inputs are wrong: $e!", "login-wrong");
-        }
-
-        AndroidOptions getAndroidOptions() => const AndroidOptions(
-          encryptedSharedPreferences: true,
-        );
-        final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-        await storage.write(
-            key: MyStorageKeys.emailAdress,
-            value: email
-        );
-        await storage.write(
-            key: MyStorageKeys.password,
-            value: password
-        );
-
-      } else {
-        throw MyCustomException("the email address is not verified!", "email-not-verified");
-      }
-    } else {
+    if (user == null) {
       throw MyCustomException("the user is not logged in!", "not-logged-in");
     }
+
+    if (user.emailVerified == false) {
+      throw MyCustomException("the email address is not verified!", "email-not-verified");
+    }
+
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: email,
+      password: password,
+    );
+
+    try { await user.reauthenticateWithCredential(credential); } catch (e) {
+      throw MyCustomException("the login inputs are wrong: $e!", "login-wrong");
+    }
+
+    AndroidOptions getAndroidOptions() => const AndroidOptions(
+      encryptedSharedPreferences: true,
+    );
+    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+    await storage.write(
+        key: MyStorageKeys.emailAdress,
+        value: email
+    );
+    await storage.write(
+        key: MyStorageKeys.password,
+        value: password
+    );
   }
 
   Future<MyDefaultUserStructure> getUserFromStorage() async {

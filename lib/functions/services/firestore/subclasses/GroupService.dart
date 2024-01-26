@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
@@ -242,6 +244,44 @@ class GroupService {
     });
 
     return userStream;
+  }
+
+  ///[MyCustomException] Keys:
+  ///- snapshot-not-existent: snapshot doesn`t exists
+  ///- not-logged-in: User is not logged in!
+  Future<Stream<bool>> isCurrentMemberInGroupAsStream(String groupUUID) async {
+    StreamController<bool> controller = StreamController<bool>();
+
+    FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupUUID)
+        .snapshots()
+        .listen((snapshot) async {
+      if (!snapshot.exists) {
+        controller.addError(MyCustomException("The snapshot doesn't exist for $groupUUID", "snapshot-not-existent"));
+        return;
+      }
+
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        controller.addError(MyCustomException("User is not logged in!", "not-logged-in"));
+        return;
+      }
+
+      MyGroup myGroup = MyGroup.fromMap(snapshot.data()!);
+      List<String>? userUUIDs = myGroup.userUUIDs;
+
+      if (userUUIDs != null && userUUIDs.isNotEmpty) {
+        bool isUserInGroup = await GroupService().isSpecificUserInGroup(user.uid, groupUUID);
+        controller.add(isUserInGroup);
+      } else {
+        controller.add(false);
+      }
+    }, onError: (error) {
+      controller.addError(error);
+    });
+
+    return controller.stream;
   }
 
   /// [MyCustomException] Keys:

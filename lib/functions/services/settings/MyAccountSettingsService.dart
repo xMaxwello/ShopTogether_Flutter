@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shopping_app/exceptions/MyCustomException.dart';
-import 'package:shopping_app/functions/String/MyStringHandler.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
 import '../../../objects/users/MyUsers.dart';
+import '../../String/MyStringHandler.dart';
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService {
