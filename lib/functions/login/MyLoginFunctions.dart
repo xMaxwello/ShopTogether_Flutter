@@ -153,6 +153,16 @@ class MyLoginFunctions {
       return;
     }
 
+    if (!MyStringHandler.isValidEmail(emailAddress)) {
+      MySnackBarService.showMySnackBar(_context, 'Es muss eine gültige E-mail-Adresse eingegeben werden.');
+      return;
+    }
+
+    if (password != passwordConfirm) {
+      MySnackBarService.showMySnackBar(_context, 'Die Felder "Passwort" und "Passwort wiederholen" stimmen nicht überein!');
+      return;
+    }
+
     if (
     !MyStringHandler.isHTMLValid(emailAddress) ||
         !MyStringHandler.isHTMLValid(password) ||
@@ -160,12 +170,12 @@ class MyLoginFunctions {
         !MyStringHandler.isHTMLValid(nameOfUser) ||
         !MyStringHandler.isHTMLValid(prenameOfUser)
     ) {
-      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * > .');
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < >');
       return;
     }
 
     if (!MyStringHandler.isPasswordValid(password)) {
-      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Zeichen!');
+      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Sonderzeichen!');
       return;
     }
 
