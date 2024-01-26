@@ -23,16 +23,18 @@ class _MyEmailVerificationAuthPageState extends State<MyEmailVerificationAuthPag
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-      await FirebaseAuth.instance.currentUser?.reload();
+    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer)  {
+
+      FirebaseAuth.instance.currentUser?.reload().then((value) => null);
       final user = FirebaseAuth.instance.currentUser;
       if (user?.emailVerified ?? false) {
         timer.cancel();
 
+        //MySnackBarService.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", isError: false);
         Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
-        MySnackBarService.showMySnackBar(context, "Ihre E-Mail wurde verifiziert!", isError: false);
       }
     });
+
   }
 
   @override
