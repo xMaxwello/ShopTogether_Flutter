@@ -41,13 +41,8 @@ class MyLoginFunctions {
       return;
     }
 
-    if (!MyStringHandler.isPasswordValid(password)) {
-      MySnackBarService.showMySnackBar(_context, 'Das Passwort muss: mindestens 5 Zeichen haben, 1 Zahl, 1 Zeichen!');
-      return;
-    }
-
     if (!MyStringHandler.isHTMLValid(emailAddress) || !MyStringHandler.isHTMLValid(password)) {
-      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < [ ^ > ] * >');
+      MySnackBarService.showMySnackBar(_context, 'Es dürfen nicht diese Zeichen eingegeben werden: < >');
       return;
     }
 
