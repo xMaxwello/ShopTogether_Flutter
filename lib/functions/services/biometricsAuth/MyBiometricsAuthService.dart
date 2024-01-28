@@ -18,40 +18,38 @@ class MyBiometricsAuthService {
     bool isBiometricsAvailable = await auth.canCheckBiometrics;
     bool isAuthenticateAvailable = isBiometricsAvailable || await auth.isDeviceSupported();
 
-    if (isAuthenticateAvailable) {
-
-      List<BiometricType> biometricsOptions = await auth.getAvailableBiometrics();
-
-      if (biometricsOptions.contains(BiometricType.strong)) {
-
-        try {
-
-          isAuthenticate = await auth.authenticate(
-              localizedReason: 'Bitte authentifizieren Sie sich, um sich anzumelden!',
-              authMessages: const <AuthMessages>[
-                AndroidAuthMessages(
-                  signInTitle: 'Biometrische Authentifzierung erforderlich!',
-                  cancelButton: 'Nein danke!',
-                ),
-              ],
-              options: const AuthenticationOptions(
-                  biometricOnly: true,
-                  useErrorDialogs: false,
-                  stickyAuth: true
-              ));
-
-        } catch (e) {
-
-          print(e);
-          throw MyCustomException("the authentiation failed: $e", "authentication-failed");
-        }
-      } else {
-
-        throw MyCustomException("the authentication types are to weak", "weak");
-      }
-    } else {
+    if (!isAuthenticateAvailable) {
 
       throw MyCustomException("the authentification is not available!", "not-available");
+    }
+
+    List<BiometricType> biometricsOptions = await auth.getAvailableBiometrics();
+
+    if (!biometricsOptions.contains(BiometricType.strong)) {
+
+      throw MyCustomException("the authentication types are to weak", "weak");
+    }
+
+    try {
+
+      isAuthenticate = await auth.authenticate(
+          localizedReason: 'Bitte authentifizieren Sie sich, um sich anzumelden!',
+          authMessages: const <AuthMessages>[
+            AndroidAuthMessages(
+              signInTitle: 'Biometrische Authentifzierung erforderlich!',
+              cancelButton: 'Nein danke!',
+            ),
+          ],
+          options: const AuthenticationOptions(
+              biometricOnly: true,
+              useErrorDialogs: false,
+              stickyAuth: true
+          ));
+
+    } catch (e) {
+
+      print(e);
+      throw MyCustomException("the authentiation failed: $e", "authentication-failed");
     }
 
     return isAuthenticate;
