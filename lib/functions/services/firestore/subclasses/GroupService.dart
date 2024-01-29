@@ -249,7 +249,7 @@ class GroupService {
   ///[MyCustomException] Keys:
   ///- snapshot-not-existent: snapshot doesn`t exists
   ///- not-logged-in: User is not logged in!
-  Stream<bool> isCurrentMemberInGroupAsStream(String groupUUID) async* {
+  /*Stream<bool> isCurrentMemberInGroupAsStream(String groupUUID) async* {
     StreamController<bool> controller = StreamController<bool>();
 
     Stream<DocumentSnapshot<Map<String, dynamic>>> groupStream = FirebaseFirestore.instance
@@ -279,6 +279,41 @@ class GroupService {
         yield false;
       }
     }
+  }*/
+
+  Future<Stream<bool>> isCurrentMemberInGroupAsStream(String groupUUID) async {
+    StreamController<bool> controller = StreamController<bool>();
+
+    FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupUUID)
+        .snapshots()
+        .listen((snapshot) async {
+      if (!snapshot.exists) {
+        controller.addError(MyCustomException("The snapshot doesn't exist for $groupUUID", "snapshot-not-existent"));
+        return;
+      }
+
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        controller.addError(MyCustomException("User is not logged in!", "not-logged-in"));
+        return;
+      }
+
+      MyGroup myGroup = MyGroup.fromMap(snapshot.data()!);
+      List<String>? userUUIDs = myGroup.userUUIDs;
+
+      if (userUUIDs != null && userUUIDs.isNotEmpty) {
+        bool isUserInGroup = await GroupService().isSpecificUserInGroup(user.uid, groupUUID);
+        controller.add(isUserInGroup);
+      } else {
+        controller.add(false);
+      }
+    }, onError: (error) {
+      controller.addError(error);
+    });
+
+    return controller.stream;
   }
 
   /// [MyCustomException] Keys:

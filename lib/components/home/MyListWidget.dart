@@ -29,8 +29,9 @@ class MyListWidget extends StatefulWidget {
   final int selectedGroupIndex;
   final String? searchedText;
   final int? maxSizeForSearch;
+  final String selectedGroupUUID;
 
-  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText, this.maxSizeForSearch});
+  const MyListWidget({super.key, required this.itemLength, required this.controller, required this.mySearchProvider, this.searchSnapshot, required this.groupsFromUser, required this.itemsValue, required this.isSearch, required this.isGroup, required this.selectedGroupIndex, this.searchedText, this.maxSizeForSearch, required this.selectedGroupUUID});
 
   @override
   State<MyListWidget> createState() => _MyListWidgetState();
@@ -81,7 +82,25 @@ class _MyListWidgetState extends State<MyListWidget> {
                       return const Text("Loading...");
                     }
 
-                    return Text("${snapshot.data!.elementAt(0)} ${snapshot.data!.elementAt(1)}");
+                    return FutureBuilder(
+                        future: MyFirestoreService.groupService.getSizeOfMembers(widget.selectedGroupUUID),
+                        builder: (BuildContext context, AsyncSnapshot<int> snapshotSize) {
+
+                          if (snapshotSize.connectionState == ConnectionState.waiting) {
+                            return const Text("Loading...");
+                          }
+
+                          if (!snapshotSize.hasData) {
+                            return const Text("Loading...");
+                          }
+
+                          if (snapshotSize.data == 1) {
+                            return const SizedBox();
+                          }
+
+                          return Text("${snapshot.data!.elementAt(0)} ${snapshot.data!.elementAt(1)}");
+                        }
+                    );
                   }
               ),
 

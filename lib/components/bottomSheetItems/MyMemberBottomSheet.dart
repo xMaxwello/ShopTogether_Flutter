@@ -22,7 +22,7 @@ class MyMemberBottomSheet {
 
     return [
       
-      const SizedBox(height: 10,),
+      const SizedBox(height: 20,),
       Center(
         child: Text(
             "Mitglieder",

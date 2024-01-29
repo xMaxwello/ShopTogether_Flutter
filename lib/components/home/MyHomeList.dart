@@ -151,6 +151,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                             int itemLength = searchSnapshot.data!.length + 1; /// +1 => the MySearchForMoreProductsWidget
 
                                             return MyListWidget(
+                                              selectedGroupUUID: itemsValue.selectedGroupUUID,
                                               maxSizeForSearch: sizeSnapshot.data!,
                                               itemLength: itemLength, controller: _controller,
                                               mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
@@ -183,11 +184,12 @@ class _MyHomeListState extends State<MyHomeList> {
 
                               ///shows the ProductItems or the GroupItems
                               return MyListWidget(
-                                  itemLength: itemLength, controller: _controller,
-                                  mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
-                                  itemsValue: itemsValue,
-                                  isSearch: false, isGroup: itemsValue.isGroup,
-                                  selectedGroupIndex: selectedGroupIndex
+                                selectedGroupUUID: itemsValue.selectedGroupUUID,
+                                itemLength: itemLength, controller: _controller,
+                                mySearchProvider: mySearchProvider, groupsFromUser: groupsFromUser,
+                                itemsValue: itemsValue,
+                                isSearch: false, isGroup: itemsValue.isGroup,
+                                selectedGroupIndex: selectedGroupIndex
                               );
                             });
                       });
