@@ -48,11 +48,13 @@ class _MyCustomItemBottomSheetState extends State<MyCustomItemBottomSheet> {
     }
   }
 
-  void _loadGroupMembers() {
+  void _loadGroupMembers() async {
     if (widget.groupUUID != null) {
-      Stream<List<MyUser>> userStream = MyFirestoreService.groupService.getMembersAsStream(widget.groupUUID!);
+      Stream<List<MyUser>> userStream = await MyFirestoreService.groupService.getMembersAsStream(widget.groupUUID!);
       userStream.listen((List<MyUser> users) {
-        _users = users;
+        setState(() {
+          _users = users;
+        });
       });
     }
   }

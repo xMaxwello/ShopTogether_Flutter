@@ -216,7 +216,7 @@ class GroupService {
 
   ///[MyCustomException] Keys:
   ///- snapshot-not-existent: snapshot doesn`t exists
-  Stream<List<MyUser>> getMembersAsStream(String groupUUID) async* {
+  /*Stream<List<MyUser>> getMembersAsStream(String groupUUID) async* {
     Stream<DocumentSnapshot<Map<String, dynamic>>>groupStream = FirebaseFirestore.instance
         .collection("groups")
         .doc(groupUUID)
@@ -244,6 +244,35 @@ class GroupService {
             "the snapshot doesn't exist for $groupUUID", "snapshot-not-existent");
       }
     }
+  }*/
+  Future<Stream<List<MyUser>>> getMembersAsStream(String groupUUID) async {
+
+    Stream<List<MyUser>> userStream = FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupUUID)
+        .snapshots()
+        .asyncMap((snapshot) {
+
+      if (snapshot.exists) {
+        MyGroup myGroup = MyGroup.fromMap(snapshot.data()!);
+        List<String>? userUUIDs = myGroup.userUUIDs;
+
+        if (userUUIDs != null && userUUIDs.isNotEmpty) {
+
+          List<Future<MyUser>> userFutures = userUUIDs.map((String userUUID) =>
+              MyFirestoreService.userService.getUserAsObject(userUUID)).toList();
+
+          return Future.wait(userFutures);
+        } else {
+          return [];
+        }
+      } else {
+        throw MyCustomException(
+            "the snapshot doesn't exist for $groupUUID", "snapshot-not-existent");
+      }
+    });
+
+    return userStream;
   }
 
   ///[MyCustomException] Keys:
