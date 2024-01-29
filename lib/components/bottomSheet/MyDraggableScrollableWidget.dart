@@ -3,38 +3,20 @@ import 'package:flutter/material.dart';
 /**
  * Its the BottomSheet Layout
  * */
-
-class MyDraggableScrollableWidget extends StatelessWidget {
+class MyDraggableScrollableWidget extends StatefulWidget {
 
   final List<Widget> widgets;
 
   const MyDraggableScrollableWidget({super.key, required this.widgets});
 
   @override
-  Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-        initialChildSize: 0.95,
-        maxChildSize: 1.0,
-        minChildSize: 0.0,
-        expand: false,
-        builder: (BuildContext context, ScrollController scrollController) {
-
-          return ListView.builder(
-            key: UniqueKey(),
-            controller: scrollController,
-            itemCount: widgets.length,
-            itemBuilder: (BuildContext context, int index) {
-              return widgets.elementAt(index);
-            },
-          );
-        }
-    );
-  }
+  State<MyDraggableScrollableWidget> createState() => _MyDraggableScrollableWidgetState();
 }
 
-
-/*
-LayoutBuilder(
+class _MyDraggableScrollableWidgetState extends State<MyDraggableScrollableWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints boxConstraints) {
           return Container(
             color: Theme.of(context).colorScheme.background,
@@ -44,26 +26,7 @@ LayoutBuilder(
                 minChildSize: 0.0,
                 builder: (BuildContext context, ScrollController scrollController) {
 
-                  return ListView.builder(
-                    key: UniqueKey(),
-                    controller: scrollController,
-                    itemCount: widget.widgets.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return widget.widgets.elementAt(index);
-                    },
-                  );
-                }
-            ),
-          );
-        }
-    );
-* */
-
-/*
                   return Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
 
                       Divider(
@@ -74,16 +37,23 @@ LayoutBuilder(
                       ),
 
                       Expanded(
-                        child: ListView.builder(
-                        shrinkWrap: true,
-                        key: UniqueKey(),
-                        //controller: scrollController,
-                        itemCount: widget.widgets.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return widget.widgets.elementAt(index);
-                        },
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+
+                              for (int i = 0; i<widget.widgets.length;i++)
+                                widget.widgets.elementAt(i)
+
+                            ],
+                          )
                       ),
-                      )
 
                     ],
-                  );*/
+                  );
+                }
+            ),
+          );
+        }
+    );
+  }
+}
