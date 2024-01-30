@@ -75,11 +75,11 @@ class _MyListWidgetState extends State<MyListWidget> {
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text("Loading...");
+                      return const Text(" ");
                     }
 
                     if (!snapshot.hasData) {
-                      return const Text("Loading...");
+                      return const Text(" ");
                     }
 
                     return FutureBuilder(
@@ -87,15 +87,15 @@ class _MyListWidgetState extends State<MyListWidget> {
                         builder: (BuildContext context, AsyncSnapshot<int> snapshotSize) {
 
                           if (snapshotSize.connectionState == ConnectionState.waiting) {
-                            return const Text("Loading...");
+                            return const Text(" ");
                           }
 
                           if (!snapshotSize.hasData) {
-                            return const Text("Loading...");
+                            return const Text(" ");
                           }
 
                           if (snapshotSize.data == 1) {
-                            return const SizedBox();
+                            return const Text(" ");
                           }
 
                           return Text("${snapshot.data!.elementAt(0)} ${snapshot.data!.elementAt(1)}");
