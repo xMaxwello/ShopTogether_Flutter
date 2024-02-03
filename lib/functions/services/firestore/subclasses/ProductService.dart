@@ -106,7 +106,7 @@ class ProductService {
     }
   }
 
-  void updateSelectedUserOfProduct(String groupUUID, String productUUID, String selectedUserUUID) async {
+  Future<void> updateSelectedUserOfProduct(String groupUUID, String productUUID, String selectedUserUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
@@ -175,7 +175,7 @@ class ProductService {
     List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
 
     List<String?>? productUUIDs = productsData
-        .where((element) => element["userOwnerUUID"] == userUUID)
+        .where((element) => element["selectedUserUUID"] == userUUID)
         .map((Map<String, dynamic> myProduct) => MyProduct.fromMap(myProduct).productID).toList();
 
     return productUUIDs;
