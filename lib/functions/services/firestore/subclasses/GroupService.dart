@@ -275,6 +275,31 @@ class GroupService {
     return userStream;
   }
 
+  Future<List<String>> getMemberUUIDsAsList(String groupUUID) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupUUID)
+        .get();
+
+    if (!snapshot.exists) {
+      throw MyCustomException(
+          "the snapshot doesn't exist for $groupUUID", "snapshot-not-existent");
+    }
+
+    MyGroup myGroup = MyGroup.fromMap(snapshot.data()!);
+    List<String>? userUUIDs = myGroup.userUUIDs;
+
+    if (userUUIDs == null) {
+      return [];
+    }
+
+    if (userUUIDs.isEmpty) {
+      return [];
+    }
+
+    return userUUIDs;
+  }
+
   ///[MyCustomException] Keys:
   ///- snapshot-not-existent: snapshot doesn`t exists
   ///- not-logged-in: User is not logged in!
