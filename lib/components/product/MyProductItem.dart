@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/components/product/MyUpdateProductAmountWidget.dart';
-import 'package:shopping_app/functions/String/MyStringHandler.dart';
+import 'package:shopping_app/functions/string/MyStringHandler.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';
 
 /**

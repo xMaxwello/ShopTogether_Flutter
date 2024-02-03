@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyItemBottomSheet.dart';
-import 'package:shopping_app/functions/String/MyStringHandler.dart';
+import 'package:shopping_app/functions/string/MyStringHandler.dart';
 import 'package:shopping_app/functions/providers/search/MySearchProvider.dart';
 import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dart';
 import 'package:shopping_app/objects/products/MyProduct.dart';

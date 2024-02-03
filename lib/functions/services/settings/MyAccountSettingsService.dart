@@ -5,7 +5,7 @@ import 'package:shopping_app/functions/services/firestore/MyFirestoreService.dar
 import 'package:shopping_app/functions/services/firestore/subclasses/UserService.dart';
 
 import '../../../objects/users/MyUsers.dart';
-import '../../String/MyStringHandler.dart';
+import '../../string/MyStringHandler.dart';
 import '../snackbars/MySnackBarService.dart';
 
 class MyAccountSettingsService {
