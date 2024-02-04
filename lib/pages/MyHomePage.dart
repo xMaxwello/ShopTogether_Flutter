@@ -8,6 +8,7 @@ import 'package:shopping_app/components/home/MyHomeList.dart';
 import 'package:shopping_app/components/home/MyHomeNavigationBar.dart';
 import 'package:shopping_app/functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
 import 'package:shopping_app/functions/providers/items/MyItemsProvider.dart';
+import 'package:shopping_app/functions/providers/navigationBar/MyNavigationBarProvider.dart';
 
 import '../functions/floatingAction/MyFloatingActionFunctions.dart';
 import '../functions/providers/search/MySearchProvider.dart';
@@ -32,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Provider.of<MyFloatingButtonProvider>(context, listen: false).updateExtended(true);
       Provider.of<MyItemsProvider>(context, listen: false).updateIsGroup(true);
       Provider.of<MySearchProvider>(context, listen: false).updateIsSearching(false);
+      Provider.of<MyNavigationBarProvider>(context, listen: false).updateNavigationSelected([true, false]);
     });
 
     ///Refreshs the current user
