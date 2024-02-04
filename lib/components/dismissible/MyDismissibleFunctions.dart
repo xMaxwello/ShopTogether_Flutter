@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/components/bottomSheetItems/MyCustomItemBottomSheet.dart';
+import 'package:shopping_app/functions/services/snackbars/MySnackBarService.dart';
 
 import '../../functions/dialog/MyDialog.dart';
 import '../../functions/providers/floatingbutton/MyFloatingButtonProvider.dart';
@@ -9,7 +10,6 @@ import '../../functions/providers/items/MyItemsProvider.dart';
 import '../../functions/services/firestore/MyFirestoreService.dart';
 import '../../objects/groups/MyGroup.dart';
 import '../../objects/products/MyProduct.dart';
-import '../../pages/MyHomePage.dart';
 import '../../pages/MyProductPage.dart';
 import '../bottomSheet/MyDraggableScrollableWidget.dart';
 import '../bottomSheetItems/MyItemBottomSheet.dart';
@@ -41,10 +41,8 @@ class MyDismissibleFuntions {
                 List<String> userUUIDs = await MyFirestoreService.groupService.getMemberUUIDsAsList(groupUUID);
 
                 await MyFirestoreService.productService.updateSelectedUserOfProducts(groupUUID, currentUser.uid, userUUIDs[0]);
+                MySnackBarService.showMySnackBar(context, "Sie haben die Gruppe verlassen!", isError: false);
               },
-              onCancelled: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
-              }
           );
         } else {
 
@@ -55,10 +53,8 @@ class MyDismissibleFuntions {
               onConfirm: () async {
 
                 MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
+                MySnackBarService.showMySnackBar(context, "Sie haben die Gruppe gelöscht!", isError: false);
               },
-              onCancelled: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
-              }
           );
         }
       }
