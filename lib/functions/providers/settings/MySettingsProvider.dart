@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class MySettingsProvider with ChangeNotifier {
   bool _isBiometricLock = false;
   bool _isNotificationsEnabled = false;
@@ -16,7 +15,7 @@ class MySettingsProvider with ChangeNotifier {
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     _isBiometricLock = prefs.getBool('biometricLock') ?? false;
-    _isNotificationsEnabled = prefs.getBool('notificationsEnabled') ?? true;
+    _isNotificationsEnabled = prefs.getBool('notificationsEnabled') ?? false;
     _isVibrationEnabled = prefs.getBool('vibrationEnabled') ?? true;
     _isSoundEnabled = prefs.getBool('soundEnabled') ?? true;
     _isDarkThemeEnabled = prefs.getBool('darkThemeEnabled') ?? false;

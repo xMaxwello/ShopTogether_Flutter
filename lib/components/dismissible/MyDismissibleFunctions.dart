@@ -41,7 +41,6 @@ class MyDismissibleFuntions {
                 List<String> userUUIDs = await MyFirestoreService.groupService.getMemberUUIDsAsList(groupUUID);
 
                 await MyFirestoreService.productService.updateSelectedUserOfProducts(groupUUID, currentUser.uid, userUUIDs[0]);
-                MySnackBarService.showMySnackBar(context, "Sie haben die Gruppe verlassen!", isError: false);
               },
           );
         } else {
@@ -53,7 +52,6 @@ class MyDismissibleFuntions {
               onConfirm: () async {
 
                 MyFirestoreService.groupService.removeGroup(groupsFromUser[itemIndex].groupUUID!);
-                MySnackBarService.showMySnackBar(context, "Sie haben die Gruppe gelöscht!", isError: false);
               },
           );
         }
