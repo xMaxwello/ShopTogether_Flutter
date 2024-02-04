@@ -182,6 +182,7 @@ class _MyHomeListState extends State<MyHomeList> {
                                 return emptyErrorWidget;
                               }
 
+                              ///TODO: Beim kicken eines Users aus einer Gruppe wird nur eine bestimmte anzahl an Produkten an den GroupAdmin übergeben
                               ///shows the ProductItems or the GroupItems
                               return MyListWidget(
                                 selectedGroupUUID: itemsValue.selectedGroupUUID,
