@@ -74,7 +74,7 @@ class MyItemBottomSheet {
                   productName: product.productName ?? "Unbekannt",
                   selectedUserUUID: currentUserUUID,
                   productCount: 1,
-                  productVolumen: "0",
+                  productVolumen: product.quantity ?? '',
                   productVolumenType: '',
                   productImageUrl: product.imageFrontUrl ?? '',
                   productDescription: ''
