@@ -36,14 +36,11 @@ class MyDismissibleFuntions {
               onConfirm: () async {
 
                 await MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, currentUser.uid);
-                MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
+                await MyFirestoreService.userService.removeGroupUUIDsFromUser(currentUser.uid, groupUUID);
 
-                ///remove UserUUID of the products in this group, who should buy this product. (selectedUserUUID)
-                List<String?>? productUUIDs = await MyFirestoreService.productService.getProductUUIDsOfSelectedUser(groupUUID, currentUser.uid);
-                for (String? productUUID in productUUIDs!) {
+                List<String> userUUIDs = await MyFirestoreService.groupService.getMemberUUIDsAsList(groupUUID);
 
-                  MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, "");
-                }
+                await MyFirestoreService.productService.updateSelectedUserOfProducts(groupUUID, currentUser.uid, userUUIDs[0]);
               },
               onCancelled: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));

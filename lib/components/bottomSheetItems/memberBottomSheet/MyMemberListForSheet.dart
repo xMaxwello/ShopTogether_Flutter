@@ -45,7 +45,7 @@ class MyMemberListForSheet extends StatelessWidget {
                   );
                 }
 
-                List<MyUser> myUser = memberSnapshots.data!;
+                List<MyUser> myUsers = memberSnapshots.data!;
 
                 return Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
@@ -59,10 +59,11 @@ class MyMemberListForSheet extends StatelessWidget {
                         shrinkWrap: true,
                         children: [
 
-                          for (int i = 0;i < myUser.length;i++)
+                          for (int i = 0;i < myUsers.length;i++)
                             MyUserWidget(
                               groupUUID: selectedGroupUUID,
-                              myUser: myUser.elementAt(i),
+                              myUser: myUsers.elementAt(i),
+                              firstUser: myUsers.first,
                             ),
 
                         ],

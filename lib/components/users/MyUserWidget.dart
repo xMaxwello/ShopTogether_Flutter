@@ -12,8 +12,9 @@ class MyUserWidget extends StatelessWidget {
 
   final MyUser myUser;
   final String groupUUID;
+  final MyUser firstUser;
 
-  const MyUserWidget({super.key, required this.myUser, required this.groupUUID});
+  const MyUserWidget({super.key, required this.myUser, required this.groupUUID, required this.firstUser});
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +80,9 @@ class MyUserWidget extends StatelessWidget {
                       if (snapshotIsUserOwner.data == false) {
 
                         await MyFirestoreService.groupService.removeUserUUIDFromGroup(groupUUID, myUser.uuid);
-                        MyFirestoreService.userService.removeGroupUUIDsFromUser(myUser.uuid, groupUUID);
+                        await MyFirestoreService.userService.removeGroupUUIDsFromUser(myUser.uuid, groupUUID);
 
-                        ///remove UserUUID of the products, who should buy this product. (selectedUserUUID)
-                        List<String?>? productUUIDs = await MyFirestoreService.productService.getProductUUIDsOfSelectedUser(groupUUID, myUser.uuid);
-
-                        List<String> userUUIDs = await MyFirestoreService.groupService.getMemberUUIDsAsList(groupUUID);
-
-                        for (String? productUUID in productUUIDs!) {
-
-                          await MyFirestoreService.productService.updateSelectedUserOfProduct(groupUUID, productUUID!, userUUIDs[0]);
-                        }
+                        await MyFirestoreService.productService.updateSelectedUserOfProducts(groupUUID, myUser.uuid, firstUser.uuid);
                       } else {
 
                         MySnackBarService.showMySnackBar(context, "Als Gruppen-Owner dürfen Sie sich nicht löschen!");

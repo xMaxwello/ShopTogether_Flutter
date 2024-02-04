@@ -128,8 +128,41 @@ class ProductService {
 
       myProduct['selectedUserUUID'] = selectedUserUUID;
       ref.update({"products": productsData});
+    } else {
+
+      print("Product dont found: updateSelectedUserOfProduct");
     }
   }
+
+  Future<void> updateSelectedUserOfProducts(String groupUUID, String oldUserUUID, String newUserUUID) async {
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    // Referenz auf die Gruppe
+    DocumentReference<Map<String, dynamic>> groupRef =
+    FirebaseFirestore.instance.collection("groups").doc(groupUUID);
+
+    // Alle Produkte abrufen, die dem alten Benutzer gehören
+    DocumentSnapshot<Map<String, dynamic>> groupSnapshot = await groupRef.get();
+    List<Map<String, dynamic>> productsData =
+    List<Map<String, dynamic>>.from(groupSnapshot.get("products") ?? []);
+
+    // Batch-Update für jedes gefundene Produkt
+    for (int i = 0; i < productsData.length; i++) {
+      if (productsData[i]["selectedUserUUID"] == oldUserUUID) {
+        productsData[i]["selectedUserUUID"] = newUserUUID;
+      }
+    }
+
+    // Batch-Update für die gesamte Produktsammlung
+    batch.update(groupRef, {"products": productsData});
+
+    // Batch-Update ausführen
+    await batch.commit();
+  }
+
+
+
+
 
   /// [MyCustomException] Keys:
   /// - snapshot-not-exists: the snapshot of the getProductByUUID(String productUUID) doesn`t exists!
@@ -160,7 +193,7 @@ class ProductService {
     return product;
   }
 
-  Future<List<String?>?> getProductUUIDsOfSelectedUser(String groupUUID, String userUUID) async {
+  Future<List<String?>> getProductUUIDsOfSelectedUser(String groupUUID, String userUUID) async {
 
     DocumentReference<Map<String, dynamic>> ref =
     FirebaseFirestore.instance.collection("groups").doc(groupUUID);
@@ -174,7 +207,7 @@ class ProductService {
     List<Map<String, dynamic>> productsData =
     List<Map<String, dynamic>>.from(snapshot.get("products") ?? []);
 
-    List<String?>? productUUIDs = productsData
+    List<String?> productUUIDs = productsData
         .where((element) => element["selectedUserUUID"] == userUUID)
         .map((Map<String, dynamic> myProduct) => MyProduct.fromMap(myProduct).productID).toList();
 
