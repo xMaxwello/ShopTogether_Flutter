@@ -1,4 +1,4 @@
-# FoodScannerApp
+# ShopTogether
 
 ##Functions:
 
@@ -51,3 +51,10 @@ Beim registrieren weiteres Feld "Passwort wiederholen"
 Produkte Leuten zu weisen
 
 Neues Theme für Anmeldeseite mit Weissem Hintergrund, Title theme für andere seiten transparent machen
+
+![Screenshot_20250220_231515](https://github.com/user-attachments/assets/fe73add3-4079-4306-a5e8-66c1a69f23f9)
+![Screenshot_20250220_231523](https://github.com/user-attachments/assets/d6dafb21-d2fb-4883-93d0-8e8a8f89378f)
+![Screenshot_20250220_231633](https://github.com/user-attachments/assets/316397b6-43ec-4296-9632-1a40997976d3)
+![Screenshot_20250220_231624](https://github.com/user-attachments/assets/a390f693-66dc-4a20-8c6d-5be1a7e477a0)
+
+
